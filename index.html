@@ -4,10 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CTD • Campus Transportation Design | MIT ADT University</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="apple-touch-icon" href="assets/favicon.png">
+  <link rel="icon" type="image/png" href="faviconfinal.png?v=6">
+  <link rel="shortcut icon" type="image/png" href="faviconfinal.png?v=6">
+  <link rel="apple-touch-icon" href="faviconfinal.png?v=6">
 
   <!-- Google Fonts: DM Sans, Plus Jakarta Sans & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,9 +16,11 @@
   <!-- Phosphor Icons -->
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-  <!-- Leaflet CSS & JS (Local Fast Cache with Online Fallback) -->
-  <link rel="stylesheet" href="assets/leaflet.css" onerror="this.onerror=null;this.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';">
-  <script src="assets/leaflet.js" onerror="this.onerror=null;this.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';"></script>
+  <!-- Leaflet CSS & JS (Official CDN for reliable live GitHub Pages hosting) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <!-- Google Maps JavaScript API with user provided key -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-1Dc6aFDvUq8dwzAUfWBNwKexsdgmIkE&libraries=geometry" async defer></script>
 
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -32,7 +33,7 @@
     <!-- ==================================================================== -->
     <header class="app-topbar">
       <div class="topbar-brand">
-        <img src="assets/logo.png" alt="CTD Transport" class="brand-img">
+        <img src="dashboardlogo.png" alt="MIT Bus Transport" class="brand-img">
       </div>
 
       <div class="topbar-center">
@@ -261,7 +262,7 @@
                 <!-- Left Column: Vehicle Visual Identity -->
                 <div class="bus-vehicle-card">
                   <div class="bus-coach-stage">
-                    <img src="assets/bus-coach.png" alt="Bus Coach" class="bus-coach-img">
+                    <img src="buses.png" alt="Bus Coach" class="bus-coach-img">
                   </div>
                   <div class="bus-id-badge-wrap">
                     <div class="license-plate-badge" id="dashBusPlateTitle">MH 12 AB 1234</div>
@@ -654,7 +655,7 @@
                   <div class="assigned-bus-item">
                     <div class="route-spec-top-row">
                       <div class="route-bus-thumb-wrap">
-                        <img src="assets/bus-coach.png" alt="Bus Coach" class="route-bus-thumb-img">
+                        <img src="buses.png" alt="Bus Coach" class="route-bus-thumb-img">
                       </div>
                       <div class="route-bus-title-group">
                         <div style="display: flex; align-items: center; gap: 8px;">
@@ -670,7 +671,7 @@
                   <div class="assigned-bus-item">
                     <div class="route-spec-top-row">
                       <div class="route-bus-thumb-wrap">
-                        <img src="assets/bus-coach.png" alt="Bus Coach" class="route-bus-thumb-img">
+                        <img src="buses.png" alt="Bus Coach" class="route-bus-thumb-img">
                       </div>
                       <div class="route-bus-title-group">
                         <div style="display: flex; align-items: center; gap: 8px;">
@@ -898,7 +899,7 @@
             <div class="card-flat bus-spec-primary-card">
               <div class="bus-spec-hero-row">
                 <div class="bus-coach-thumb-wrap">
-                  <img src="assets/bus-coach.png" alt="Bus Coach" class="bus-coach-img">
+                  <img src="buses.png" alt="Bus Coach" class="bus-coach-img">
                 </div>
                 <div class="bus-hero-info">
                   <div class="bus-plate-title" id="bdPlateNumber">MH12-CD-5678</div>

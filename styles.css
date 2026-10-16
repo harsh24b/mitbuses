@@ -184,7 +184,9 @@ code, .tabular-nums {
 }
 
 .brand-img {
-  height: 28px;
+  height: 32px;
+  max-height: 34px;
+  max-width: 170px;
   width: auto;
   object-fit: contain;
 }

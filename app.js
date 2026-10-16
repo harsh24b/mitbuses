@@ -1753,15 +1753,56 @@ function switchDashSubtab(tab) {
   document.getElementById('dashSubtabContentComplaints')?.classList.toggle('hidden', tab !== 'complaints');
 }
 
+// Google Maps API Key provided for live transit tracking
+const GOOGLE_MAPS_API_KEY = 'AIzaSyD-1Dc6aFDvUq8dwzAUfWBNwKexsdgmIkE';
+
+// Safe resilient tile layer powered by Google Maps with fallback
+function createSafeTileLayer(mapInstance) {
+  // Official Google Maps Roadmap Tiles powered by user's Google Maps API Key
+  const primaryTiles = L.tileLayer(`https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&key=${GOOGLE_MAPS_API_KEY}`, {
+    maxZoom: 20,
+    subdomains: '0123',
+    attribution: '&copy; Google Maps'
+  });
+
+  // Handle tile loading errors by seamlessly falling back to OpenStreetMap
+  primaryTiles.on('tileerror', function() {
+    if (mapInstance && !mapInstance._hasFallbackTileLayer) {
+      mapInstance._hasFallbackTileLayer = true;
+      console.warn('Google Maps tile layer error, activating OpenStreetMap fallback');
+      const fallbackTiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+      });
+      fallbackTiles.addTo(mapInstance);
+    }
+  });
+
+  return primaryTiles;
+}
+
 function initDashboardMap() {
   const mapEl = document.getElementById('dashLeafletMap');
   if (!mapEl) return;
 
   if (typeof L === 'undefined') {
-    console.warn('Leaflet library is still loading, retrying dashboard map initialization in 200ms...');
-    setTimeout(initDashboardMap, 200);
+    console.warn('Leaflet library is still loading, retrying dashboard map initialization in 150ms...');
+    setTimeout(initDashboardMap, 150);
     return;
   }
+
+  // Ensure default Leaflet marker assets resolve cleanly on GitHub Pages
+  try {
+    if (L.Icon && L.Icon.Default && !L.Icon.Default._ghConfigured) {
+      L.Icon.Default._ghConfigured = true;
+      delete L.Icon.Default.prototype._getIconUrl;
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
+      });
+    }
+  } catch (e) {}
 
   // If map already exists, invalidate size and return to prevent reinitialization errors
   if (AppState.dashMap) {
@@ -1786,20 +1827,14 @@ function initDashboardMap() {
     fadeAnimation: true
   }).setView([18.545, 73.96], 12);
 
-  // OpenStreetMap Standard Tiles (100% free, reliable, no API key required, zero watermarks)
-  const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    subdomains: 'abc',
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  });
-
+  const tiles = createSafeTileLayer(map);
   tiles.addTo(map);
   AppState.dashMap = map;
 
   const initialKey = AppState.busKeys[AppState.selectedBusIndex] || 'bus-e';
   updateDashboardRoute(initialKey);
 
-  [60, 200, 500, 1000].forEach(delay => {
+  [60, 200, 500, 1000, 2000].forEach(delay => {
     setTimeout(() => {
       if (AppState.dashMap) AppState.dashMap.invalidateSize();
     }, delay);
@@ -2081,7 +2116,10 @@ function renderRouteDetail(routeId) {
 function initRouteDetailMap(route) {
   const mapEl = document.getElementById('routeDetailMap');
   if (!mapEl) return;
-  if (typeof L === 'undefined') return;
+  if (typeof L === 'undefined') {
+    setTimeout(() => initRouteDetailMap(route), 150);
+    return;
+  }
 
   if (!AppState.routeDetailMap) {
     if (mapEl._leaflet_id) {
@@ -2096,15 +2134,11 @@ function initRouteDetailMap(route) {
       fadeAnimation: true
     }).setView([18.545, 73.96], 12);
 
-    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      subdomains: 'abc',
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
+    const tiles = createSafeTileLayer(AppState.routeDetailMap);
     tiles.addTo(AppState.routeDetailMap);
   }
 
-  [60, 200, 500].forEach(delay => {
+  [60, 200, 500, 1000, 2000].forEach(delay => {
     setTimeout(() => {
       if (AppState.routeDetailMap) AppState.routeDetailMap.invalidateSize();
     }, delay);
@@ -2831,16 +2865,7 @@ function getUnivBusRouteMeta(b, idx) {
   let arrival = b.arrival || '8:30 AM';
   let distance = b.distance || '12.4';
   let progressPct = b.progressPct !== undefined ? b.progressPct : (50 + ((idx * 7) % 35));
-  let vehicleImg = 'assets/bus-side-coach.jpg';
-
-  const model = (b.model || '').toLowerCase();
-  if (model.includes('van') || model.includes('traveller')) {
-    vehicleImg = 'assets/bus-side-van.jpg';
-  } else if (model.includes('shuttle') || model.includes('lynx')) {
-    vehicleImg = 'assets/bus-side-shuttle.jpg';
-  } else {
-    vehicleImg = 'assets/bus-side-coach.jpg';
-  }
+  let vehicleImg = 'buses.png';
 
   return { origin, dest, departure, arrival, distance, progressPct, themeColor, vehicleImg };
 }
@@ -5405,4 +5430,17 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSettingsRoutesTable();
 
   setTimeout(initDashboardMap, 150);
+});
+
+// Automatic map dimension sync on window load and resize
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    if (AppState.dashMap) AppState.dashMap.invalidateSize();
+    if (AppState.routeDetailMap) AppState.routeDetailMap.invalidateSize();
+  }, 100);
+});
+
+window.addEventListener('resize', () => {
+  if (AppState.dashMap) AppState.dashMap.invalidateSize();
+  if (AppState.routeDetailMap) AppState.routeDetailMap.invalidateSize();
 });
