@@ -1,0 +1,2463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CTD • Campus Transportation Design | MIT ADT University</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/favicon.png">
+
+  <!-- Google Fonts: DM Sans, Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Leaflet CSS & JS (Local Fast Cache with Online Fallback) -->
+  <link rel="stylesheet" href="assets/leaflet.css" onerror="this.onerror=null;this.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';">
+  <script src="assets/leaflet.js" onerror="this.onerror=null;this.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- ==================================================================== -->
+    <!-- TOP APPLICATION NAVBAR (EXACT SPEC MATCHING IMAGE 4)                 -->
+    <!-- ==================================================================== -->
+    <header class="app-topbar">
+      <div class="topbar-brand">
+        <img src="assets/logo.png" alt="CTD Transport" class="brand-img">
+      </div>
+
+      <div class="topbar-center">
+        <div class="header-search-wrap">
+          <i class="ph ph-magnifying-glass"></i>
+          <input type="text" id="globalSearchInput" placeholder="Search" onkeyup="handleGlobalSearch(this.value)">
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <button class="header-notif-btn" title="Notifications" onclick="navigateTo('complaints')">
+          <i class="ph ph-bell"></i>
+        </button>
+
+        <div class="header-user-profile" onclick="openDriverModal('santosh')">
+          <span class="header-user-name">CTD Admin</span>
+          <div class="header-user-avatar-circle">C</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==================================================================== -->
+    <!-- WORKSPACE (SIDEBAR + MAIN CONTENT)                                   -->
+    <!-- ==================================================================== -->
+    <div class="app-workspace">
+
+      <!-- LEFT SIDEBAR (EXACT MATCHING IMAGE 4) -->
+      <aside class="app-sidebar">
+        <div>
+          <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item">
+              <button class="active" data-target="dashboard" onclick="navigateTo('dashboard')">
+                <i class="ph ph-house"></i>
+                <span>Home</span>
+              </button>
+            </li>
+            <li class="sidebar-nav-item">
+              <button data-target="routes" onclick="navigateTo('routes')">
+                <i class="ph ph-map-trifold"></i>
+                <span>Routes</span>
+              </button>
+            </li>
+            <li class="sidebar-nav-item">
+              <button data-target="buses" onclick="navigateTo('buses')">
+                <i class="ph ph-van"></i>
+                <span>Buses</span>
+              </button>
+            </li>
+            <li class="sidebar-nav-item">
+              <button data-target="drivers" onclick="navigateTo('drivers')">
+                <i class="ph ph-steering-wheel"></i>
+                <span>Drivers</span>
+              </button>
+            </li>
+            <li class="sidebar-nav-item">
+              <button data-target="chat" onclick="navigateTo('chat')">
+                <i class="ph ph-chat-circle-dots"></i>
+                <span>Chat</span>
+              </button>
+            </li>
+            <li class="sidebar-nav-item">
+              <button data-target="complaints" onclick="navigateTo('complaints')">
+                <i class="ph ph-clock-countdown"></i>
+                <span>Complaints</span>
+              </button>
+            </li>
+            <li class="sidebar-nav-item">
+              <button data-target="passengers" onclick="navigateTo('passengers')">
+                <i class="ph ph-users"></i>
+                <span>Transport Users</span>
+              </button>
+            </li>
+            <li class="sidebar-nav-item">
+              <button data-target="finances" onclick="navigateTo('finances')">
+                <i class="ph ph-chart-line-up"></i>
+                <span>Finances</span>
+              </button>
+            </li>
+          </ul>
+
+          <div class="sidebar-divider"></div>
+
+          <ul class="sidebar-footer-nav">
+            <li class="sidebar-nav-item">
+              <button data-target="settings" onclick="navigateTo('settings')">
+                <i class="ph ph-gear-six"></i>
+                <span>Settings</span>
+              </button>
+            </li>
+            <li class="sidebar-nav-item">
+              <button onclick="triggerToast('Session Active • MIT ADT CTD Console', 'info')">
+                <i class="ph ph-sign-out"></i>
+                <span>Logout</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- MAIN VIEWPORT -->
+      <main class="app-main-viewport">
+
+        <!-- ================================================================ -->
+        <!-- VIEW 1: HOME DASHBOARD (EXACT DESIGN MATCHING IMAGE 4)           -->
+        <!-- ================================================================ -->
+        <section class="view-section active" id="view-dashboard">
+          
+          <!-- 5 TOP KPI METRICS (EXACT TEXT, VALUES & COLORS FROM IMAGE 4) -->
+          <div class="dashboard-kpi-row">
+            
+            <!-- Card 1 -->
+            <div class="kpi-metric-card" onclick="navigateTo('buses')">
+              <span class="kpi-metric-title">University Buses</span>
+              <span class="kpi-metric-number">17</span>
+              <span class="kpi-metric-subtext green">15 Active • 2 in maintenance</span>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="kpi-metric-card" onclick="navigateTo('buses')">
+              <span class="kpi-metric-title">External Buses</span>
+              <span class="kpi-metric-number">27</span>
+              <span class="kpi-metric-subtext green">27 Active</span>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="kpi-metric-card" onclick="openDriverModal('santosh')">
+              <span class="kpi-metric-title">Driver Availability</span>
+              <span class="kpi-metric-number">16</span>
+              <span class="kpi-metric-subtext green">12 on duty • 2 off duty</span>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="kpi-metric-card" onclick="navigateTo('finances')">
+              <span class="kpi-metric-title">Hostel Students</span>
+              <span class="kpi-metric-number">36</span>
+              <span class="kpi-metric-subtext gray">₹150 per trip • Total : ₹5400</span>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="kpi-metric-card" onclick="navigateTo('complaints')">
+              <span class="kpi-metric-title">Complaints</span>
+              <span class="kpi-metric-number">4</span>
+              <span class="kpi-metric-subtext red">2 unresolved</span>
+            </div>
+
+          </div>
+
+          <!-- MAIN MIDDLE SECTION (LEFT: MAP & SPECS, RIGHT: ROUTE & COMPLAINTS) -->
+          <div class="dashboard-main-grid">
+            
+            <!-- LEFT PANEL: BUS SELECTOR, MAP, SUBTABS, VEHICLE DETAILS -->
+            <div class="card-flat dash-left-panel">
+              
+              <!-- Top Row: Interactive Calendar on Left, Bus Selector Dropdown on Right -->
+              <div class="dash-bus-select-row">
+                
+                <!-- Left: Interactive Calendar Widget (Strict Design Guidelines, 6px radius, tabular nums) -->
+                <div class="dash-calendar-control" id="dashCalendarControl">
+                  <button type="button" class="dash-calendar-btn" onclick="openDashDatePicker()" title="Click to select transit date">
+                    <div class="dash-cal-btn-inner">
+                      <i class="ph ph-calendar-blank dash-cal-icon"></i>
+                      <span class="dash-cal-display-date" id="dashCalendarDisplay">15/10/2026</span>
+                    </div>
+                    <i class="ph ph-caret-down dash-cal-dropdown-arrow"></i>
+                    <input type="date" id="dashDateInput" class="dash-hidden-date-picker" value="2026-10-15" onchange="handleDashDateSelect(this.value)">
+                  </button>
+                </div>
+
+                <!-- Right: Bus Corridor Dropdown Selector (Grid Selection Menu) -->
+                <div class="dash-bus-dropdown-wrapper">
+                  <button class="bus-dropdown-btn" id="dashBusDropdownBtn" onclick="toggleDashBusDropdown(event)" type="button" title="Select from 12 Bus Corridors">
+                    <div class="bus-btn-content">
+                      <i class="ph ph-van" style="color: var(--accent);"></i>
+                      <span id="dashSelectedBusLabel">Bus E - Lohegaon</span>
+                    </div>
+                    <i class="ph ph-caret-down"></i>
+                  </button>
+                  <div class="dash-bus-dropdown-menu hidden" id="dashBusDropdownMenu">
+                    <!-- Populated via JS as 12-Bus 2-column Grid -->
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Map Widget (Showing Lohegaon to MIT Campus Loni) -->
+              <div class="dash-map-container">
+                <div id="dashLeafletMap" style="width: 100%; height: 100%;"></div>
+                <div class="map-pin-badge origin">
+                  <div id="dashOriginBadgeName">Lohegaon Bus Stop</div>
+                  <div style="color: var(--text-muted); font-size: 11px;" id="dashOriginBadgeTime">6:55 AM</div>
+                </div>
+                <div class="map-pin-badge destination">
+                  <div id="dashDestBadgeName">MIT Campus Loni</div>
+                  <div style="color: var(--text-muted); font-size: 11px;" id="dashDestBadgeTime">8:30 AM</div>
+                </div>
+
+                <!-- Floating Live HUD on Map (Clean Minimal Transit ETA, No Live Bus Tracker or Bus Pill Header) -->
+                <div class="live-tracker-hud" id="dashLiveTrackerHud">
+                  <span id="dashHudBusPill" style="display:none;"></span>
+                  <span id="dashHudSpeed" style="display:none;"></span>
+                  <div class="hud-stats">
+                    <div class="hud-stat-item">
+                      <span class="hud-label">Next stop</span>
+                      <span class="hud-val" id="dashHudNextStop">Kendriya Vidhyalaya</span>
+                    </div>
+                    <div class="hud-stat-item">
+                      <span class="hud-label">Estimated Arrival</span>
+                      <span class="hud-val" id="dashHudEta">3 mins</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Subtabs: Bus Details (Active), Bus Complaints (NO ICONS) -->
+              <div class="dash-subtabs-row">
+                <button class="dash-subtab active" id="tabBusDetails" onclick="switchDashSubtab('details')">
+                  Bus Details
+                </button>
+                <button class="dash-subtab" id="tabBusComplaints" onclick="switchDashSubtab('complaints')">
+                  Bus Complaints
+                </button>
+              </div>
+
+              <!-- SUBTAB 1: BUS DETAILS (STRUCTURED WITH EXCELLENT HIERARCHY) -->
+              <div class="bus-details-content" id="dashSubtabContentDetails">
+                <!-- Left Column: Vehicle Visual Identity -->
+                <div class="bus-vehicle-card">
+                  <div class="bus-coach-stage">
+                    <img src="assets/bus-coach.png" alt="Bus Coach" class="bus-coach-img">
+                  </div>
+                  <div class="bus-id-badge-wrap">
+                    <div class="license-plate-badge" id="dashBusPlateTitle">MH 12 AB 1234</div>
+                    <span class="bus-model-caption" id="dashBusModelSpec">Tata Marcopolo • 49-Seater Luxury AC Coach</span>
+                  </div>
+                </div>
+
+                <!-- Right Column: Structured Specifications & Attendance Hierarchy -->
+                <div class="bus-specs-hierarchy">
+                  <!-- Header: Route Corridor & Live Status -->
+                  <div class="bus-specs-header-row">
+                    <div class="bus-corridor-tag-grp">
+                      <span class="bus-specs-eyebrow">Fleet Corridor</span>
+                      <span class="bus-specs-route-title" id="dashBusRouteSpec">Lohegaon Express Corridor</span>
+                    </div>
+                    <div class="bus-status-indicator" id="dashBusStatusSpecWrap">
+                      <span class="badge-clean operational" id="dashBusStatusBadge"><span class="status-dot green"></span> Active on Route</span>
+                    </div>
+                  </div>
+
+                  <!-- 4-Cell Structured Metric Grid -->
+                  <div class="bus-specs-key-grid">
+                    <div class="bus-spec-metric-card">
+                      <span class="spec-metric-label">Seating Capacity</span>
+                      <span class="spec-metric-val" id="dashBusCapSpec">49 Seats</span>
+                      <span class="spec-metric-sub" id="dashBusEnrolledLoadSub">39 Enrolled (79.6% Load)</span>
+                    </div>
+
+                    <div class="bus-spec-metric-card">
+                      <span class="spec-metric-label">Today's Schedule</span>
+                      <span class="spec-metric-val" id="dashBusScheduleSpec">6:55 AM – 8:30 AM</span>
+                      <span class="spec-metric-sub">Morning Inbound Shift</span>
+                    </div>
+
+                    <div class="bus-spec-metric-card">
+                      <span class="spec-metric-label">Registration</span>
+                      <span class="spec-metric-val" id="dashBusRegSub">REG-5678</span>
+                      <span class="spec-metric-sub" id="dashBusOwnerSub">Tarawade Logistics Fleet</span>
+                    </div>
+
+                    <div class="bus-spec-metric-card">
+                      <span class="spec-metric-label">Service</span>
+                      <span class="spec-metric-val" id="dashBusFitnessSpec">28 Feb 2026</span>
+                      <span class="spec-metric-sub" id="dashBusServiceSub">Last Serviced Date</span>
+                    </div>
+                  </div>
+
+                  <!-- Today's Attendance Breakdown Bar (Replaces Speed Bar) -->
+                  <div class="bus-attendance-strip" id="dashBusAttendanceStrip">
+                    <div class="att-strip-header">
+                      <span class="att-strip-title"><i class="ph ph-check-circle" style="color: var(--accent);"></i> Today's Attendance (15/10/2026)</span>
+                    </div>
+                    <div class="att-strip-items">
+                      <div class="att-strip-col">
+                        <span class="att-strip-label">Students</span>
+                        <span class="att-strip-val" id="dashBusAttStudentsVal"><strong>32</strong> Present • 2 Absent</span>
+                      </div>
+                      <div class="att-strip-divider"></div>
+                      <div class="att-strip-col">
+                        <span class="att-strip-label">Faculty</span>
+                        <span class="att-strip-val" id="dashBusAttFacultyVal"><strong>4</strong> Present • 1 Absent</span>
+                      </div>
+                    </div>
+                  </div>
+                  <span id="dashBusLiveSpeed" style="display:none;"></span>
+                  <span id="dashBusFuelLevel" style="display:none;"></span>
+                </div>
+              </div>
+
+              <!-- SUBTAB 3: BUS COMPLAINTS -->
+              <div class="hidden" id="dashSubtabContentComplaints" style="padding-top: 10px;">
+                <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">Grievances Logged for Selected Bus</div>
+                <div style="font-size: 13px; color: var(--text-secondary); padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-control); background: var(--surface);">
+                  • Need curtains in Bus — Raised by Student on 28 Jan, 2026.
+                </div>
+              </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: ROUTE DETAILS & COMPLAINTS -->
+            <div class="dash-right-col">
+              
+              <!-- CARD 1: ROUTE DETAILS • LOHEGAON (EXACT 2-COLUMN STOPS SPEC FROM IMAGE 4) -->
+              <div class="card-flat route-stops-card">
+                <div class="route-card-title">
+                  Route Details • <span>Lohegaon</span>
+                </div>
+
+                <div class="stops-2col-flow">
+                  
+                  <!-- Left Column: Stops 1 to 6 -->
+                  <div class="stops-col-list">
+                    
+                    <div class="stop-flow-node">
+                      <div class="stop-num-circle">1</div>
+                      <div class="stop-meta">
+                        <span class="stop-node-name">Lohegaon Bus Stop</span>
+                        <span class="stop-node-time">6:55 AM</span>
+                      </div>
+                    </div>
+
+                    <div class="stop-flow-node">
+                      <div class="stop-num-circle">2</div>
+                      <div class="stop-meta">
+                        <span class="stop-node-name">Kendriya Vidhyalaya</span>
+                        <span class="stop-node-time">6:55 AM</span>
+                      </div>
+                    </div>
+
+                    <div class="stop-flow-node">
+                      <div class="stop-num-circle">3</div>
+                      <div class="stop-meta">
+                        <span class="stop-node-name">Khese Park</span>
+                        <span class="stop-node-time">6:55 AM</span>
+                      </div>
+                    </div>
+
+                    <div class="stop-flow-node">
+                      <div class="stop-num-circle">4</div>
+                      <div class="stop-meta">
+                        <span class="stop-node-name">Kalwad</span>
+                        <span class="stop-node-time">6:55 AM</span>
+                      </div>
+                    </div>
+
+                    <div class="stop-flow-node">
+                      <div class="stop-num-circle">5</div>
+                      <div class="stop-meta">
+                        <span class="stop-node-name">Symbiosis College</span>
+                        <span class="stop-node-time">6:55 AM</span>
+                      </div>
+                    </div>
+
+                    <div class="stop-flow-node">
+                      <div class="stop-num-circle">6</div>
+                      <div class="stop-meta">
+                        <span class="stop-node-name">Ramwadi Police St.</span>
+                        <span class="stop-node-time">6:55 AM</span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- Right Column: Stops 7 to 11 -->
+                  <div class="stops-col-list">
+                    
+                    <div class="stop-flow-node">
+                      <div class="stop-num-circle">7</div>
+                      <div class="stop-meta">
+                        <span class="stop-node-name">Novotel Hotel</span>
+                        <span class="stop-node-time">6:55 AM</span>
+                      </div>
+                    </div>
+
+                    <div class="stop-flow-node">
+                      <div class="stop-num-circle">8</div>
+                      <div class="stop-meta">
+                        <span class="stop-node-name">Phoenix Mall</span>
+                        <span class="stop-node-time">6:55 AM</span>
+                      </div>
+                    </div>
+
+                    <div class="stop-flow-node">
+                      <div class="stop-num-circle">9</div>
+                      <div class="stop-meta">
+                        <span class="stop-node-name">Tata Guard Room</span>
+                        <span class="stop-node-time">6:55 AM</span>
+                      </div>
+                    </div>
+
+                    <div class="stop-flow-node">
+                      <div class="stop-num-circle">10</div>
+                      <div class="stop-meta">
+                        <span class="stop-node-name">Chandan Nagar Bypass</span>
+                        <span class="stop-node-time">6:55 AM</span>
+                      </div>
+                    </div>
+
+                    <div class="stop-flow-node">
+                      <div class="stop-num-circle">11</div>
+                      <div class="stop-meta">
+                        <span class="stop-node-name">MIT Campus Loni</span>
+                        <span class="stop-node-time">6:55 AM</span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- CARD 2: COMPLAINTS (EXACT SPEC MATCHING IMAGE 4) -->
+              <div class="card-flat dash-complaints-card">
+                <div class="dash-c-header">
+                  <span class="dash-c-title">Complaints</span>
+                </div>
+
+                <div class="dash-complaint-list">
+                  
+                  <!-- Item 1: Need curtains in Bus -->
+                  <div class="dash-c-item" onclick="navigateTo('complaints')">
+                    <div class="dash-c-dot orange"></div>
+                    <div class="dash-c-body">
+                      <div class="dash-c-top">
+                        <span class="dash-c-issue">Need curtains in Bus</span>
+                        <span class="dash-c-date">28 Jan, 2026</span>
+                      </div>
+                      <div class="dash-c-raisedby">Raised by Student</div>
+                    </div>
+                  </div>
+
+                  <!-- Item 2: Rash driving reported on Phoenix mall -->
+                  <div class="dash-c-item" onclick="navigateTo('complaints')">
+                    <div class="dash-c-dot blue"></div>
+                    <div class="dash-c-body">
+                      <div class="dash-c-top">
+                        <span class="dash-c-issue">Rash driving reported on Phoenix mall</span>
+                        <span class="dash-c-date">23 Jan, 2026</span>
+                      </div>
+                      <div class="dash-c-raisedby">Raised by Student</div>
+                    </div>
+                  </div>
+
+                  <!-- Item 3: Bus late by 20 mins -->
+                  <div class="dash-c-item" onclick="navigateTo('complaints')">
+                    <div class="dash-c-dot blue"></div>
+                    <div class="dash-c-body">
+                      <div class="dash-c-top">
+                        <span class="dash-c-issue">Bus late by 20 mins</span>
+                        <span class="dash-c-date">23 Jan, 2026</span>
+                      </div>
+                      <div class="dash-c-raisedby">Raised by Faculty</div>
+                    </div>
+                  </div>
+
+                  <!-- Item 4: AC blower cooling weak in rear cabin -->
+                  <div class="dash-c-item" onclick="navigateTo('complaints')">
+                    <div class="dash-c-dot orange"></div>
+                    <div class="dash-c-body">
+                      <div class="dash-c-top">
+                        <span class="dash-c-issue">AC blower cooling weak in rear</span>
+                        <span class="dash-c-date">22 Jan, 2026</span>
+                      </div>
+                      <div class="dash-c-raisedby">Raised by Student</div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- VIEW 2: ROUTES DIRECTORY (CLEAN REFERENCE STYLE: IMAGE 1 & 2)    -->
+        <!-- ================================================================ -->
+        <section class="view-section" id="view-routes">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title">Bus Routes Directory</h2>
+              <p class="view-desc">Select any transit corridor to inspect complete route map, numbered stops, assigned bus, driver, and transport user roster.</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <span class="badge-clean operational"><i class="ph ph-check-circle"></i> 5 Active Corridors</span>
+            </div>
+          </div>
+
+          <!-- Clean Filter Toolbar -->
+          <div class="toolbar-flat">
+            <div class="toolbar-search">
+              <i class="ph ph-magnifying-glass"></i>
+              <input type="text" id="routeSearchInput" placeholder="Filter routes, stops or driver..." onkeyup="filterRoutes()">
+            </div>
+            <div class="toolbar-pills">
+              <button class="pill-btn active" onclick="setRouteFilter('all', this)">All (6)</button>
+              <button class="pill-btn" onclick="setRouteFilter('active', this)">Active (5)</button>
+              <button class="pill-btn" onclick="setRouteFilter('maintenance', this)">Maintenance (1)</button>
+            </div>
+          </div>
+
+          <!-- Routes Cards Grid (Image 2 style) -->
+          <div class="routes-grid-flat" id="routesGridContainer">
+            <!-- Injected via JavaScript -->
+          </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- VIEW 2B: ROUTE DETAIL VIEW (CUSTOM ROUTE VIEW SPEC)             -->
+        <!-- ================================================================ -->
+        <section class="view-section" id="view-route-detail">
+          <!-- Back Nav Above Heading -->
+          <div class="route-back-link-bar">
+            <button class="btn-clean" onclick="navigateTo('routes')" title="Return to Routes Directory">
+              <i class="ph ph-arrow-left"></i> Back to Routes
+            </button>
+          </div>
+
+          <!-- Page Header -->
+          <div class="view-header route-detail-topbar">
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <h2 class="view-title" id="rdRouteTitle">Bus E - Lohegaon Corridor</h2>
+                <span class="badge-clean operational" id="rdRouteStatusBadge">Active</span>
+                <span class="badge-clean live-pulse-badge"><span class="pulse-dot"></span> Live GPS</span>
+              </div>
+              <p class="view-desc" id="rdRouteSubtitle">Corridor origin: Lohegaon Bus Stop • Destination: MIT Campus Loni • 11 Stops • 50 mins</p>
+            </div>
+
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-clean btn-clean-primary" onclick="exportPassengerManifest()">
+                <i class="ph ph-download-simple"></i> Export Manifest
+              </button>
+            </div>
+          </div>
+
+          <!-- Top Section: Left (Map + Bus Details) & Right (Stops with Numbers) -->
+          <div class="route-detail-main-layout">
+            
+            <!-- Left Column: Map & Assigned Vehicle -->
+            <div class="route-detail-left-col">
+              
+              <!-- Route Map Container with Live Moving Bus -->
+              <div class="card-flat route-detail-map-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ph ph-navigation-arrow" style="font-size: 16px; color: var(--text-secondary);"></i>
+                    <span style="font-size: 14px; font-weight: 600;">Live Route Map & GPS Telemetry</span>
+                  </div>
+                  <div class="map-controls-inline">
+                    <button class="pill-btn active" id="rdLiveToggleBtn" onclick="toggleRouteDetailBusMove()">Live tracking</button>
+                    <button class="pill-btn" onclick="recenterRouteDetailMap()">Recenter</button>
+                  </div>
+                </div>
+
+                <div class="dash-map-container" style="height: 320px; margin-bottom: 0;">
+                  <div id="routeDetailMap" style="width: 100%; height: 100%;"></div>
+                  <div class="map-pin-badge origin" id="rdOriginBadge">
+                    <div id="rdOriginBadgeName">Lohegaon Bus Stop</div>
+                    <div style="color: var(--text-muted); font-size: 11px;" id="rdOriginBadgeTime">6:55 AM Departure</div>
+                  </div>
+                  <div class="map-pin-badge destination" id="rdDestBadge">
+                    <div id="rdDestBadgeName">MIT Campus Loni</div>
+                    <div style="color: var(--text-muted); font-size: 11px;" id="rdDestBadgeTime">8:30 AM Arrival</div>
+                  </div>
+
+                  <!-- Floating Live HUD on Map -->
+                  <div class="live-tracker-hud">
+                    <div class="hud-header">
+                      <span class="hud-live-dot"></span>
+                      <span class="hud-title">Live telemetry</span>
+                      <span class="hud-bus-pill" id="rdHudBusPill">Bus E</span>
+                    </div>
+                    <div class="hud-stats">
+                      <div class="hud-stat-item">
+                        <span class="hud-label">Speed</span>
+                        <span class="hud-val" id="rdHudSpeed">42 km/h</span>
+                      </div>
+                      <div class="hud-stat-item">
+                        <span class="hud-label">Current stop</span>
+                        <span class="hud-val" id="rdHudCurrentStop">Khese Park</span>
+                      </div>
+                      <div class="hud-stat-item">
+                        <span class="hud-label">Next stop</span>
+                        <span class="hud-val" id="rdHudNextStop">Kalwad</span>
+                      </div>
+                      <div class="hud-stat-item">
+                        <span class="hud-label">Eta to campus</span>
+                        <span class="hud-val" id="rdHudEta">35 mins</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Assigned Vehicle Fleet Details Card (2 Assigned Buses) -->
+              <div class="card-flat route-bus-spec-card">
+                <div class="section-sub-header">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ph ph-bus" style="color: var(--accent);"></i>
+                    <span>Assigned Vehicle Fleet Details (2 Buses)</span>
+                  </div>
+                  <span class="badge-clean operational" id="rdBusStatusBadge"><span class="badge-dot"></span> 2 Active in Corridor</span>
+                </div>
+
+                <div class="assigned-buses-grid" id="rdAssignedBusesContainer">
+                  <!-- Bus 1 (Primary Bus) -->
+                  <div class="assigned-bus-item">
+                    <div class="route-spec-top-row">
+                      <div class="route-bus-thumb-wrap">
+                        <img src="assets/bus-coach.png" alt="Bus Coach" class="route-bus-thumb-img">
+                      </div>
+                      <div class="route-bus-title-group">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                          <span class="route-bus-main-plate" id="rdBus1Plate">MH12-CD-5678</span>
+                          <span class="badge-clean operational" style="font-size: 10.5px; padding: 1px 6px;"><span class="badge-dot"></span> Primary</span>
+                        </div>
+                        <div class="route-bus-reg-line" id="rdBus1Reg">Coach #09 • REG-1192 • Deluxe High-Deck</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Bus 2 (Supplementary Bus) -->
+                  <div class="assigned-bus-item">
+                    <div class="route-spec-top-row">
+                      <div class="route-bus-thumb-wrap">
+                        <img src="assets/bus-coach.png" alt="Bus Coach" class="route-bus-thumb-img">
+                      </div>
+                      <div class="route-bus-title-group">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                          <span class="route-bus-main-plate" id="rdBus2Plate">MH12-RN-4421</span>
+                          <span class="badge-clean operational" style="font-size: 10.5px; padding: 1px 6px;"><span class="badge-dot"></span> Supplementary</span>
+                        </div>
+                        <div class="route-bus-reg-line" id="rdBus2Reg">Coach #14 • REG-2044 • Standard 49</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right Column: Route Stops with Numbers (like in home) -->
+            <div class="route-detail-right-col">
+              <div class="card-flat route-stops-timeline-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                  <div>
+                    <div class="route-card-title" style="margin-bottom: 2px;" id="rdStopsCardTitle">Route Stops • <span id="rdStopsSpan">Lohegaon</span></div>
+                    <div style="font-size: 12px; color: var(--text-muted);" id="rdStopsSubtitle">Sequential Waypoints with pickup timings</div>
+                  </div>
+                  <span class="badge-clean active" id="rdStopsCountBadge">11 Stops</span>
+                </div>
+
+                <!-- Numbered Stops list container -->
+                <div class="route-stops-numbered-list" id="rdStopsListContainer">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Section: Transport Users Details of that Route -->
+          <div class="card-flat route-passengers-manifest-card" style="margin-top: 20px;">
+            <div class="manifest-header-row" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px; flex-wrap: wrap; gap: 14px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <h3 style="font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                    <i class="ph ph-users"></i> Transport Users
+                  </h3>
+                  <span class="badge-clean operational" id="rdPassengerCountBadge">39 Enrolled</span>
+                  <span class="badge-clean warning" id="rdAvailableSeatsBadge">10 Seats Available</span>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">Assigned campus students and faculty members with verified boarding stops and RFID smart pass clearance.</p>
+              </div>
+            </div>
+
+            <!-- Spacious 2-Tier Filter Suite -->
+            <div class="route-manifest-filter-suite">
+              <div class="route-manifest-primary-row">
+                <div class="toolbar-search" style="width: 320px; flex-shrink: 0;">
+                  <i class="ph ph-magnifying-glass"></i>
+                  <input type="text" id="rdPassengerSearchInput" placeholder="Search transport user, roll no, stop..." onkeyup="filterRoutePassengers()">
+                </div>
+                <div class="toolbar-pills">
+                  <button class="pill-btn active" id="rdTabAll" onclick="setRoutePassengerStatusFilter('all', this)">All</button>
+                  <button class="pill-btn" id="rdTabPaid" onclick="setRoutePassengerStatusFilter('Paid', this)">Paid</button>
+                  <button class="pill-btn" id="rdTabPending" onclick="setRoutePassengerStatusFilter('Pending', this)">Pending</button>
+                  <button class="pill-btn" id="rdTabOverdue" onclick="setRoutePassengerStatusFilter('Overdue', this)">Overdue</button>
+                </div>
+                <div style="margin-left: auto;">
+                  <button class="btn-clean" onclick="exportPassengerManifest()" style="height: 36px; padding: 0 14px;" title="Export Manifest">
+                    <i class="ph ph-download-simple"></i> Export Manifest
+                  </button>
+                </div>
+              </div>
+
+              <div class="route-manifest-secondary-row">
+                <div class="filter-item-labeled">
+                  <span class="filter-mini-label">Boarding Stop</span>
+                  <select id="rdPassengerStopFilter" class="filter-select-modern" onchange="filterRoutePassengers()">
+                    <option value="all">All Boarding Stops</option>
+                  </select>
+                </div>
+                <div class="filter-item-labeled">
+                  <span class="filter-mini-label">Department</span>
+                  <select id="rdPassengerDeptFilter" class="filter-select-modern" onchange="filterRoutePassengers()">
+                    <option value="all">All Departments / Colleges</option>
+                    <option value="School of Design">School of Design</option>
+                    <option value="School of Engineering">School of Engineering</option>
+                    <option value="School of Computing">School of Computing</option>
+                    <option value="School of Management">School of Management</option>
+                    <option value="School of Architecture">School of Architecture</option>
+                  </select>
+                </div>
+                <button type="button" class="btn-filter-reset" onclick="resetRoutePassengerFilters()" title="Reset Filters">
+                  <i class="ph ph-arrow-counter-clockwise"></i> Reset
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table-flat">
+                <thead>
+                  <tr>
+                    <th>Roll No.</th>
+                    <th>Transport User Name</th>
+                    <th>Contact Phone</th>
+                    <th>Boarding Stop</th>
+                    <th>College / Department</th>
+                    <th>Pass Status</th>
+                    <th>Fee Status</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="rdPassengersTableBody">
+                  <!-- Injected via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- VIEW 3: BUSES & FLEET (CLEAN REFERENCE STYLE: IMAGE 1 & 3)       -->
+        <!-- ================================================================ -->
+        <!-- ================================================================ -->
+        <!-- ================================================================ -->
+        <!-- VIEW 3: UNIVERSITY BUSES REGISTRY                                -->
+        <!-- ================================================================ -->
+        <section class="view-section" id="view-buses">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title">University Buses</h2>
+              <p class="view-desc">Complete registry of 17 university-owned buses with operational status, booking history, and maintenance records.</p>
+            </div>
+            <button class="btn-clean btn-clean-primary" onclick="openNewTripModal()">
+              <i class="ph ph-plus-circle"></i> Add New Trip
+            </button>
+          </div>
+
+          <!-- Top Fleet KPI Row -->
+          <div class="dashboard-kpi-row" style="margin-bottom: 20px;">
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">University Buses</span>
+              <span class="kpi-metric-number" id="kpiTotalUnivBuses">17</span>
+              <span class="kpi-metric-subtext green">17 University-Owned Fleet</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Available for Trips</span>
+              <span class="kpi-metric-number" id="kpiAvailableUnivBuses">9</span>
+              <span class="kpi-metric-subtext green">Ready for Special Trips</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Scheduled Trips</span>
+              <span class="kpi-metric-number" id="kpiActiveTripsCount">6</span>
+              <span class="kpi-metric-subtext warning">Hostel, Field & Treks</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Maintenance</span>
+              <span class="kpi-metric-number" id="kpiMaintenanceUnivBuses">2</span>
+              <span class="kpi-metric-subtext red">Depot Workshop Berth</span>
+            </div>
+          </div>
+
+          <!-- UNIVERSITY-OWNED BUSES REGISTRY -->
+          <div class="card-flat">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h3 style="font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                  <i class="ph ph-bus"></i>
+                  University Buses Registry (17 Buses)
+                </h3>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Click any bus card to inspect its full trip schedule, booking history, and maintenance records log.</p>
+              </div>
+
+              <!-- Filter Pills & Search -->
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <div class="toolbar-search" style="width: 260px;">
+                  <i class="ph ph-magnifying-glass"></i>
+                  <input type="text" id="univBusSearchInput" placeholder="Search bus code, plate, model..." onkeyup="filterUniversityBuses()">
+                </div>
+                <div class="toolbar-pills">
+                  <button class="pill-btn active" id="btnFilterUnivAll" onclick="setUnivBusFilter('all', this)">All</button>
+                  <button class="pill-btn" id="btnFilterUnivAvail" onclick="setUnivBusFilter('Available', this)">Available</button>
+                  <button class="pill-btn" id="btnFilterUnivSched" onclick="setUnivBusFilter('Scheduled', this)">Scheduled</button>
+                  <button class="pill-btn" id="btnFilterUnivMaint" onclick="setUnivBusFilter('Maintenance', this)">Maintenance</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- University Buses Grid (13 Cards) -->
+            <div class="university-buses-grid" id="univBusesContainer">
+              <!-- Injected via JavaScript -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- VIEW 3B: SPECIFIC BUS DETAILS VIEW (FULL HISTORY & MAINTENANCE)  -->
+        <!-- ================================================================ -->
+        <section class="view-section" id="view-bus-detail">
+          <!-- Back Nav & Page Header -->
+          <div class="view-header route-detail-topbar">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <button class="btn-clean" onclick="navigateTo('buses')" title="Return to University Buses">
+                <i class="ph ph-arrow-left"></i> Back to University Fleet
+              </button>
+              <div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <h2 class="view-title" id="bdBusTitle">Bus U-01 • MH12-CD-5678</h2>
+                  <span class="badge-clean operational" id="bdBusStatusBadge">Operational</span>
+                  <span class="badge-clean">MIT ADT Owned</span>
+                </div>
+                <p class="view-desc" id="bdBusSubtitle">Ashok Leyland 49 Deluxe High-Deck • Designated Driver: Santosh Jadhav • Assigned Corridor: Bus A - Nigdi</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-clean btn-clean-primary" onclick="openNewTripModalForCurrentBus()">
+                <i class="ph ph-plus-circle"></i> Add New Trip
+              </button>
+              <button class="btn-clean" onclick="triggerCall('+918336818273')" id="bdCallDriverBtn">
+                <i class="ph ph-phone"></i> Call Driver
+              </button>
+            </div>
+          </div>
+
+          <!-- Vehicle & Driver Overview Row -->
+          <div class="bus-detail-cards-row" style="margin-bottom: 20px;">
+            <!-- Left Card: Vehicle Fleet Specification & Telemetry -->
+            <div class="card-flat bus-spec-primary-card">
+              <div class="bus-spec-hero-row">
+                <div class="bus-coach-thumb-wrap">
+                  <img src="assets/bus-coach.png" alt="Bus Coach" class="bus-coach-img">
+                </div>
+                <div class="bus-hero-info">
+                  <div class="bus-plate-title" id="bdPlateNumber">MH12-CD-5678</div>
+                  <div class="bus-reg-sub" id="bdRegistrationNo">Coach #01 • REG-1011 • University Owned Fleet</div>
+                  <div class="bus-tags-strip" style="display: flex; gap: 6px; margin-top: 8px;">
+                    <span class="badge-clean operational" id="bdStatus">Operational</span>
+                    <span class="badge-clean">49 Seater Deluxe</span>
+                    <span class="badge-clean">GPS Monitored</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4 Specification Tiles Grid -->
+              <div class="spec-tiles-grid" style="margin-top: 18px;">
+                <div class="spec-tile-item">
+                  <span class="spec-tile-label">Seating Capacity</span>
+                  <span class="spec-tile-val" id="bdCapacity">49 Seats</span>
+                </div>
+                <div class="spec-tile-item">
+                  <span class="spec-tile-label">Current Odometer</span>
+                  <span class="spec-tile-val" id="bdOdometer">38,400 km</span>
+                </div>
+                <div class="spec-tile-item">
+                  <span class="spec-tile-label">Fuel Status</span>
+                  <span class="spec-tile-val" id="bdFuel">88% Diesel</span>
+                </div>
+                <div class="spec-tile-item">
+                  <span class="spec-tile-label">Speed Governor</span>
+                  <span class="spec-tile-val">60 km/h Strict</span>
+                </div>
+              </div>
+
+              <!-- Fleet KPIs Strip -->
+              <div class="bus-telemetry-kpi-strip">
+                <div class="kpi-strip-item">
+                  <span class="kpi-strip-num" id="bdTotalTripsCount">3</span>
+                  <span class="kpi-strip-lbl">Trips in History</span>
+                </div>
+                <div class="kpi-strip-divider"></div>
+                <div class="kpi-strip-item">
+                  <span class="kpi-strip-num" id="bdTotalMaintCount">3</span>
+                  <span class="kpi-strip-lbl">Service Records</span>
+                </div>
+                <div class="kpi-strip-divider"></div>
+                <div class="kpi-strip-item">
+                  <span class="kpi-strip-num">100%</span>
+                  <span class="kpi-strip-lbl">Fitness Certified</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Card: Designated Fleet Driver -->
+            <div class="card-flat bus-driver-primary-card">
+              <div class="route-driver-top-row">
+                <img src="assets/driver-santosh.jpg" id="bdDriverPhoto" alt="Driver" class="route-driver-avatar-lg">
+                <div class="route-driver-title-group">
+                  <div class="route-driver-main-name" id="bdDriverName">Santosh Jadhav</div>
+                  <div class="route-driver-empid-line" id="bdDriverEmpId">Emp ID: MIT-DRV-101 • Heavy Transport</div>
+                  <a href="tel:+918336818273" class="route-driver-phone-chip" id="bdDriverPhoneLink">
+                    <i class="ph ph-phone"></i>
+                    <span id="bdDriverPhone">+91 83368 18273</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="spec-tiles-grid" style="margin-top: 16px;">
+                <div class="spec-tile-item">
+                  <span class="spec-tile-label">Attendance Rate</span>
+                  <span class="spec-tile-val" id="bdDriverAttendance">98% (27/28 Days)</span>
+                </div>
+                <div class="spec-tile-item">
+                  <span class="spec-tile-label">Duty Roster</span>
+                  <span class="spec-tile-val" id="bdDriverDuty">On Duty</span>
+                </div>
+                <div class="spec-tile-item">
+                  <span class="spec-tile-label">Experience</span>
+                  <span class="spec-tile-val" id="bdDriverExp">5.2 Years</span>
+                </div>
+                <div class="spec-tile-item">
+                  <span class="spec-tile-label">Safety Rating</span>
+                  <span class="spec-tile-val" id="bdDriverRating">4.9 / 5.0</span>
+                </div>
+              </div>
+
+              <div class="bus-driver-actions-row">
+                <button type="button" class="btn-clean" id="bdCallDriverBtnBottom" onclick="triggerCall('+918336818273')">
+                  <i class="ph ph-phone"></i> Call Driver
+                </button>
+                <button type="button" class="btn-clean btn-clean-primary" onclick="navigateTo('chat');">
+                  <i class="ph ph-chat-text"></i> Message Driver
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION: TRIP SCHEDULE & BOOKING HISTORY -->
+          <div class="card-flat" style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <h3 style="font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                  <i class="ph ph-calendar-check"></i>
+                  Trip Schedule & Booking History
+                </h3>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Showing date, timings, trip reason, status, faculty in charge, and college for this university bus.</p>
+              </div>
+              <button class="btn-clean" onclick="openNewTripModalForCurrentBus()">
+                <i class="ph ph-plus-circle"></i> Add New Trip
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table-flat">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Timings</th>
+                    <th>Trip Reason / Description</th>
+                    <th>Status</th>
+                    <th>Faculty in Charge</th>
+                    <th>Faculty Contact</th>
+                    <th>College / Institute</th>
+                    <th>Transport Users</th>
+                  </tr>
+                </thead>
+                <tbody id="bdTripScheduleTableBody">
+                  <!-- Injected via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SECTION: MAINTENANCE HISTORY LOG -->
+          <div class="card-flat">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <h3 style="font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                  <i class="ph ph-wrench"></i>
+                  Maintenance History Log
+                </h3>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Comprehensive technical service history alongside reason and level of maintenance.</p>
+              </div>
+              <button class="btn-clean" onclick="logNewMaintenancePrompt()">
+                <i class="ph ph-plus-circle"></i> Log Service Record
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table-flat">
+                <thead>
+                  <tr>
+                    <th>Service Date</th>
+                    <th>Odometer</th>
+                    <th>Maintenance Reason & Scope</th>
+                    <th>Level of Maintenance</th>
+                    <th>Depot / Workshop</th>
+                    <th>Cost</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="bdMaintenanceTableBody">
+                  <!-- Injected via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- VIEW 3C: UNIVERSITY DRIVERS DIRECTORY (DEDICATED VIEW)          -->
+        <!-- ================================================================ -->
+        <section class="view-section" id="view-drivers">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title">University Drivers</h2>
+              <p class="view-desc">Complete registry of 17 employed campus transit drivers, assigned university buses, duty rosters, and safety ratings.</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-clean" onclick="triggerToast('Driver roster sync complete', 'success')">
+                <i class="ph ph-arrows-clockwise"></i> Sync Roster
+              </button>
+              <button class="btn-clean btn-clean-primary" onclick="openDriverModal('santosh')">
+                <i class="ph ph-user"></i> Driver Profile
+              </button>
+            </div>
+          </div>
+
+          <!-- Drivers Top KPI Cards -->
+          <div class="dashboard-kpi-row" style="margin-bottom: 20px;">
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Total Employed</span>
+              <span class="kpi-metric-number">17</span>
+              <span class="kpi-metric-subtext green">Campus Fleet Drivers</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Average Experience</span>
+              <span class="kpi-metric-number">4.9 yrs</span>
+              <span class="kpi-metric-subtext green">Heavy Transport Certified</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Average Attendance</span>
+              <span class="kpi-metric-number">96.8%</span>
+              <span class="kpi-metric-subtext green">Monthly Reliability Rate</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Safety Rating Avg</span>
+              <span class="kpi-metric-number">4.9 / 5.0</span>
+              <span class="kpi-metric-subtext green">Zero Incident Record</span>
+            </div>
+          </div>
+
+          <!-- Drivers Toolbar -->
+          <div class="toolbar-flat" style="margin-bottom: 20px;">
+            <div class="toolbar-search" style="width: 320px;">
+              <i class="ph ph-magnifying-glass"></i>
+              <input type="text" id="dedicatedDriverSearchInput" placeholder="Search driver name, employee ID, phone..." onkeyup="filterDedicatedDrivers()">
+            </div>
+          </div>
+
+          <!-- Dedicated Drivers Grid -->
+          <div class="university-drivers-grid" id="dedicatedDriversContainer">
+            <!-- Injected via JavaScript -->
+          </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- VIEW 4: DISPATCH CHAT (CLEAN MINIMALIST ENTERPRISE MESSENGER)    -->
+        <!-- ================================================================ -->
+        <section class="view-section" id="view-chat">
+          <div class="chat-flat-layout">
+            
+            <!-- Channels List -->
+            <div class="chat-flat-sidebar">
+              <div style="padding: 14px 16px; border-bottom: 1px solid var(--border-color);">
+                <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px;">Dispatch Comms</div>
+                <div class="toolbar-search" style="width: 100%; margin-bottom: 10px;">
+                  <i class="ph ph-magnifying-glass"></i>
+                  <input type="text" id="chatSearchInput" placeholder="Search chats..." onkeyup="filterChatConversations()">
+                </div>
+                <!-- Selection pills below search: All, Unread, Important -->
+                <div class="chat-filter-pills-row">
+                  <button class="pill-btn active" id="chatPillAll" onclick="setChatFilter('all', this)">All</button>
+                  <button class="pill-btn" id="chatPillUnread" onclick="setChatFilter('unread', this)">Unread (2)</button>
+                  <button class="pill-btn" id="chatPillImportant" onclick="setChatFilter('important', this)">Important (4)</button>
+                </div>
+              </div>
+
+              <div class="chat-flat-list" id="chatConversationsList">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+
+            <!-- Main Conversation Window -->
+            <div class="chat-main-flat">
+              <div class="chat-header-flat">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="font-size: 14px; font-weight: 600;" id="activeChatName">All Drivers Broadcast</div>
+                  </div>
+                  <div style="font-size: 12px; color: var(--status-green);" id="activeChatSub">● 13 Drivers Active • Strict Speed Telemetry</div>
+                </div>
+                <button class="btn-clean" id="activeChatCallBtn" onclick="triggerCall('+919847432984')"><i class="ph ph-phone"></i> Call Driver</button>
+              </div>
+
+              <div class="chat-messages-area" id="chatMessagesThread">
+                <!-- Injected via JavaScript -->
+              </div>
+
+              <!-- Quick Smart Replies -->
+              <div class="chat-quick-replies-row">
+                <button class="pill-btn" onclick="quickReplyChat('Replacement vehicle is on the way')">Replacement vehicle is on the way</button>
+                <button class="pill-btn" onclick="quickReplyChat('Issue noted. It will get resolved shortly')">Issue noted. Resolving shortly</button>
+                <button class="pill-btn" onclick="quickReplyChat('Reroute via bypass')">Reroute via bypass</button>
+              </div>
+
+              <div class="chat-input-row">
+                <input type="text" id="chatMessageInput" placeholder="Type a message to driver or channel..." onkeydown="handleChatInputKeyDown(event)">
+                <button class="btn-clean btn-clean-primary" onclick="sendChatMessage()">Send</button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- VIEW 5: COMPLAINTS DESK (CLEAN FLAT RESOLUTION TABLE)            -->
+        <!-- ================================================================ -->
+        <section class="view-section" id="view-complaints">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title">Complaints & Grievances Desk</h2>
+              <p class="view-desc">Monitor student and faculty incident logs, service delays, vehicle maintenance alerts, and driver conduct.</p>
+            </div>
+            <button class="btn-clean btn-clean-primary" onclick="openNewComplaintModal()">
+              <i class="ph ph-plus-circle"></i> Log Grievance
+            </button>
+          </div>
+
+          <!-- Top Complaints KPI Stats Row -->
+          <div class="dashboard-kpi-row" style="margin-bottom: 20px;">
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Total Complaints</span>
+              <span class="kpi-metric-number" id="kpiTotalComplaints">12</span>
+              <span class="kpi-metric-subtext blue">Registered Incident Logs</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Pending Action</span>
+              <span class="kpi-metric-number" id="kpiPendingComplaints">4</span>
+              <span class="kpi-metric-subtext red">Awaiting Dispatch Review</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">In Progress</span>
+              <span class="kpi-metric-number" id="kpiInProgressComplaints">4</span>
+              <span class="kpi-metric-subtext warning">Investigation Underway</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Resolved</span>
+              <span class="kpi-metric-number" id="kpiResolvedComplaints">4</span>
+              <span class="kpi-metric-subtext green">Closed & Verified</span>
+            </div>
+          </div>
+
+          <!-- Complaints Filter Toolbar (Search + Status Pills + Category & Route Dropdowns) -->
+          <div class="toolbar-flat" style="margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+            <div class="toolbar-search" style="width: 250px;">
+              <i class="ph ph-magnifying-glass"></i>
+              <input type="text" id="complaintsSearchInput" placeholder="Search grievance text, issue..." onkeyup="filterComplaints()">
+            </div>
+
+            <!-- Status filter pills -->
+            <div class="toolbar-pills">
+              <button class="pill-btn active" id="cTabAll" onclick="filterComplaintsByStatus('all', this)">All</button>
+              <button class="pill-btn" id="cTabPending" onclick="filterComplaintsByStatus('pending', this)">Pending</button>
+              <button class="pill-btn" id="cTabInProgress" onclick="filterComplaintsByStatus('in-progress', this)">In Progress</button>
+              <button class="pill-btn" id="cTabResolved" onclick="filterComplaintsByStatus('resolved', this)">Resolved</button>
+            </div>
+
+            <!-- Category & Corridor dropdown filters -->
+            <div style="display: flex; gap: 8px; margin-left: auto; flex-wrap: wrap;">
+              <select id="complaintCategoryFilter" class="pill-btn" style="padding: 6px 10px;" onchange="filterComplaints()">
+                <option value="all">All Categories</option>
+                <option value="Delay">Delay</option>
+                <option value="Safety">Safety & Driving</option>
+                <option value="Comfort">Comfort & Curtains</option>
+                <option value="Overcrowding">Overcrowding</option>
+                <option value="AC & Cooling">AC & Cooling</option>
+                <option value="Route Deviation">Route Deviation</option>
+                <option value="Cleanliness">Cleanliness</option>
+                <option value="Behavior">Staff Behavior</option>
+              </select>
+
+              <select id="complaintRouteFilter" class="pill-btn" style="padding: 6px 10px;" onchange="filterComplaints()">
+                <option value="all">All Corridors</option>
+                <option value="Bus A - Nigdi">Bus A - Nigdi</option>
+                <option value="Bus B - Chaphekar">Bus B - Chaphekar</option>
+                <option value="Bus D - Moshi">Bus D - Moshi</option>
+                <option value="Bus E - Lohegaon">Bus E - Lohegaon</option>
+                <option value="Bus F - Pashan">Bus F - Pashan</option>
+                <option value="Bus U-">University Fleet</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card-flat">
+            <table class="table-flat">
+              <thead>
+                <tr>
+                  <th>Reporter</th>
+                  <th>Category</th>
+                  <th>Issue Details</th>
+                  <th>Corridor / Bus</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="complaintsTableBody">
+                <!-- Injected via JavaScript with anonymous identities -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- VIEW 6: TRANSPORT USERS (STUDENTS & FACULTY SMART PASSES)        -->
+        <!-- ================================================================ -->
+        <section class="view-section" id="view-passengers">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title">Transport Users Directory</h2>
+              <p class="view-desc">4,280 Registered students and faculty transit passes across 14 university institutes.</p>
+            </div>
+            <button class="btn-clean btn-clean-primary" onclick="openAddStudentModal()">
+              <i class="ph ph-user-plus"></i> Add Transport User
+            </button>
+          </div>
+
+          <!-- Top Transport Users KPI Stats Row -->
+          <div class="dashboard-kpi-row" style="margin-bottom: 20px;">
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Total Transport Users</span>
+              <span class="kpi-metric-number" id="kpiTotalPassengers">4,280</span>
+              <span class="kpi-metric-subtext blue">Across 14 Institutes</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Passes Collected</span>
+              <span class="kpi-metric-number" id="kpiPassesCollected">3,724</span>
+              <span class="kpi-metric-subtext green">87% Physical Passes Issued</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Passes Not Collected</span>
+              <span class="kpi-metric-number" id="kpiPassesNotCollected">556</span>
+              <span class="kpi-metric-subtext warning">Pending Desk Pickup</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Active & Paid</span>
+              <span class="kpi-metric-number" id="kpiPaidPassengers">3,892</span>
+              <span class="kpi-metric-subtext green">91% Transit Passes Paid</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Payment Pending</span>
+              <span class="kpi-metric-number" id="kpiPendingPassengers">268</span>
+              <span class="kpi-metric-subtext red">Verification In Progress</span>
+            </div>
+          </div>
+
+          <!-- Passengers Filter Suite (Spaced Out & Clear Hierarchy) -->
+          <div class="passengers-filter-suite">
+            <!-- Row 1: Search, Status Tabs & View Toggle -->
+            <div class="passengers-primary-filter-row">
+              <div class="toolbar-search passengers-search-large">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="text" id="passengerSearchInput" placeholder="Search by Roll No, Transport User Name, or Route..." onkeyup="filterPassengers()">
+              </div>
+
+              <div class="toolbar-pills passengers-status-tabs">
+                <button class="pill-btn active" id="passTabAll" onclick="setPassengerStatusFilter('all', this)">All (<span id="passCountAll">16</span>)</button>
+                <button class="pill-btn" id="passTabPaid" onclick="setPassengerStatusFilter('paid', this)">Paid (<span id="passCountPaid">11</span>)</button>
+                <button class="pill-btn" id="passTabPending" onclick="setPassengerStatusFilter('pending', this)">Pending (<span id="passCountPending">3</span>)</button>
+                <button class="pill-btn" id="passTabOverdue" onclick="setPassengerStatusFilter('overdue', this)">Overdue (<span id="passCountOverdue">2</span>)</button>
+              </div>
+
+              <div class="passengers-view-toggle-wrap">
+                <div class="view-mode-toggle-group">
+                  <button type="button" class="view-mode-btn active" id="btnPassengerViewTable" onclick="setPassengerViewMode('table')" title="Table View">
+                    <i class="ph ph-table"></i> Table
+                  </button>
+                  <button type="button" class="view-mode-btn" id="btnPassengerViewCards" onclick="setPassengerViewMode('cards')" title="Smart Pass Cards View">
+                    <i class="ph ph-identification-card"></i> Cards
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 2: Secondary Attribute Filter Controls Strip (Generously Spaced) -->
+            <div class="passengers-secondary-filter-strip">
+              <div class="filter-item-labeled">
+                <span class="filter-mini-label">Pass Status</span>
+                <select id="passengerPassStatusFilter" class="filter-select-modern" onchange="filterPassengers()" title="Filter by Pass Status">
+                  <option value="all">All Pass Statuses</option>
+                  <option value="Collected">Collected</option>
+                  <option value="Not collected">Not collected</option>
+                </select>
+              </div>
+
+              <div class="filter-item-labeled">
+                <span class="filter-mini-label">Route Corridor</span>
+                <select id="passengerRouteFilter" class="filter-select-modern" onchange="filterPassengers()" title="Filter by Route Corridor">
+                  <option value="all">All Transit Corridors</option>
+                  <option value="Bus A">Bus A (Nigdi)</option>
+                  <option value="Bus B">Bus B (Chaphekar)</option>
+                  <option value="Bus C">Bus C (Kothrud)</option>
+                  <option value="Bus D">Bus D (Moshi)</option>
+                  <option value="Bus E">Bus E (Lohegaon)</option>
+                  <option value="Bus F">Bus F (Pashan)</option>
+                  <option value="Bus G">Bus G (Hadapsar)</option>
+                </select>
+              </div>
+
+              <div class="filter-item-labeled">
+                <span class="filter-mini-label">Fee Status</span>
+                <select id="passengerFeeStatusFilter" class="filter-select-modern" onchange="filterPassengers()" title="Filter by Fee Status">
+                  <option value="all">All Fee Statuses</option>
+                  <option value="Paid">Fee Paid (Authorized)</option>
+                  <option value="Pending">Fee Pending (Under Review)</option>
+                  <option value="Overdue">Fee Overdue (Action Needed)</option>
+                </select>
+              </div>
+
+              <button type="button" class="btn-filter-reset" onclick="resetPassengerFilters()" title="Reset all filters">
+                <i class="ph ph-arrow-counter-clockwise"></i> Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Table Container -->
+          <div class="card-flat" id="passengersTableContainer">
+            <table class="table-flat">
+              <thead>
+                <tr>
+                  <th>Roll No.</th>
+                  <th>Transport User Name</th>
+                  <th>Assigned Route & Bus</th>
+                  <th>Boarding Stop</th>
+                  <th>Pass Status</th>
+                  <th>Fee Status</th>
+                  <th style="text-align: right; width: 60px;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="passengersTableBody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Smart Pass Cards Container (Toggled via View Switcher) -->
+          <div id="passengersCardsContainer" class="passenger-grid-cards" style="display: none;">
+            <!-- Injected via JavaScript -->
+          </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- VIEW 7: FINANCES & BILLINGS (EXACT REVENUE & TARAWADE INVOICES)  -->
+        <!-- ================================================================ -->
+        <section class="view-section" id="view-finances">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title">Finances & Tarawade Billings</h2>
+              <p class="view-desc">University transit revenue reconciliation and contractor monthly statements.</p>
+            </div>
+            <button class="btn-clean" onclick="openAddExpenseModal()">
+              <i class="ph ph-plus"></i> Add Expense Voucher
+            </button>
+          </div>
+
+          <div class="dashboard-kpi-row" style="margin-bottom: 20px;">
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Total Semester Revenue</span>
+              <span class="kpi-metric-number">₹12,45,000</span>
+              <span class="kpi-metric-subtext green">+12.5% vs last term</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Pending Payments</span>
+              <span class="kpi-metric-number">₹2,10,500</span>
+              <span class="kpi-metric-subtext red">142 pending installments</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Bus Pass Registrations</span>
+              <span class="kpi-metric-number">842 Passes</span>
+              <span class="kpi-metric-subtext green">+58 new this month</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Internal Operating Expenses</span>
+              <span class="kpi-metric-number">₹4,85,000</span>
+              <span class="kpi-metric-subtext gray">Fuel, Maintenance & Salaries</span>
+            </div>
+            <div class="kpi-metric-card">
+              <span class="kpi-metric-title">Contractor Cleared</span>
+              <span class="kpi-metric-number">100%</span>
+              <span class="kpi-metric-subtext green">All Tarawade SLAs verified</span>
+            </div>
+          </div>
+
+          <div class="card-flat">
+            <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Tarawade Monthly Invoices</div>
+            <table class="table-flat">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Invoice No.</th>
+                  <th>Contractor Amount</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>October 2026</strong></td>
+                  <td><code>#TW-2023-102</code></td>
+                  <td><strong>₹3,40,000</strong></td>
+                  <td><span class="badge-clean active">Cleared</span></td>
+                  <td><button class="btn-clean" onclick="viewInvoice('#TW-2023-102')">View Statement</button></td>
+                </tr>
+                <tr>
+                  <td><strong>September 2026</strong></td>
+                  <td><code>#TW-2023-098</code></td>
+                  <td><strong>₹3,15,000</strong></td>
+                  <td><span class="badge-clean active">Cleared</span></td>
+                  <td><button class="btn-clean" onclick="viewInvoice('#TW-2023-098')">View Statement</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- VIEW 8: SETTINGS & OPERATIONS MANAGEMENT SUITE                   -->
+        <!-- ================================================================ -->
+        <section class="view-section" id="view-settings">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title">Settings</h2>
+              <p class="view-desc">Manage transport users, fleet buses, drivers roster, routes directory, and system parameters.</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-clean" onclick="exportMasterTransitBackup()" title="Download JSON Database Backup">
+                <i class="ph ph-download-simple"></i> Export Backup
+              </button>
+            </div>
+          </div>
+
+          <!-- Structured Settings Hub (Modern App Style: Overview Categories) -->
+          <div id="settingsHubView" class="settings-hub-wrap">
+            
+            <!-- Group 1: Operational Entities & Registries -->
+            <div class="settings-group-card">
+              <div class="settings-group-header">
+                <span class="settings-group-title">Operations & Transit Registries</span>
+                <span class="settings-group-sub">Manage enrolled transport users, fleet buses, driver rosters, and corridors</span>
+              </div>
+              <div class="settings-menu-list">
+                <!-- Row 1: Transport Users -->
+                <div class="settings-nav-item" onclick="openSettingsSubpage('users')">
+                  <div class="settings-nav-icon users">
+                    <i class="ph ph-users"></i>
+                  </div>
+                  <div class="settings-nav-text">
+                    <div class="settings-nav-title">Transport Users</div>
+                    <div class="settings-nav-desc">Student & faculty pass directory, enrollment, verification, and pass status</div>
+                  </div>
+                  <div class="settings-nav-right">
+                    <span class="badge-clean">4,280 Enrolled</span>
+                    <i class="ph ph-caret-right settings-caret"></i>
+                  </div>
+                </div>
+
+                <!-- Row 2: Fleet Buses -->
+                <div class="settings-nav-item" onclick="openSettingsSubpage('buses')">
+                  <div class="settings-nav-icon buses">
+                    <i class="ph ph-van"></i>
+                  </div>
+                  <div class="settings-nav-text">
+                    <div class="settings-nav-title">Fleet Buses</div>
+                    <div class="settings-nav-desc">University and contracted coaches, seating capacity, license plates, and health</div>
+                  </div>
+                  <div class="settings-nav-right">
+                    <span class="badge-clean">36 Buses</span>
+                    <i class="ph ph-caret-right settings-caret"></i>
+                  </div>
+                </div>
+
+                <!-- Row 3: Drivers Roster -->
+                <div class="settings-nav-item" onclick="openSettingsSubpage('drivers')">
+                  <div class="settings-nav-icon drivers">
+                    <i class="ph ph-steering-wheel"></i>
+                  </div>
+                  <div class="settings-nav-text">
+                    <div class="settings-nav-title">Drivers Roster</div>
+                    <div class="settings-nav-desc">Certified commercial transit pilots, shift duty logs, and licensing compliance</div>
+                  </div>
+                  <div class="settings-nav-right">
+                    <span class="badge-clean">16 Drivers</span>
+                    <i class="ph ph-caret-right settings-caret"></i>
+                  </div>
+                </div>
+
+                <!-- Row 4: Transit Routes -->
+                <div class="settings-nav-item" onclick="openSettingsSubpage('routes')">
+                  <div class="settings-nav-icon routes">
+                    <i class="ph ph-path"></i>
+                  </div>
+                  <div class="settings-nav-text">
+                    <div class="settings-nav-title">Transit Routes</div>
+                    <div class="settings-nav-desc">Campus transit corridors, origin-destination waypoints, and stop sequence schedules</div>
+                  </div>
+                  <div class="settings-nav-right">
+                    <span class="badge-clean">7 Corridors</span>
+                    <i class="ph ph-caret-right settings-caret"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Group 2: System Preferences & Database Backup -->
+            <div class="settings-group-card">
+              <div class="settings-group-header">
+                <span class="settings-group-title">System & Dispatch Preferences</span>
+                <span class="settings-group-sub">Telemetry streaming, security thresholds, and database management</span>
+              </div>
+              <div class="settings-menu-list">
+                <!-- Row 5: System Parameters -->
+                <div class="settings-nav-item" onclick="openSettingsSubpage('system')">
+                  <div class="settings-nav-icon system">
+                    <i class="ph ph-sliders"></i>
+                  </div>
+                  <div class="settings-nav-text">
+                    <div class="settings-nav-title">System Parameters</div>
+                    <div class="settings-nav-desc">GPS telemetry ping frequency, speed governor rules, and contractor SLAs</div>
+                  </div>
+                  <div class="settings-nav-right">
+                    <span class="badge-clean operational">Active</span>
+                    <i class="ph ph-caret-right settings-caret"></i>
+                  </div>
+                </div>
+
+                <!-- Row 6: Database Backup -->
+                <div class="settings-nav-item" onclick="exportMasterTransitBackup()">
+                  <div class="settings-nav-icon backup">
+                    <i class="ph ph-database"></i>
+                  </div>
+                  <div class="settings-nav-text">
+                    <div class="settings-nav-title">Database Backup & JSON Export</div>
+                    <div class="settings-nav-desc">Download master snapshot archive of all campus transit records for audit & restore</div>
+                  </div>
+                  <div class="settings-nav-right">
+                    <span class="badge-clean">Download JSON</span>
+                    <i class="ph ph-download-simple settings-caret"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- SUBPAGE CONTAINER: DISPLAYS WHEN USER CLICKS A SETTINGS CATEGORY -->
+          <div id="settingsSubpageContainer" class="hidden">
+            <!-- Breadcrumbs & Back Navigation Bar -->
+            <div class="settings-subpage-nav-bar">
+              <button type="button" class="btn-settings-back" onclick="closeSettingsSubpage()">
+                <i class="ph ph-arrow-left"></i> Back to Settings
+              </button>
+              <div class="settings-breadcrumbs">
+                <span>Settings</span>
+                <i class="ph ph-caret-right" style="font-size: 11px;"></i>
+                <span id="settingsBreadcrumbCurrent" style="color: var(--text-primary); font-weight: 600;">Transport Users</span>
+              </div>
+            </div>
+
+          <!-- PANEL 1: TRANSPORT USERS MANAGEMENT -->
+          <div class="settings-tab-panel" id="settingsPanelUsers">
+            <div class="card-flat">
+              <div class="settings-panel-header">
+                <div class="settings-panel-title-grp">
+                  <h3><i class="ph ph-users" style="color: var(--accent);"></i> Transport Users (Students & Faculty) Management</h3>
+                  <p>Add, inspect, or remove enrolled students and faculty members from the campus transit registry.</p>
+                </div>
+                <button class="btn-clean btn-clean-primary" onclick="openAddStudentModal()">
+                  <i class="ph ph-user-plus"></i> Add Transport User
+                </button>
+              </div>
+
+              <div class="settings-toolbar-row" style="margin-top: 16px;">
+                <div class="toolbar-search" style="width: 280px;">
+                  <i class="ph ph-magnifying-glass"></i>
+                  <input type="text" id="settingsUserSearch" placeholder="Search user name, roll no, route..." onkeyup="renderSettingsUsersTable()">
+                </div>
+                <select id="settingsUserRoleFilter" class="filter-select-modern" onchange="renderSettingsUsersTable()">
+                  <option value="all">All Roles (Student / Faculty)</option>
+                  <option value="Student">Students Only</option>
+                  <option value="Faculty">Faculty & Staff</option>
+                </select>
+                <select id="settingsUserFeeFilter" class="filter-select-modern" onchange="renderSettingsUsersTable()">
+                  <option value="all">All Fee Statuses</option>
+                  <option value="Paid">Paid</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Overdue">Overdue</option>
+                </select>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table-flat">
+                  <thead>
+                    <tr>
+                      <th>Transport User</th>
+                      <th>Roll No / PRN</th>
+                      <th>Role</th>
+                      <th>Department</th>
+                      <th>Assigned Corridor</th>
+                      <th>Fee Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="settingsUsersTableBody">
+                    <!-- Dynamically populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANEL 2: FLEET BUSES MANAGEMENT -->
+          <div class="settings-tab-panel hidden" id="settingsPanelBuses">
+            <div class="card-flat">
+              <div class="settings-panel-header">
+                <div class="settings-panel-title-grp">
+                  <h3><i class="ph ph-van" style="color: var(--accent);"></i> Fleet Buses Management</h3>
+                  <p>Add new coaches, monitor vehicle specifications, and decommission or remove buses from campus fleet.</p>
+                </div>
+                <button class="btn-clean btn-clean-primary" onclick="openAddBusModal()">
+                  <i class="ph ph-plus-circle"></i> Add New Bus
+                </button>
+              </div>
+
+              <div class="settings-toolbar-row" style="margin-top: 16px;">
+                <div class="toolbar-search" style="width: 280px;">
+                  <i class="ph ph-magnifying-glass"></i>
+                  <input type="text" id="settingsBusSearch" placeholder="Search bus code, plate, model..." onkeyup="renderSettingsBusesTable()">
+                </div>
+                <select id="settingsBusStatusFilter" class="filter-select-modern" onchange="renderSettingsBusesTable()">
+                  <option value="all">All Statuses</option>
+                  <option value="Operational">Operational</option>
+                  <option value="Maintenance">Maintenance / Standby</option>
+                </select>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table-flat">
+                  <thead>
+                    <tr>
+                      <th>Bus Code</th>
+                      <th>License Plate</th>
+                      <th>Coach Model</th>
+                      <th>Capacity</th>
+                      <th>Designated Driver</th>
+                      <th>Assigned Corridor</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="settingsBusesTableBody">
+                    <!-- Dynamically populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANEL 3: DRIVERS ROSTER MANAGEMENT -->
+          <div class="settings-tab-panel hidden" id="settingsPanelDrivers">
+            <div class="card-flat">
+              <div class="settings-panel-header">
+                <div class="settings-panel-title-grp">
+                  <h3><i class="ph ph-steering-wheel" style="color: var(--accent);"></i> Drivers Roster Management</h3>
+                  <p>Enroll certified commercial heavy vehicle drivers, assign vehicles, or offboard transit personnel.</p>
+                </div>
+                <button class="btn-clean btn-clean-primary" onclick="openAddDriverModal()">
+                  <i class="ph ph-user-plus"></i> Add New Driver
+                </button>
+              </div>
+
+              <div class="settings-toolbar-row" style="margin-top: 16px;">
+                <div class="toolbar-search" style="width: 280px;">
+                  <i class="ph ph-magnifying-glass"></i>
+                  <input type="text" id="settingsDriverSearch" placeholder="Search driver name, emp ID, bus..." onkeyup="renderSettingsDriversTable()">
+                </div>
+                <select id="settingsDriverDutyFilter" class="filter-select-modern" onchange="renderSettingsDriversTable()">
+                  <option value="all">All Duty Rosters</option>
+                  <option value="On Duty">On Duty</option>
+                  <option value="Standby">Standby</option>
+                </select>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table-flat">
+                  <thead>
+                    <tr>
+                      <th>Driver</th>
+                      <th>Employee ID</th>
+                      <th>Contact Phone</th>
+                      <th>Commercial DL</th>
+                      <th>Assigned Bus</th>
+                      <th>Duty Status</th>
+                      <th>Rating</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="settingsDriversTableBody">
+                    <!-- Dynamically populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANEL 4: TRANSIT ROUTES MANAGEMENT -->
+          <div class="settings-tab-panel hidden" id="settingsPanelRoutes">
+            <div class="card-flat">
+              <div class="settings-panel-header">
+                <div class="settings-panel-title-grp">
+                  <h3><i class="ph ph-path" style="color: var(--accent);"></i> Transit Routes & Corridors Management</h3>
+                  <p>Commission new transit corridors, configure waypoints, and deactivate or remove outdated routes.</p>
+                </div>
+                <button class="btn-clean btn-clean-primary" onclick="openAddRouteModal()">
+                  <i class="ph ph-plus-circle"></i> Add New Route
+                </button>
+              </div>
+
+              <div class="settings-toolbar-row" style="margin-top: 16px;">
+                <div class="toolbar-search" style="width: 280px;">
+                  <i class="ph ph-magnifying-glass"></i>
+                  <input type="text" id="settingsRouteSearch" placeholder="Search route, origin, plate..." onkeyup="renderSettingsRoutesTable()">
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table-flat">
+                  <thead>
+                    <tr>
+                      <th>Route Code & Corridor</th>
+                      <th>Origin Landmark</th>
+                      <th>Destination</th>
+                      <th>Waypoint Stops</th>
+                      <th>Est. Duration</th>
+                      <th>Assigned Vehicle</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="settingsRoutesTableBody">
+                    <!-- Dynamically populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANEL 5: SYSTEM PARAMETERS -->
+          <div class="settings-tab-panel hidden" id="settingsPanelSystem">
+            <div class="card-flat" style="max-width: 720px;">
+              <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                <i class="ph ph-sliders"></i> Fleet Telemetry & Contractor Configuration
+              </h3>
+              <div class="form-group-flat">
+                <label class="form-label-flat">University Entity</label>
+                <input type="text" class="form-input-flat" value="MIT ADT University • Campus Transportation Division" readonly>
+              </div>
+              <div class="form-group-flat">
+                <label class="form-label-flat">Fleet Primary Contractor</label>
+                <input type="text" class="form-input-flat" value="Tarawade Logistics & Tours Pvt. Ltd.">
+              </div>
+              <div class="form-group-flat">
+                <label class="form-label-flat">Active Contract Buses Quota</label>
+                <input type="number" class="form-input-flat" value="24">
+              </div>
+              <div class="form-group-flat">
+                <label class="form-label-flat">Speed Governor Alert Threshold</label>
+                <input type="text" class="form-input-flat" value="60 km/h (Strict)">
+              </div>
+              <div class="form-group-flat">
+                <label class="form-label-flat">GPS Telemetry Ping Frequency</label>
+                <select class="form-input-flat">
+                  <option value="5s">Realtime Stream (5 seconds)</option>
+                  <option value="10s" selected>Standard Enterprise (10 seconds)</option>
+                  <option value="30s">Battery Saver Mode (30 seconds)</option>
+                </select>
+              </div>
+              <div class="form-group-flat">
+                <label class="form-label-flat">RFID Smart Pass Protocol</label>
+                <input type="text" class="form-input-flat" value="ISO/IEC 14443 Type A • MIFARE DESFire EV2 (Encrypted)" readonly>
+              </div>
+              <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn-clean" onclick="exportMasterTransitBackup()"><i class="ph ph-download-simple"></i> Download Full Backup JSON</button>
+                <button class="btn-clean btn-clean-primary" onclick="triggerToast('System parameters saved', 'success')"><i class="ph ph-check"></i> Save Parameters</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: DRIVER PROFILE                                                -->
+  <!-- ==================================================================== -->
+  <div class="modal-overlay hidden" id="driverModal">
+    <div class="modal-dialog-flat">
+      <div class="modal-header-flat">
+        <span class="modal-title-flat">Staff / Driver Profile</span>
+        <button class="modal-close-btn" onclick="closeDriverModal()"><i class="ph ph-x"></i></button>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px;">
+        <img src="assets/driver-santosh.jpg" id="modalDriverPhoto" alt="Driver" style="width: 52px; height: 52px; border-radius: var(--radius-control); object-fit: cover; border: 1px solid var(--border); flex-shrink: 0; margin-top: 1px;">
+        <div>
+          <h3 style="font-size: 16px; font-weight: 600; color: var(--text-primary);" id="modalDriverName">Santosh Jadhav</h3>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;" id="modalDriverSub">Emp ID: MIT-DRV-101 • Bus U-01</div>
+          <span class="badge-clean active" id="modalDriverStatus" style="margin-top: 4px;">Active on duty</span>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 14px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 16px;">
+        <div>
+          <div style="font-size: 12px; color: var(--text-muted);">Contact number</div>
+          <div style="font-size: 13px; font-weight: 500; color: var(--text-primary); margin-top: 2px; font-variant-numeric: tabular-nums;" id="modalDriverPhone">+91 83368 18273</div>
+        </div>
+        <div>
+          <div style="font-size: 12px; color: var(--text-muted);">Attendance rate</div>
+          <div style="font-size: 13px; font-weight: 500; color: var(--text-primary); margin-top: 2px; font-variant-numeric: tabular-nums;" id="modalDriverAttendance">98% (27/28 Days)</div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button class="btn-clean" id="modalDriverCallBtn" onclick="triggerCall('+918336818273')"><i class="ph ph-phone"></i> Call Driver</button>
+        <button class="btn-clean btn-clean-primary" id="modalDriverMsgBtn" onclick="closeDriverModal(); navigateTo('chat');"><i class="ph ph-chat-text"></i> Message</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: CHARTER SPECIAL TRIP (PROMINENT ACTION WITH SOUND)            -->
+  <!-- ==================================================================== -->
+  <div class="modal-overlay hidden" id="newTripModal">
+    <div class="modal-dialog-flat modern-trip-modal">
+      <div class="modal-header-flat">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="modal-header-icon-box">
+            <i class="ph ph-calendar-plus"></i>
+          </div>
+          <div>
+            <h3 class="modal-title-flat">Add New Trip</h3>
+            <p class="modal-subtitle-flat">Allot a university fleet bus for industrial visits, study tours, or faculty transit.</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closeNewTripModal()" title="Close dialog"><i class="ph ph-x"></i></button>
+      </div>
+
+      <form onsubmit="handleSaveTrip(event)">
+        <!-- Section 1: Faculty in Charge -->
+        <div class="modal-form-section">
+          <div class="modal-section-tag">
+            <span class="step-num">01</span>
+            <span>Faculty & Department In-Charge</span>
+          </div>
+
+          <div class="form-grid-2col">
+            <div class="form-group-flat">
+              <label class="form-label-flat">Faculty In-Charge *</label>
+              <div class="input-icon-wrap">
+                <i class="ph ph-user"></i>
+                <input type="text" id="tripFacultyName" class="form-input-flat" value="Prof. Harsh Bhawsar" required placeholder="Prof. Full Name">
+              </div>
+            </div>
+            <div class="form-group-flat">
+              <label class="form-label-flat">Faculty Contact Number *</label>
+              <div class="input-icon-wrap">
+                <i class="ph ph-phone"></i>
+                <input type="text" id="tripFacultyContact" class="form-input-flat" value="+91 98450 22391" required placeholder="+91 XXXXX XXXXX">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group-flat" style="margin-top: 10px;">
+            <label class="form-label-flat">Sponsoring College / Institute *</label>
+            <div class="input-icon-wrap">
+              <i class="ph ph-buildings"></i>
+              <select id="tripCollege" class="form-input-flat" required>
+                <option value="Institute of Design">Institute of Design (IOD)</option>
+                <option value="School of Engineering">School of Engineering (SOE)</option>
+                <option value="School of Computing">School of Computing (SOC)</option>
+                <option value="School of Management">School of Management (SOM)</option>
+                <option value="Faculty of Architecture">Faculty of Architecture (FOA)</option>
+                <option value="All Campuses Shuttle">All Campuses Shuttle</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Trip Itinerary & Schedule -->
+        <div class="modal-form-section">
+          <div class="modal-section-tag">
+            <span class="step-num">02</span>
+            <span>Trip Itinerary & Timings</span>
+          </div>
+
+          <div class="form-group-flat">
+            <label class="form-label-flat">Purpose / Destination Corridor *</label>
+            <div class="input-icon-wrap">
+              <i class="ph ph-map-pin"></i>
+              <input type="text" id="tripDescription" class="form-input-flat" placeholder="e.g. Industrial Visit - Chakan Automobile Cluster" value="Industrial Visit - Chakan Automobile Cluster" required>
+            </div>
+          </div>
+
+          <div class="form-grid-3col" style="margin-top: 10px;">
+            <div class="form-group-flat">
+              <label class="form-label-flat">Trip Date *</label>
+              <div class="input-icon-wrap">
+                <i class="ph ph-calendar-blank"></i>
+                <input type="text" id="tripDate" class="form-input-flat" value="30/03/2026" required placeholder="DD/MM/YYYY">
+              </div>
+            </div>
+            <div class="form-group-flat">
+              <label class="form-label-flat">Timings *</label>
+              <div class="input-icon-wrap">
+                <i class="ph ph-clock"></i>
+                <input type="text" id="tripTimings" class="form-input-flat" value="8:30 AM – 4:30 PM" required placeholder="8:30 AM – 4:30 PM">
+              </div>
+            </div>
+            <div class="form-group-flat">
+              <label class="form-label-flat">Transport Users Headcount *</label>
+              <div class="input-icon-wrap">
+                <i class="ph ph-users"></i>
+                <input type="number" id="tripPassengers" class="form-input-flat" value="44" min="1" max="50" required>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Bus Fleet Allocation -->
+        <div class="modal-form-section">
+          <div class="modal-section-tag">
+            <span class="step-num">03</span>
+            <span>Vehicle Allocation (13 University Fleet)</span>
+          </div>
+
+          <div class="form-group-flat">
+            <label class="form-label-flat">Select University Bus *</label>
+            <div class="input-icon-wrap">
+              <i class="ph ph-van"></i>
+              <select id="tripBusSelect" class="form-input-flat" required>
+                <!-- Dynamically populated with 13 university buses -->
+              </select>
+            </div>
+          </div>
+
+          <!-- Notice Banner -->
+          <div class="trip-allocation-callout">
+            <i class="ph ph-shield-check"></i>
+            <div>
+              <strong>Instant Dispatch Allotment:</strong> Bus schedule & designated driver are locked on the university dispatch log.
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Actions Footer -->
+        <div class="modal-footer-flat">
+          <button type="button" class="btn-clean" onclick="closeNewTripModal()">Cancel</button>
+          <button type="submit" class="btn-clean btn-clean-primary">
+            <i class="ph ph-check"></i> Add New Trip
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: EDIT TRANSPORT USER PROFILE (FOR TRANSPORT MANAGEMENT)       -->
+  <!-- ==================================================================== -->
+  <div class="modal-overlay hidden" id="editPassengerModal">
+    <div class="modal-dialog-flat" style="max-width: 500px;">
+      <div class="modal-header-flat">
+        <div>
+          <span class="modal-title-flat">Edit Transport User Profile</span>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Transport Management Console • Update Pass & Details</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeEditPassengerModal()"><i class="ph ph-x"></i></button>
+      </div>
+      <form onsubmit="handleSaveEditedPassenger(event)">
+        <input type="hidden" id="editPassengerOrigId">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Roll Number</label>
+            <input type="text" id="editPassengerId" class="form-input-flat" readonly style="background: var(--bg-body); cursor: not-allowed;">
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Pass Number</label>
+            <input type="text" id="editPassengerPassNo" class="form-input-flat" readonly style="background: var(--bg-body); cursor: not-allowed;">
+          </div>
+        </div>
+
+        <div class="form-group-flat">
+          <label class="form-label-flat">Transport User Full Name *</label>
+          <input type="text" id="editPassengerName" class="form-input-flat" required placeholder="Full Name">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Pass Status *</label>
+            <select id="editPassengerPassStatus" class="form-input-flat" style="font-weight: 600;">
+              <option value="Collected">Collected</option>
+              <option value="Not collected">Not collected</option>
+            </select>
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Fee Status *</label>
+            <select id="editPassengerFeeStatus" class="form-input-flat">
+              <option value="Paid">Paid (Authorized)</option>
+              <option value="Pending">Pending Clearance</option>
+              <option value="Overdue">Overdue / Hold</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Assigned Corridor</label>
+            <select id="editPassengerRoute" class="form-input-flat">
+              <option value="Bus A - Nigdi">Bus A - Nigdi</option>
+              <option value="Bus B - Chaphekar">Bus B - Chaphekar</option>
+              <option value="Bus C - Kothrud">Bus C - Kothrud</option>
+              <option value="Bus D - Moshi">Bus D - Moshi</option>
+              <option value="Bus E - Lohegaon">Bus E - Lohegaon</option>
+              <option value="Bus F - Pashan">Bus F - Pashan</option>
+              <option value="Bus G - Hadapsar">Bus G - Hadapsar</option>
+            </select>
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Bus ID</label>
+            <input type="text" id="editPassengerBus" class="form-input-flat" placeholder="MH12-AB-1234">
+          </div>
+        </div>
+
+        <div class="form-group-flat">
+          <label class="form-label-flat">Boarding Stop</label>
+          <input type="text" id="editPassengerStop" class="form-input-flat" placeholder="e.g. Chandan Nagar Water Tank">
+        </div>
+
+        <div class="form-group-flat">
+          <label class="form-label-flat">Contact Phone Number</label>
+          <input type="tel" id="editPassengerPhone" class="form-input-flat" placeholder="+91 98220 11492">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border);">
+          <button type="button" class="btn-clean" onclick="closeEditPassengerModal()">Cancel</button>
+          <button type="submit" class="btn-clean btn-clean-primary"><i class="ph ph-floppy-disk"></i> Save Profile Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: ADD / ENROLL TRANSPORT USER (STUDENT OR FACULTY)              -->
+  <!-- ==================================================================== -->
+  <div class="modal-overlay hidden" id="addStudentModal">
+    <div class="modal-dialog-flat" style="max-width: 480px;">
+      <div class="modal-header-flat">
+        <span class="modal-title-flat">Enroll Transport User (Student / Faculty)</span>
+        <button class="modal-close-btn" onclick="closeAddStudentModal()"><i class="ph ph-x"></i></button>
+      </div>
+      <form onsubmit="handleSaveStudent(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">University ID (PRN) *</label>
+            <input type="text" id="studId" class="form-input-flat" placeholder="ADT23..." required>
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">User Role *</label>
+            <select id="studType" class="form-input-flat">
+              <option value="Student">Student (UG / PG)</option>
+              <option value="Faculty">Faculty & Staff</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group-flat">
+          <label class="form-label-flat">Transport User Full Name *</label>
+          <input type="text" id="studName" class="form-input-flat" placeholder="e.g. Prateek Sharma" required>
+        </div>
+
+        <div class="form-group-flat">
+          <label class="form-label-flat">College / Department *</label>
+          <select id="studDept" class="form-input-flat">
+            <option value="Institute of Design (IOD)">MIT Institute of Design (IOD)</option>
+            <option value="School of Engineering (SOE)">MIT School of Engineering (SOE)</option>
+            <option value="School of Computing (SOC)">MIT School of Computing (SOC)</option>
+            <option value="College of Management (COM)">MIT College of Management (COM)</option>
+            <option value="School of Bioengineering">MIT School of Bioengineering</option>
+            <option value="College of Architecture (SOA)">MIT College of Architecture (SOA)</option>
+            <option value="Film & Television Institute (FTI)">MIT Film & Television Institute (FTI)</option>
+            <option value="School of Fine Arts (SFA)">MIT School of Fine Arts (SFA)</option>
+          </select>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Assigned Corridor</label>
+            <select id="studRoute" class="form-input-flat">
+              <option value="Bus E - Lohegaon">Bus E - Lohegaon</option>
+              <option value="Bus A - Nigdi">Bus A - Nigdi</option>
+              <option value="Bus B - Chaphekar">Bus B - Chaphekar</option>
+              <option value="Bus C - Kothrud">Bus C - Kothrud</option>
+              <option value="Bus D - Moshi">Bus D - Moshi</option>
+              <option value="Bus F - Pashan">Bus F - Pashan</option>
+              <option value="Bus G - Hadapsar">Bus G - Hadapsar</option>
+            </select>
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Boarding Stop</label>
+            <input type="text" id="studBoardingStop" class="form-input-flat" placeholder="e.g. Dange Chowk" value="Central Point">
+          </div>
+        </div>
+
+        <div class="form-group-flat">
+          <label class="form-label-flat">Fees Clearance Status</label>
+          <select id="studFeeStatus" class="form-input-flat">
+            <option value="Paid">Paid & Authorized</option>
+            <option value="Pending">Pending Clearance</option>
+            <option value="Overdue">Overdue / Hold</option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
+          <button type="button" class="btn-clean" onclick="closeAddStudentModal()">Cancel</button>
+          <button type="submit" class="btn-clean btn-clean-primary"><i class="ph ph-check"></i> Enroll Transport User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: SMART PASS RFID CARD INSPECTION                               -->
+  <!-- ==================================================================== -->
+  <div class="modal-overlay hidden" id="smartPassModal">
+    <div class="modal-dialog-flat" style="max-width: 520px; padding: 0; overflow: hidden;">
+      <div class="modal-header-flat" style="padding: 16px 20px; border-bottom: 1px solid var(--border-color);">
+        <span class="modal-title-flat" style="display: inline-flex; align-items: center; gap: 8px;">
+          <i class="ph ph-identification-card"></i> Official Transit Smart Pass
+        </span>
+        <button class="modal-close-btn" onclick="closeSmartPassModal()"><i class="ph ph-x"></i></button>
+      </div>
+      <div id="smartPassModalContent" style="padding: 20px;">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; border-top: 1px solid var(--border-color); background: var(--surface);">
+        <span style="font-size: 11px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px;">
+          <i class="ph ph-shield-check"></i> MIT ADT RFID Encrypted
+        </span>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn-clean" onclick="triggerToast('Downloading Pass PDF (ISO/IEC 14443 Type A)...', 'success')"><i class="ph ph-download-simple"></i> Download PDF</button>
+          <button type="button" class="btn-clean btn-clean-primary" onclick="triggerToast('Sent Pass print job to Campus Transit Desk printer!', 'success')"><i class="ph ph-printer"></i> Print Pass</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: ADD NEW FLEET BUS                                             -->
+  <!-- ==================================================================== -->
+  <div class="modal-overlay hidden" id="addBusModal">
+    <div class="modal-dialog-flat" style="max-width: 520px;">
+      <div class="modal-header-flat">
+        <span class="modal-title-flat"><i class="ph ph-van"></i> Add New Fleet Bus</span>
+        <button class="modal-close-btn" onclick="closeAddBusModal()"><i class="ph ph-x"></i></button>
+      </div>
+      <form onsubmit="handleSaveBus(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Bus Code *</label>
+            <input type="text" id="newBusCode" class="form-input-flat" placeholder="e.g. Bus U-14" required>
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">License Plate Number *</label>
+            <input type="text" id="newBusPlate" class="form-input-flat" placeholder="e.g. MH12-PQ-9081" required>
+          </div>
+        </div>
+
+        <div class="form-group-flat">
+          <label class="form-label-flat">Coach Model & Description *</label>
+          <input type="text" id="newBusModel" class="form-input-flat" placeholder="e.g. Ashok Leyland 49 Deluxe High-Deck" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Seating Capacity *</label>
+            <input type="number" id="newBusCapacity" class="form-input-flat" value="49" min="20" max="70" required>
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Fleet Ownership *</label>
+            <select id="newBusOwner" class="form-input-flat">
+              <option value="MIT ADT University Owned">MIT ADT University Owned</option>
+              <option value="Tarawade Logistics Fleet">Tarawade Logistics Fleet</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Assigned Corridor</label>
+            <input type="text" id="newBusCorridor" class="form-input-flat" placeholder="e.g. Bus G - Hadapsar Corridor" value="Campus Shuttle Corridor">
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Operational Status</label>
+            <select id="newBusStatus" class="form-input-flat">
+              <option value="Operational">Operational</option>
+              <option value="Standby">Standby / Reserve</option>
+              <option value="Maintenance">Under Maintenance</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
+          <button type="button" class="btn-clean" onclick="closeAddBusModal()">Cancel</button>
+          <button type="submit" class="btn-clean btn-clean-primary"><i class="ph ph-check"></i> Register Bus to Fleet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: ADD NEW DRIVER                                                -->
+  <!-- ==================================================================== -->
+  <div class="modal-overlay hidden" id="addDriverModal">
+    <div class="modal-dialog-flat" style="max-width: 520px;">
+      <div class="modal-header-flat">
+        <span class="modal-title-flat"><i class="ph ph-steering-wheel"></i> Enroll New Transit Driver</span>
+        <button class="modal-close-btn" onclick="closeAddDriverModal()"><i class="ph ph-x"></i></button>
+      </div>
+      <form onsubmit="handleSaveDriver(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Driver Full Name *</label>
+            <input type="text" id="newDriverName" class="form-input-flat" placeholder="e.g. Sachin Shinde" required>
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Employee ID *</label>
+            <input type="text" id="newDriverEmpId" class="form-input-flat" placeholder="e.g. MIT-DRV-114" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Contact Phone Number *</label>
+            <input type="tel" id="newDriverPhone" class="form-input-flat" placeholder="e.g. +91 98220 99441" required>
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Heavy Commercial DL No *</label>
+            <input type="text" id="newDriverLicense" class="form-input-flat" placeholder="e.g. MH12-2020-DL88214" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Assigned Bus</label>
+            <input type="text" id="newDriverBus" class="form-input-flat" placeholder="e.g. Bus U-14" value="Standby Fleet">
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Duty Roster Status</label>
+            <select id="newDriverDuty" class="form-input-flat">
+              <option value="On Duty">On Duty</option>
+              <option value="Standby">Standby</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Driving Experience</label>
+            <input type="text" id="newDriverExp" class="form-input-flat" placeholder="e.g. 5.5 Years" value="4.0 Years">
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Initial Safety Rating</label>
+            <select id="newDriverRating" class="form-input-flat">
+              <option value="5.0">5.0 / 5.0</option>
+              <option value="4.9" selected>4.9 / 5.0</option>
+              <option value="4.8">4.8 / 5.0</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
+          <button type="button" class="btn-clean" onclick="closeAddDriverModal()">Cancel</button>
+          <button type="submit" class="btn-clean btn-clean-primary"><i class="ph ph-check"></i> Enroll Driver to Roster</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: ADD NEW TRANSIT ROUTE                                         -->
+  <!-- ==================================================================== -->
+  <div class="modal-overlay hidden" id="addRouteModal">
+    <div class="modal-dialog-flat" style="max-width: 520px;">
+      <div class="modal-header-flat">
+        <span class="modal-title-flat"><i class="ph ph-path"></i> Commission New Transit Route</span>
+        <button class="modal-close-btn" onclick="closeAddRouteModal()"><i class="ph ph-x"></i></button>
+      </div>
+      <form onsubmit="handleSaveRoute(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Route ID Key *</label>
+            <input type="text" id="newRouteId" class="form-input-flat" placeholder="e.g. bus-g" required>
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Route Code Name *</label>
+            <input type="text" id="newRouteName" class="form-input-flat" placeholder="e.g. Bus G - Hadapsar" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Origin Landmark *</label>
+            <input type="text" id="newRouteOrigin" class="form-input-flat" placeholder="e.g. Hadapsar Gadital" required>
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Destination Campus *</label>
+            <input type="text" id="newRouteDest" class="form-input-flat" value="MIT Campus Loni" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Stops Count</label>
+            <input type="number" id="newRouteStops" class="form-input-flat" value="9" min="2" max="25" required>
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Est. Travel Time</label>
+            <input type="text" id="newRouteTime" class="form-input-flat" placeholder="e.g. 40 mins" value="45 mins" required>
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Capacity</label>
+            <input type="number" id="newRouteCap" class="form-input-flat" value="49" min="20" max="60" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group-flat">
+            <label class="form-label-flat">Assigned Bus Plate</label>
+            <input type="text" id="newRouteBus" class="form-input-flat" placeholder="e.g. MH12-GH-8812" value="MH12-GH-8812">
+          </div>
+          <div class="form-group-flat">
+            <label class="form-label-flat">Assigned Driver Name</label>
+            <input type="text" id="newRouteDriver" class="form-input-flat" placeholder="e.g. Tanaji More" value="Tanaji More">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
+          <button type="button" class="btn-clean" onclick="closeAddRouteModal()">Cancel</button>
+          <button type="submit" class="btn-clean btn-clean-primary"><i class="ph ph-check"></i> Commission Route</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: GENERIC CONFIRMATION DIALOG (FOR DELETING/REMOVING ENTITIES)   -->
+  <!-- ==================================================================== -->
+  <div class="modal-overlay hidden" id="confirmDeleteModal">
+    <div class="modal-dialog-flat" style="max-width: 440px;">
+      <div class="modal-header-flat">
+        <span class="modal-title-flat" id="confirmModalTitle" style="color: var(--status-red); display: flex; align-items: center; gap: 8px;">
+          <i class="ph ph-warning-circle"></i> Confirm Removal
+        </span>
+        <button class="modal-close-btn" onclick="closeConfirmDeleteModal()"><i class="ph ph-x"></i></button>
+      </div>
+      <div style="padding: 18px 0; font-size: 13.5px; color: var(--text-primary); line-height: 1.5;" id="confirmModalMessage">
+        Are you sure you want to proceed with this removal?
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button type="button" class="btn-clean" onclick="closeConfirmDeleteModal()">Cancel</button>
+        <button type="button" class="btn-clean btn-clean-primary" id="confirmModalProceedBtn" style="background: var(--status-red); border-color: var(--status-red);">
+          <i class="ph ph-trash"></i> Confirm Removal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOASTS -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- SCRIPT -->
+  <script src="app.js"></script>
+</body>
+</html>
