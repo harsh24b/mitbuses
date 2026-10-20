@@ -1861,7 +1861,18 @@ function renderRoutesDirectory() {
     'Prakash Jagtap': 'assets/driver-prakash.jpg',
     'Ramesh Shinde': 'assets/driver-ramesh.jpg',
     'Arun Patil': 'assets/driver-arun.jpg',
-    'Sanjay Deshmukh': 'assets/driver-sanjay.jpg'
+    'Sanjay Deshmukh': 'assets/driver-sanjay.jpg',
+    'Tanaji More': 'assets/driver-tanaji.jpg',
+    'Sambhaji Kadam': 'assets/driver-sambhaji.jpg',
+    'Sambhaji Shinde': 'assets/driver-sambhaji.jpg',
+    'Chandrakant Mane': 'assets/driver-chandrakant.jpg',
+    'Chandrakant Shinde': 'assets/driver-chandrakant.jpg',
+    'Ankush Shinde': 'assets/driver-ankush.jpg',
+    'Ankush Bhosale': 'assets/driver-ankush.jpg',
+    'Kishor Chavan': 'assets/driver-kishor.jpg',
+    'Baban Gaikwad': 'assets/driver-baban.jpg',
+    'Mahesh Thorat': 'assets/driver-mahesh.jpg',
+    'Nitin Pawar': 'assets/driver-nitin.jpg'
   };
 
   container.innerHTML = filtered.map(r => {

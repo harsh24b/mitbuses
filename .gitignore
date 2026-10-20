@@ -1,0 +1,5 @@
+# Temporary inspection scripts and cache
+extracted_fig/
+*.py
+.DS_Store
+Thumbs.db
