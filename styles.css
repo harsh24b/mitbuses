@@ -4688,11 +4688,270 @@ select.form-input-flat {
 }
 
 /* ==========================================================================
-   ROUTE DETAIL: BACK LINK & UNCLUTTERED MANIFEST FILTER
+   INSIDE DETAIL PAGE HEADER & BREADCRUMB SYSTEM
+   Standardized web guidelines for subpages, detail views & nested navigation
    ========================================================================== */
+
+.inside-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+/* 1. Breadcrumb Bar */
+.inside-breadcrumb-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.inside-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px 0 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.inside-back-btn i {
+  font-size: 13px;
+  transition: transform 0.15s ease;
+  color: var(--text-muted);
+}
+
+.inside-back-btn:hover {
+  background: var(--subtle-fill);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.inside-back-btn:hover i {
+  transform: translateX(-2px);
+  color: var(--accent);
+}
+
+.inside-breadcrumb-sep {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 400;
+  user-select: none;
+}
+
+.inside-breadcrumb-current {
+  color: var(--text-muted);
+  font-size: 12.5px;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 500px;
+}
+
+/* 2. Main Title Row - Keep Title & Actions aligned on one clean horizontal axis */
+.inside-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+}
+
+.inside-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  flex: 1;
+}
+
+.inside-title-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+
+.inside-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* 3. Badges */
+.inside-badges-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.inside-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1;
+  background: var(--subtle-fill);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.inside-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.inside-status-badge.operational {
+  background: #ECFDF5;
+  color: #065F46;
+  border-color: #A7F3D0;
+}
+.inside-status-badge.operational .inside-status-dot {
+  background: #10B981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.inside-status-badge.warning {
+  background: #FFFBEB;
+  color: #92400E;
+  border-color: #FDE68A;
+}
+.inside-status-badge.warning .inside-status-dot {
+  background: #F59E0B;
+}
+
+.inside-status-badge.danger {
+  background: #FEF2F2;
+  color: #991B1B;
+  border-color: #FECACA;
+}
+.inside-status-badge.danger .inside-status-dot {
+  background: #EF4444;
+}
+
+.inside-telemetry-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1;
+  background: #EFF6FF;
+  color: #1E40AF;
+  border: 1px solid #BFDBFE;
+  white-space: nowrap;
+}
+
+.inside-telemetry-badge i {
+  font-size: 13px;
+  color: #2563EB;
+}
+
+.inside-telemetry-badge .pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2563EB;
+  animation: pulse-ring 1.5s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+.inside-tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1;
+  background: var(--subtle-fill);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.inside-tag-badge i {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* 4. Metadata Strip */
+.inside-meta-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+.inside-meta-strip .meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.inside-meta-strip .meta-item i {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.inside-meta-strip .meta-item strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.inside-meta-strip .meta-sep {
+  color: var(--border-strong);
+  font-size: 10px;
+  user-select: none;
+}
+
+/* 5. Right Action Buttons */
+.inside-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
 .route-back-link-bar {
   margin-bottom: 12px;
 }
+
 
 .route-manifest-filter-suite {
   display: flex;

@@ -22,7 +22,7 @@
   <!-- Google Maps JavaScript API with user provided key -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-1Dc6aFDvUq8dwzAUfWBNwKexsdgmIkE&libraries=geometry" async defer></script>
 
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=inside-hdr1">
 </head>
 <body>
 
@@ -556,28 +556,51 @@
         <!-- VIEW 2B: ROUTE DETAIL VIEW (CUSTOM ROUTE VIEW SPEC)             -->
         <!-- ================================================================ -->
         <section class="view-section" id="view-route-detail">
-          <!-- Back Nav Above Heading -->
-          <div class="route-back-link-bar">
-            <button class="btn-clean" onclick="navigateTo('routes')" title="Return to Routes Directory">
-              <i class="ph ph-arrow-left"></i> Back to Routes
-            </button>
-          </div>
-
-          <!-- Page Header -->
-          <div class="view-header route-detail-topbar">
-            <div>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <h2 class="view-title" id="rdRouteTitle">Bus E - Lohegaon Corridor</h2>
-                <span class="badge-clean operational" id="rdRouteStatusBadge">Active</span>
-                <span class="badge-clean live-pulse-badge"><span class="pulse-dot"></span> Live GPS</span>
-              </div>
-              <p class="view-desc" id="rdRouteSubtitle">Corridor origin: Lohegaon Bus Stop • Destination: MIT Campus Loni • 11 Stops • 50 mins</p>
+          <!-- Inside Page Header: Breadcrumb & Title Layout -->
+          <div class="inside-page-header">
+            <!-- Top Row: Breadcrumb & Back Action -->
+            <div class="inside-breadcrumb-bar">
+              <button class="inside-back-btn" onclick="navigateTo('routes')" title="Return to Routes Directory">
+                <i class="ph ph-arrow-left"></i>
+                <span>Back to Routes</span>
+              </button>
+              <span class="inside-breadcrumb-sep">/</span>
+              <span class="inside-breadcrumb-current" id="rdBreadcrumbCurrent">Bus A – Nigdi Corridor</span>
             </div>
 
-            <div style="display: flex; gap: 8px;">
-              <button class="btn-clean btn-clean-primary" onclick="exportPassengerManifest()">
-                <i class="ph ph-download-simple"></i> Export Manifest
-              </button>
+            <!-- Main Title & Actions Row -->
+            <div class="inside-header-row">
+              <div class="inside-header-info">
+                <div class="inside-title-strip">
+                  <h1 class="inside-title" id="rdRouteTitle">Bus A – Nigdi Corridor</h1>
+                  <div class="inside-badges-group">
+                    <span class="inside-status-badge operational" id="rdRouteStatusBadge">
+                      <span class="inside-status-dot"></span>
+                      <span class="inside-status-label">Active</span>
+                    </span>
+                    <span class="inside-telemetry-badge">
+                      <span class="pulse-dot"></span>
+                      <i class="ph ph-broadcast"></i> Live GPS
+                    </span>
+                  </div>
+                </div>
+
+                <div class="inside-meta-strip" id="rdRouteSubtitle">
+                  <span class="meta-item"><i class="ph ph-map-pin"></i> <span>Origin: <strong>Nigdi Pradhikaran</strong></span></span>
+                  <span class="meta-sep">•</span>
+                  <span class="meta-item"><i class="ph ph-flag-banner"></i> <span>Destination: <strong>MIT Campus Loni</strong></span></span>
+                  <span class="meta-sep">•</span>
+                  <span class="meta-item"><i class="ph ph-signpost"></i> <span>9 Stops</span></span>
+                  <span class="meta-sep">•</span>
+                  <span class="meta-item"><i class="ph ph-clock"></i> <span>45 mins</span></span>
+                </div>
+              </div>
+
+              <div class="inside-actions-group">
+                <button class="btn-clean btn-clean-primary" onclick="exportPassengerManifest()">
+                  <i class="ph ph-download-simple"></i> Export Manifest
+                </button>
+              </div>
             </div>
           </div>
 
@@ -867,29 +890,51 @@
         <!-- VIEW 3B: SPECIFIC BUS DETAILS VIEW (FULL HISTORY & MAINTENANCE)  -->
         <!-- ================================================================ -->
         <section class="view-section" id="view-bus-detail">
-          <!-- Back Nav & Page Header -->
-          <div class="view-header route-detail-topbar">
-            <div style="display: flex; align-items: center; gap: 14px;">
-              <button class="btn-clean" onclick="navigateTo('buses')" title="Return to University Buses">
-                <i class="ph ph-arrow-left"></i> Back to University Fleet
+          <!-- Inside Page Header: Breadcrumb & Title Layout -->
+          <div class="inside-page-header">
+            <!-- Top Row: Breadcrumb & Back Action -->
+            <div class="inside-breadcrumb-bar">
+              <button class="inside-back-btn" onclick="navigateTo('buses')" title="Return to University Fleet">
+                <i class="ph ph-arrow-left"></i>
+                <span>Back to University Fleet</span>
               </button>
-              <div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <h2 class="view-title" id="bdBusTitle">Bus U-01 • MH12-CD-5678</h2>
-                  <span class="badge-clean operational" id="bdBusStatusBadge">Operational</span>
-                  <span class="badge-clean">MIT ADT Owned</span>
-                </div>
-                <p class="view-desc" id="bdBusSubtitle">Ashok Leyland 49 Deluxe High-Deck • Designated Driver: Santosh Jadhav • Assigned Corridor: Bus A - Nigdi</p>
-              </div>
+              <span class="inside-breadcrumb-sep">/</span>
+              <span class="inside-breadcrumb-current" id="bdBreadcrumbCurrent">Bus U-01 • MH12-CD-5678</span>
             </div>
 
-            <div style="display: flex; gap: 8px;">
-              <button class="btn-clean btn-clean-primary" onclick="openNewTripModalForCurrentBus()">
-                <i class="ph ph-plus-circle"></i> Add New Trip
-              </button>
-              <button class="btn-clean" onclick="triggerCall('+918336818273')" id="bdCallDriverBtn">
-                <i class="ph ph-phone"></i> Call Driver
-              </button>
+            <!-- Main Title & Actions Row -->
+            <div class="inside-header-row">
+              <div class="inside-header-info">
+                <div class="inside-title-strip">
+                  <h1 class="inside-title" id="bdBusTitle">Bus U-01 • MH12-CD-5678</h1>
+                  <div class="inside-badges-group">
+                    <span class="inside-status-badge operational" id="bdBusStatusBadge">
+                      <span class="inside-status-dot"></span>
+                      <span class="inside-status-label">Operational</span>
+                    </span>
+                    <span class="inside-tag-badge">
+                      <i class="ph ph-buildings"></i> MIT ADT Owned
+                    </span>
+                  </div>
+                </div>
+
+                <div class="inside-meta-strip" id="bdBusSubtitle">
+                  <span class="meta-item"><i class="ph ph-bus"></i> <span>Ashok Leyland 49 Deluxe High-Deck</span></span>
+                  <span class="meta-sep">•</span>
+                  <span class="meta-item"><i class="ph ph-user"></i> <span>Driver: <strong>Santosh Jadhav</strong></span></span>
+                  <span class="meta-sep">•</span>
+                  <span class="meta-item"><i class="ph ph-navigation-arrow"></i> <span>Corridor: <strong>Bus A - Nigdi</strong></span></span>
+                </div>
+              </div>
+
+              <div class="inside-actions-group">
+                <button class="btn-clean btn-clean-primary" onclick="openNewTripModalForCurrentBus()">
+                  <i class="ph ph-plus-circle"></i> Add New Trip
+                </button>
+                <button class="btn-clean" onclick="triggerCall('+918336818273')" id="bdCallDriverBtn">
+                  <i class="ph ph-phone"></i> Call Driver
+                </button>
+              </div>
             </div>
           </div>
 
@@ -2459,6 +2504,6 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- SCRIPT -->
-  <script src="app.js"></script>
+  <script src="app.js?v=inside-hdr1"></script>
 </body>
 </html>

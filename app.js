@@ -1980,17 +1980,37 @@ function openRouteDetail(routeId) {
 function renderRouteDetail(routeId) {
   const route = BUS_ROUTES_DETAILED[routeId] || BUS_ROUTES_DETAILED['bus-e'];
 
-  // Top Title and Subtitle
+  // Top Title, Breadcrumb and Subtitle
   const titleEl = document.getElementById('rdRouteTitle');
+  const breadcrumbCurrent = document.getElementById('rdBreadcrumbCurrent');
   const subEl = document.getElementById('rdRouteSubtitle');
   const statusBadge = document.getElementById('rdRouteStatusBadge');
   const callBtn = document.getElementById('rdCallDriverBtn');
 
-  if (titleEl) titleEl.textContent = `${route.name} Corridor`;
-  if (subEl) subEl.textContent = `Origin: ${route.origin} • Destination: ${route.dest} • ${route.stops.length} Stops • ${route.time}`;
+  const routeDisplayName = `${route.name} Corridor`;
+  if (titleEl) titleEl.textContent = routeDisplayName;
+  if (breadcrumbCurrent) breadcrumbCurrent.textContent = routeDisplayName;
+
+  if (subEl) {
+    const stopsCount = route.stops ? route.stops.length : 9;
+    subEl.innerHTML = `
+      <span class="meta-item"><i class="ph ph-map-pin"></i> <span>Origin: <strong>${route.origin || 'Nigdi Pradhikaran'}</strong></span></span>
+      <span class="meta-sep">•</span>
+      <span class="meta-item"><i class="ph ph-flag-banner"></i> <span>Destination: <strong>${route.dest || 'MIT Campus Loni'}</strong></span></span>
+      <span class="meta-sep">•</span>
+      <span class="meta-item"><i class="ph ph-signpost"></i> <span>${stopsCount} Stops</span></span>
+      <span class="meta-sep">•</span>
+      <span class="meta-item"><i class="ph ph-clock"></i> <span>${route.time || '45 mins'}</span></span>
+    `;
+  }
+
   if (statusBadge) {
-    statusBadge.className = `badge-clean ${route.status === 'active' ? 'operational' : 'danger'}`;
-    statusBadge.textContent = route.status === 'active' ? 'Active' : 'Maintenance';
+    const isActive = route.status === 'active';
+    statusBadge.className = `inside-status-badge ${isActive ? 'operational' : 'danger'}`;
+    statusBadge.innerHTML = `
+      <span class="inside-status-dot"></span>
+      <span class="inside-status-label">${isActive ? 'Active' : 'Maintenance'}</span>
+    `;
   }
   if (callBtn) {
     callBtn.setAttribute('onclick', `triggerCall('${route.driver.phone}')`);
@@ -3105,21 +3125,37 @@ function renderBusDetail(busId) {
 
   AppState.currentBusDetailId = bus.id;
 
-  // Header Title & Badges
+  // Header Title, Breadcrumb & Badges
   const titleEl = document.getElementById('bdBusTitle');
-  if (titleEl) titleEl.textContent = `${bus.code} • ${bus.plate}`;
+  const breadcrumbCurrent = document.getElementById('bdBreadcrumbCurrent');
+  const busDisplayTitle = `${bus.code} • ${bus.plate}`;
+
+  if (titleEl) titleEl.textContent = busDisplayTitle;
+  if (breadcrumbCurrent) breadcrumbCurrent.textContent = busDisplayTitle;
 
   const statusBadge = document.getElementById('bdBusStatusBadge');
   if (statusBadge) {
-    statusBadge.textContent = bus.status;
-    statusBadge.className = 'badge-clean ' + (
-      bus.status === 'Operational' ? 'operational' :
-      bus.status === 'Booked for Special Trip' ? 'warning' : 'danger'
-    );
+    const isOp = bus.status === 'Operational';
+    const isSched = bus.status === 'Scheduled';
+    const isSpecial = bus.status === 'Booked for Special Trip';
+    const statusClass = (isOp || isSched) ? 'operational' : isSpecial ? 'warning' : 'danger';
+    statusBadge.className = `inside-status-badge ${statusClass}`;
+    statusBadge.innerHTML = `
+      <span class="inside-status-dot"></span>
+      <span class="inside-status-label">${bus.status}</span>
+    `;
   }
 
   const subEl = document.getElementById('bdBusSubtitle');
-  if (subEl) subEl.textContent = `${bus.model} • Driver: ${bus.driver.name} • Assigned Corridor: ${bus.assignedCorridor}`;
+  if (subEl) {
+    subEl.innerHTML = `
+      <span class="meta-item"><i class="ph ph-bus"></i> <span>${bus.model}</span></span>
+      <span class="meta-sep">•</span>
+      <span class="meta-item"><i class="ph ph-user"></i> <span>Driver: <strong>${bus.driver.name}</strong></span></span>
+      <span class="meta-sep">•</span>
+      <span class="meta-item"><i class="ph ph-navigation-arrow"></i> <span>Corridor: <strong>${bus.assignedCorridor}</strong></span></span>
+    `;
+  }
 
   const callBtn = document.getElementById('bdCallDriverBtn');
   if (callBtn) {
