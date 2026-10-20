@@ -22,7 +22,7 @@
   <!-- Google Maps JavaScript API with user provided key -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-1Dc6aFDvUq8dwzAUfWBNwKexsdgmIkE&libraries=geometry" async defer></script>
 
-  <link rel="stylesheet" href="styles.css?v=inside-hdr1">
+  <link rel="stylesheet" href="styles.css?v=org-tables2">
 </head>
 <body>
 
@@ -938,135 +938,101 @@
             </div>
           </div>
 
-          <!-- Vehicle & Driver Overview Row -->
-          <div class="bus-detail-cards-row" style="margin-bottom: 20px;">
-            <!-- Left Card: Vehicle Fleet Specification & Telemetry -->
-            <div class="card-flat bus-spec-primary-card">
-              <div class="bus-spec-hero-row">
-                <div class="bus-coach-thumb-wrap">
-                  <img src="buses.png" alt="Bus Coach" class="bus-coach-img">
-                </div>
-                <div class="bus-hero-info">
-                  <div class="bus-plate-title" id="bdPlateNumber">MH12-CD-5678</div>
-                  <div class="bus-reg-sub" id="bdRegistrationNo">Coach #01 • REG-1011 • University Owned Fleet</div>
-                  <div class="bus-tags-strip" style="display: flex; gap: 6px; margin-top: 8px;">
-                    <span class="badge-clean operational" id="bdStatus">Operational</span>
-                    <span class="badge-clean">49 Seater Deluxe</span>
-                    <span class="badge-clean">GPS Monitored</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 4 Specification Tiles Grid -->
-              <div class="spec-tiles-grid" style="margin-top: 18px;">
-                <div class="spec-tile-item">
-                  <span class="spec-tile-label">Seating Capacity</span>
-                  <span class="spec-tile-val" id="bdCapacity">49 Seats</span>
-                </div>
-                <div class="spec-tile-item">
-                  <span class="spec-tile-label">Current Odometer</span>
-                  <span class="spec-tile-val" id="bdOdometer">38,400 km</span>
-                </div>
-                <div class="spec-tile-item">
-                  <span class="spec-tile-label">Fuel Status</span>
-                  <span class="spec-tile-val" id="bdFuel">88% Diesel</span>
-                </div>
-                <div class="spec-tile-item">
-                  <span class="spec-tile-label">Speed Governor</span>
-                  <span class="spec-tile-val">60 km/h Strict</span>
-                </div>
-              </div>
-
-              <!-- Fleet KPIs Strip -->
-              <div class="bus-telemetry-kpi-strip">
-                <div class="kpi-strip-item">
-                  <span class="kpi-strip-num" id="bdTotalTripsCount">3</span>
-                  <span class="kpi-strip-lbl">Trips in History</span>
-                </div>
-                <div class="kpi-strip-divider"></div>
-                <div class="kpi-strip-item">
-                  <span class="kpi-strip-num" id="bdTotalMaintCount">3</span>
-                  <span class="kpi-strip-lbl">Service Records</span>
-                </div>
-                <div class="kpi-strip-divider"></div>
-                <div class="kpi-strip-item">
-                  <span class="kpi-strip-num">100%</span>
-                  <span class="kpi-strip-lbl">Fitness Certified</span>
-                </div>
+          <!-- Bus Detail Quick Metrics Strip -->
+          <div class="bus-detail-summary-strip">
+            <div class="summary-kpi-item">
+              <div class="summary-kpi-icon"><i class="ph ph-calendar-check"></i></div>
+              <div class="summary-kpi-content">
+                <span class="summary-kpi-val" id="bdSummaryTripsCount">3 Trips</span>
+                <span class="summary-kpi-label">Scheduled & Logged</span>
               </div>
             </div>
-
-            <!-- Right Card: Designated Fleet Driver -->
-            <div class="card-flat bus-driver-primary-card">
-              <div class="route-driver-top-row">
-                <img src="assets/driver-santosh.jpg" id="bdDriverPhoto" alt="Driver" class="route-driver-avatar-lg">
-                <div class="route-driver-title-group">
-                  <div class="route-driver-main-name" id="bdDriverName">Santosh Jadhav</div>
-                  <div class="route-driver-empid-line" id="bdDriverEmpId">Emp ID: MIT-DRV-101 • Heavy Transport</div>
-                  <a href="tel:+918336818273" class="route-driver-phone-chip" id="bdDriverPhoneLink">
-                    <i class="ph ph-phone"></i>
-                    <span id="bdDriverPhone">+91 83368 18273</span>
-                  </a>
-                </div>
+            <div class="summary-kpi-divider"></div>
+            <div class="summary-kpi-item">
+              <div class="summary-kpi-icon"><i class="ph ph-users"></i></div>
+              <div class="summary-kpi-content">
+                <span class="summary-kpi-val" id="bdSummaryPassengersCount">119 Passengers</span>
+                <span class="summary-kpi-label">Total Transport Users</span>
               </div>
-
-              <div class="spec-tiles-grid" style="margin-top: 16px;">
-                <div class="spec-tile-item">
-                  <span class="spec-tile-label">Attendance Rate</span>
-                  <span class="spec-tile-val" id="bdDriverAttendance">98% (27/28 Days)</span>
-                </div>
-                <div class="spec-tile-item">
-                  <span class="spec-tile-label">Duty Roster</span>
-                  <span class="spec-tile-val" id="bdDriverDuty">On Duty</span>
-                </div>
-                <div class="spec-tile-item">
-                  <span class="spec-tile-label">Experience</span>
-                  <span class="spec-tile-val" id="bdDriverExp">5.2 Years</span>
-                </div>
-                <div class="spec-tile-item">
-                  <span class="spec-tile-label">Safety Rating</span>
-                  <span class="spec-tile-val" id="bdDriverRating">4.9 / 5.0</span>
-                </div>
+            </div>
+            <div class="summary-kpi-divider"></div>
+            <div class="summary-kpi-item">
+              <div class="summary-kpi-icon"><i class="ph ph-wrench"></i></div>
+              <div class="summary-kpi-content">
+                <span class="summary-kpi-val" id="bdSummaryMaintCount">3 Services</span>
+                <span class="summary-kpi-label">Maintenance Records</span>
               </div>
-
-              <div class="bus-driver-actions-row">
-                <button type="button" class="btn-clean" id="bdCallDriverBtnBottom" onclick="triggerCall('+918336818273')">
-                  <i class="ph ph-phone"></i> Call Driver
-                </button>
-                <button type="button" class="btn-clean btn-clean-primary" onclick="navigateTo('chat');">
-                  <i class="ph ph-chat-text"></i> Message Driver
-                </button>
+            </div>
+            <div class="summary-kpi-divider"></div>
+            <div class="summary-kpi-item">
+              <div class="summary-kpi-icon"><i class="ph ph-gauge"></i></div>
+              <div class="summary-kpi-content">
+                <span class="summary-kpi-val" id="bdSummaryOdometer">38,400 km</span>
+                <span class="summary-kpi-label">Current Odometer</span>
               </div>
             </div>
           </div>
 
-          <!-- SECTION: TRIP SCHEDULE & BOOKING HISTORY -->
-          <div class="card-flat" style="margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-              <div>
-                <h3 style="font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                  <i class="ph ph-calendar-check"></i>
-                  Trip Schedule & Booking History
-                </h3>
-                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Showing date, timings, trip reason, status, faculty in charge, and college for this university bus.</p>
-              </div>
-              <button class="btn-clean" onclick="openNewTripModalForCurrentBus()">
-                <i class="ph ph-plus-circle"></i> Add New Trip
+          <!-- Segmented Navigation Bar -->
+          <div class="bus-tables-nav-bar">
+            <div class="bus-tables-tab-group">
+              <button type="button" class="bus-tab-btn active" id="tabBtnBoth" onclick="switchBusDetailTab('both')">
+                <i class="ph ph-squares-four"></i>
+                <span>Both Tables</span>
               </button>
+              <button type="button" class="bus-tab-btn" id="tabBtnTrips" onclick="switchBusDetailTab('trips')">
+                <i class="ph ph-calendar-check"></i>
+                <span>Trip Schedule</span>
+                <span class="bus-tab-count" id="bdTripTabCount">3</span>
+              </button>
+              <button type="button" class="bus-tab-btn" id="tabBtnMaint" onclick="switchBusDetailTab('maint')">
+                <i class="ph ph-wrench"></i>
+                <span>Maintenance Log</span>
+                <span class="bus-tab-count" id="bdMaintTabCount">3</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- SECTION 1: TRIP SCHEDULE & BOOKING HISTORY -->
+          <div class="card-flat bus-table-card" id="cardTripSchedule" style="margin-bottom: 20px;">
+            <div class="bus-table-header-suite">
+              <div class="bus-table-header-title-col">
+                <div class="bus-table-title-row">
+                  <h3 class="bus-table-title">
+                    <i class="ph ph-calendar-check"></i>
+                    Trip Schedule & Booking History
+                  </h3>
+                  <span class="bus-table-count-badge" id="bdTripTableCountBadge">3 Records</span>
+                </div>
+                <p class="bus-table-subtitle">Assigned schedules, passenger counts, faculty coordinators, and departments.</p>
+              </div>
+              <div class="bus-table-toolbar">
+                <div class="bus-table-search">
+                  <i class="ph ph-magnifying-glass"></i>
+                  <input type="text" id="bdTripSearchInput" placeholder="Search trips, faculty, college..." oninput="filterBusTrips()">
+                </div>
+                <select class="control-select" id="bdTripStatusFilter" onchange="filterBusTrips()" style="height: 34px; font-size: 12.5px; padding: 0 10px;">
+                  <option value="all">All Statuses</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Scheduled">Scheduled</option>
+                  <option value="In Progress">In Progress</option>
+                </select>
+                <button class="btn-clean btn-clean-primary" onclick="openNewTripModalForCurrentBus()" style="height: 34px;">
+                  <i class="ph ph-plus-circle"></i> Add Trip
+                </button>
+              </div>
             </div>
 
             <div class="table-responsive">
-              <table class="table-flat">
+              <table class="table-flat bus-organized-table">
                 <thead>
                   <tr>
-                    <th>Date</th>
-                    <th>Timings</th>
-                    <th>Trip Reason / Description</th>
-                    <th>Status</th>
-                    <th>Faculty in Charge</th>
-                    <th>Faculty Contact</th>
-                    <th>College / Institute</th>
-                    <th>Transport Users</th>
+                    <th style="min-width: 150px;">Date & Timings</th>
+                    <th style="min-width: 240px;">Trip Description & Purpose</th>
+                    <th style="min-width: 120px;">Status</th>
+                    <th style="min-width: 190px;">Faculty Coordinator</th>
+                    <th style="min-width: 160px;">College / Department</th>
+                    <th style="min-width: 110px; text-align: center;">Passengers</th>
                   </tr>
                 </thead>
                 <tbody id="bdTripScheduleTableBody">
@@ -1076,32 +1042,47 @@
             </div>
           </div>
 
-          <!-- SECTION: MAINTENANCE HISTORY LOG -->
-          <div class="card-flat">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-              <div>
-                <h3 style="font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                  <i class="ph ph-wrench"></i>
-                  Maintenance History Log
-                </h3>
-                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Comprehensive technical service history alongside reason and level of maintenance.</p>
+          <!-- SECTION 2: MAINTENANCE HISTORY LOG -->
+          <div class="card-flat bus-table-card" id="cardMaintenanceLog">
+            <div class="bus-table-header-suite">
+              <div class="bus-table-header-title-col">
+                <div class="bus-table-title-row">
+                  <h3 class="bus-table-title">
+                    <i class="ph ph-wrench"></i>
+                    Maintenance History Log
+                  </h3>
+                  <span class="bus-table-count-badge" id="bdMaintTableCountBadge">3 Records</span>
+                </div>
+                <p class="bus-table-subtitle">Service intervals, technical repairs, authorized depots, and expenditure audits.</p>
               </div>
-              <button class="btn-clean" onclick="logNewMaintenancePrompt()">
-                <i class="ph ph-plus-circle"></i> Log Service Record
-              </button>
+              <div class="bus-table-toolbar">
+                <div class="bus-table-search">
+                  <i class="ph ph-magnifying-glass"></i>
+                  <input type="text" id="bdMaintSearchInput" placeholder="Search service, workshop, reason..." oninput="filterBusMaint()">
+                </div>
+                <select class="control-select" id="bdMaintLevelFilter" onchange="filterBusMaint()" style="height: 34px; font-size: 12.5px; padding: 0 10px;">
+                  <option value="all">All Levels</option>
+                  <option value="Periodic">Periodic Service</option>
+                  <option value="Preventative">Preventative</option>
+                  <option value="Minor">Minor Service</option>
+                  <option value="Major">Major Overhaul</option>
+                </select>
+                <button class="btn-clean" onclick="logNewMaintenancePrompt()" style="height: 34px;">
+                  <i class="ph ph-plus-circle"></i> Log Service
+                </button>
+              </div>
             </div>
 
             <div class="table-responsive">
-              <table class="table-flat">
+              <table class="table-flat bus-organized-table">
                 <thead>
                   <tr>
-                    <th>Service Date</th>
-                    <th>Odometer</th>
-                    <th>Maintenance Reason & Scope</th>
-                    <th>Level of Maintenance</th>
-                    <th>Depot / Workshop</th>
-                    <th>Cost</th>
-                    <th>Status</th>
+                    <th style="min-width: 150px;">Service Date & Odo</th>
+                    <th style="min-width: 250px;">Maintenance Scope & Notes</th>
+                    <th style="min-width: 150px;">Service Level</th>
+                    <th style="min-width: 170px;">Workshop / Depot</th>
+                    <th style="min-width: 110px;">Status</th>
+                    <th style="min-width: 110px; text-align: right;">Cost (INR)</th>
                   </tr>
                 </thead>
                 <tbody id="bdMaintenanceTableBody">
@@ -2504,6 +2485,6 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- SCRIPT -->
-  <script src="app.js?v=inside-hdr1"></script>
+  <script src="app.js?v=org-tables2"></script>
 </body>
 </html>

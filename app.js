@@ -3163,117 +3163,247 @@ function renderBusDetail(busId) {
     callBtn.innerHTML = `<i class="ph ph-phone"></i> Call Driver (${bus.driver.name})`;
   }
 
-  // Specs Overview Card
-  const plateEl = document.getElementById('bdPlateNumber');
-  if (plateEl) plateEl.textContent = bus.plate;
+  // Summary KPI Strip Counters & Badges
+  const totalTripsCount = (bus.tripSchedule || []).length;
+  const totalPassengers = (bus.tripSchedule || []).reduce((acc, t) => acc + (parseInt(t.passengers) || 0), 0);
+  const totalMaintCount = (bus.maintenanceHistory || []).length;
 
-  const regEl = document.getElementById('bdRegistrationNo');
-  if (regEl) regEl.textContent = `${bus.reg} • University Owned Fleet`;
+  const sumTripsEl = document.getElementById('bdSummaryTripsCount');
+  if (sumTripsEl) sumTripsEl.textContent = `${totalTripsCount} Trip${totalTripsCount === 1 ? '' : 's'}`;
 
-  const capEl = document.getElementById('bdCapacity');
-  if (capEl) capEl.textContent = `${bus.capacity} Seats`;
+  const sumPassEl = document.getElementById('bdSummaryPassengersCount');
+  if (sumPassEl) sumPassEl.textContent = `${totalPassengers} Passengers`;
 
-  const statusEl = document.getElementById('bdStatus');
-  if (statusEl) statusEl.textContent = bus.status;
+  const sumMaintEl = document.getElementById('bdSummaryMaintCount');
+  if (sumMaintEl) sumMaintEl.textContent = `${totalMaintCount} Service${totalMaintCount === 1 ? '' : 's'}`;
 
-  // Designated Driver Population
-  const driverEl = document.getElementById('bdDriverName');
-  if (driverEl) driverEl.textContent = bus.driver.name;
+  const sumOdoEl = document.getElementById('bdSummaryOdometer');
+  if (sumOdoEl) sumOdoEl.textContent = bus.odometer || '38,400 km';
 
-  const drvPhotoEl = document.getElementById('bdDriverPhoto');
-  if (drvPhotoEl && bus.driver.photo) drvPhotoEl.src = bus.driver.photo;
+  const tabTripCount = document.getElementById('bdTripTabCount');
+  if (tabTripCount) tabTripCount.textContent = totalTripsCount;
 
-  const drvEmpEl = document.getElementById('bdDriverEmpId');
-  if (drvEmpEl) drvEmpEl.textContent = `Emp ID: ${bus.driver.empId} • Heavy Transport`;
+  const tabMaintCount = document.getElementById('bdMaintTabCount');
+  if (tabMaintCount) tabMaintCount.textContent = totalMaintCount;
 
-  const drvPhoneEl = document.getElementById('bdDriverPhone');
-  if (drvPhoneEl) drvPhoneEl.textContent = bus.driver.phone;
+  const tripBadge = document.getElementById('bdTripTableCountBadge');
+  if (tripBadge) tripBadge.textContent = `${totalTripsCount} Record${totalTripsCount === 1 ? '' : 's'}`;
 
-  const drvPhoneLink = document.getElementById('bdDriverPhoneLink');
-  if (drvPhoneLink) drvPhoneLink.href = `tel:${bus.driver.phone}`;
+  const maintBadge = document.getElementById('bdMaintTableCountBadge');
+  if (maintBadge) maintBadge.textContent = `${totalMaintCount} Record${totalMaintCount === 1 ? '' : 's'}`;
 
-  const drvDutyEl = document.getElementById('bdDriverDuty');
-  if (drvDutyEl) drvDutyEl.textContent = bus.driver.duty || 'On Duty';
+  // Reset table search & filter controls
+  const tripSearch = document.getElementById('bdTripSearchInput');
+  if (tripSearch) tripSearch.value = '';
+  const tripStatusFilter = document.getElementById('bdTripStatusFilter');
+  if (tripStatusFilter) tripStatusFilter.value = 'all';
 
-  const drvAttEl = document.getElementById('bdDriverAttendance');
-  if (drvAttEl) drvAttEl.textContent = bus.driver.attendance || '98% (27/28 Days)';
+  const maintSearch = document.getElementById('bdMaintSearchInput');
+  if (maintSearch) maintSearch.value = '';
+  const maintLevelFilter = document.getElementById('bdMaintLevelFilter');
+  if (maintLevelFilter) maintLevelFilter.value = 'all';
 
-  const drvExpEl = document.getElementById('bdDriverExp');
-  if (drvExpEl) drvExpEl.textContent = bus.driver.exp || '5.2 Years';
+  // Render both organized tables
+  renderBusTripsTable(bus);
+  renderBusMaintTable(bus);
+}
 
-  const drvRatingEl = document.getElementById('bdDriverRating');
-  if (drvRatingEl) drvRatingEl.textContent = bus.driver.rating || '4.9 / 5.0';
+// -----------------------------------------------------------------------------
+// ORGANIZED TRIP SCHEDULE & MAINTENANCE TABLE RENDERERS AND FILTERS
+// -----------------------------------------------------------------------------
 
-  const callBtnBottom = document.getElementById('bdCallDriverBtnBottom');
-  if (callBtnBottom) callBtnBottom.setAttribute('onclick', `triggerCall('${bus.driver.phone}')`);
-
-  const odoEl = document.getElementById('bdOdometer');
-  if (odoEl) odoEl.textContent = bus.odometer;
-
-  const fuelEl = document.getElementById('bdFuel');
-  if (fuelEl) fuelEl.textContent = bus.fuel;
-
-  const totalTripsEl = document.getElementById('bdTotalTripsCount');
-  if (totalTripsEl) totalTripsEl.textContent = bus.tripSchedule.length;
-
-  const totalMaintEl = document.getElementById('bdTotalMaintCount');
-  if (totalMaintEl) totalMaintEl.textContent = bus.maintenanceHistory.length;
-
-  // Trip Schedule Table
+function renderBusTripsTable(bus, filterText = '', statusFilter = 'all') {
   const tripTbody = document.getElementById('bdTripScheduleTableBody');
-  if (tripTbody) {
-    if (!bus.tripSchedule || bus.tripSchedule.length === 0) {
-      tripTbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">No special trip history scheduled for this bus.</td></tr>`;
-    } else {
-      tripTbody.innerHTML = bus.tripSchedule.map(t => {
-        const statusClass = t.status === 'Completed' ? 'active' :
-                            t.status === 'Scheduled' || t.status === 'Booked' ? 'warning' : 'info';
-        return `
-          <tr>
-            <td><strong>${t.date}</strong></td>
-            <td><code style="font-size: 11.5px;">${t.timings}</code></td>
-            <td><strong>${t.reason}</strong></td>
-            <td><span class="badge-clean ${statusClass}">${t.status}</span></td>
-            <td>${t.faculty}</td>
-            <td>
-              <a href="tel:${t.contact}" style="color: var(--text-secondary); display: inline-flex; align-items: center; gap: 6px; font-variant-numeric: tabular-nums;">
-                <i class="ph ph-phone"></i> ${t.contact}
-              </a>
-            </td>
-            <td><span>${t.college}</span></td>
-            <td><span class="badge-clean active">${t.passengers} passengers</span></td>
-          </tr>
-        `;
-      }).join('');
-    }
+  if (!tripTbody) return;
+
+  let trips = bus.tripSchedule || [];
+  if (filterText) {
+    const q = filterText.toLowerCase();
+    trips = trips.filter(t => 
+      (t.reason && t.reason.toLowerCase().includes(q)) ||
+      (t.faculty && t.faculty.toLowerCase().includes(q)) ||
+      (t.college && t.college.toLowerCase().includes(q)) ||
+      (t.date && t.date.toLowerCase().includes(q)) ||
+      (t.timings && t.timings.toLowerCase().includes(q))
+    );
+  }
+  if (statusFilter && statusFilter !== 'all') {
+    trips = trips.filter(t => (t.status || '').toLowerCase() === statusFilter.toLowerCase());
   }
 
-  // Maintenance History Table
-  const maintTbody = document.getElementById('bdMaintenanceTableBody');
-  if (maintTbody) {
-    if (!bus.maintenanceHistory || bus.maintenanceHistory.length === 0) {
-      maintTbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 24px;">No technical service history recorded for this bus.</td></tr>`;
-    } else {
-      maintTbody.innerHTML = bus.maintenanceHistory.map(m => {
-        const levelLower = (m.level || '').toLowerCase();
-        let levelBadgeClass = 'maint-minor';
-        if (levelLower.includes('periodic')) levelBadgeClass = 'maint-periodic';
-        else if (levelLower.includes('prevent')) levelBadgeClass = 'maint-preventative';
-        else if (levelLower.includes('overhaul') || levelLower.includes('urgent')) levelBadgeClass = 'maint-overhaul';
+  const badgeEl = document.getElementById('bdTripTableCountBadge');
+  if (badgeEl) badgeEl.textContent = `${trips.length} Record${trips.length === 1 ? '' : 's'}`;
 
-        return `
-          <tr>
-            <td><strong>${m.date}</strong></td>
-            <td><code>${m.odometer}</code></td>
-            <td>${m.reason}</td>
-            <td><span class="badge-clean ${levelBadgeClass}">${m.level}</span></td>
-            <td>${m.technician}</td>
-            <td><strong>${m.cost}</strong></td>
-            <td><span class="badge-clean ${m.status === 'Completed' ? 'active' : 'warning'}">${m.status}</span></td>
-          </tr>
-        `;
-      }).join('');
+  if (trips.length === 0) {
+    tripTbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 36px 16px;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <i class="ph ph-calendar-x" style="font-size: 28px; opacity: 0.5;"></i>
+            <span style="font-weight: 500;">No trips found matching the selected filter criteria</span>
+          </div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tripTbody.innerHTML = trips.map(t => {
+    let statusPill = '';
+    const st = (t.status || '').toLowerCase();
+    if (st === 'completed') {
+      statusPill = `<span class="badge-clean operational"><span class="inside-status-dot" style="background:#10B981;"></span> Completed</span>`;
+    } else if (st === 'scheduled' || st === 'booked') {
+      statusPill = `<span class="badge-clean warning"><span class="inside-status-dot" style="background:#F59E0B;"></span> Scheduled</span>`;
+    } else if (st.includes('progress')) {
+      statusPill = `<span class="badge-clean active"><span class="inside-status-dot" style="background:#3B82F6;"></span> In Progress</span>`;
+    } else {
+      statusPill = `<span class="badge-clean">${t.status}</span>`;
     }
+
+    return `
+      <tr>
+        <td>
+          <div class="cell-main-date">${t.date}</div>
+          <div class="cell-time"><i class="ph ph-clock"></i> ${t.timings}</div>
+        </td>
+        <td>
+          <div class="cell-trip-reason">${t.reason}</div>
+        </td>
+        <td>${statusPill}</td>
+        <td>
+          <div class="cell-faculty">${t.faculty}</div>
+          <a href="tel:${t.contact}" class="cell-contact-link">
+            <i class="ph ph-phone"></i> ${t.contact}
+          </a>
+        </td>
+        <td>
+          <span class="badge-college">${t.college}</span>
+        </td>
+        <td style="text-align: center;">
+          <span class="badge-passengers"><i class="ph ph-users"></i> ${t.passengers}</span>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderBusMaintTable(bus, filterText = '', levelFilter = 'all') {
+  const maintTbody = document.getElementById('bdMaintenanceTableBody');
+  if (!maintTbody) return;
+
+  let maint = bus.maintenanceHistory || [];
+  if (filterText) {
+    const q = filterText.toLowerCase();
+    maint = maint.filter(m =>
+      (m.reason && m.reason.toLowerCase().includes(q)) ||
+      (m.technician && m.technician.toLowerCase().includes(q)) ||
+      (m.level && m.level.toLowerCase().includes(q)) ||
+      (m.date && m.date.toLowerCase().includes(q))
+    );
+  }
+  if (levelFilter && levelFilter !== 'all') {
+    maint = maint.filter(m => (m.level || '').toLowerCase().includes(levelFilter.toLowerCase()));
+  }
+
+  const badgeEl = document.getElementById('bdMaintTableCountBadge');
+  if (badgeEl) badgeEl.textContent = `${maint.length} Record${maint.length === 1 ? '' : 's'}`;
+
+  if (maint.length === 0) {
+    maintTbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 36px 16px;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <i class="ph ph-wrench" style="font-size: 28px; opacity: 0.5;"></i>
+            <span style="font-weight: 500;">No maintenance logs match the selected filter criteria</span>
+          </div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  maintTbody.innerHTML = maint.map(m => {
+    const lvl = (m.level || '').toLowerCase();
+    let levelHtml = '';
+    if (lvl.includes('periodic')) {
+      levelHtml = `<span class="badge-service-level periodic"><i class="ph ph-arrows-clockwise"></i> ${m.level}</span>`;
+    } else if (lvl.includes('overhaul') || lvl.includes('urgent') || lvl.includes('major')) {
+      levelHtml = `<span class="badge-service-level major"><i class="ph ph-warning-circle"></i> ${m.level}</span>`;
+    } else {
+      levelHtml = `<span class="badge-service-level"><i class="ph ph-wrench"></i> ${m.level}</span>`;
+    }
+
+    const st = (m.status || '').toLowerCase();
+    let statusPill = '';
+    if (st === 'completed') {
+      statusPill = `<span class="badge-clean operational"><span class="inside-status-dot" style="background:#10B981;"></span> Completed</span>`;
+    } else {
+      statusPill = `<span class="badge-clean warning"><span class="inside-status-dot" style="background:#F59E0B;"></span> ${m.status}</span>`;
+    }
+
+    return `
+      <tr>
+        <td>
+          <div class="cell-main-date">${m.date}</div>
+          <div class="cell-odometer"><i class="ph ph-gauge"></i> ${m.odometer}</div>
+        </td>
+        <td>
+          <div class="cell-maint-reason">${m.reason}</div>
+        </td>
+        <td>${levelHtml}</td>
+        <td>
+          <div class="cell-depot">
+            <i class="ph ph-buildings" style="color:var(--text-muted); font-size:14px;"></i>
+            <span>${m.technician}</span>
+          </div>
+        </td>
+        <td>${statusPill}</td>
+        <td style="text-align: right;">
+          <span class="cell-cost-pill">${m.cost}</span>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterBusTrips() {
+  const bus = UNIVERSITY_BUSES_DATA.find(b => b.id === AppState.currentBusDetailId) || UNIVERSITY_BUSES_DATA[0];
+  if (!bus) return;
+  const search = document.getElementById('bdTripSearchInput')?.value || '';
+  const status = document.getElementById('bdTripStatusFilter')?.value || 'all';
+  renderBusTripsTable(bus, search, status);
+}
+
+function filterBusMaint() {
+  const bus = UNIVERSITY_BUSES_DATA.find(b => b.id === AppState.currentBusDetailId) || UNIVERSITY_BUSES_DATA[0];
+  if (!bus) return;
+  const search = document.getElementById('bdMaintSearchInput')?.value || '';
+  const level = document.getElementById('bdMaintLevelFilter')?.value || 'all';
+  renderBusMaintTable(bus, search, level);
+}
+
+function switchBusDetailTab(tab) {
+  const btnTrips = document.getElementById('tabBtnTrips');
+  const btnMaint = document.getElementById('tabBtnMaint');
+  const btnBoth = document.getElementById('tabBtnBoth');
+  const cardTrips = document.getElementById('cardTripSchedule');
+  const cardMaint = document.getElementById('cardMaintenanceLog');
+
+  [btnTrips, btnMaint, btnBoth].forEach(b => { if (b) b.classList.remove('active'); });
+
+  if (tab === 'trips') {
+    if (btnTrips) btnTrips.classList.add('active');
+    if (cardTrips) cardTrips.style.display = 'block';
+    if (cardMaint) cardMaint.style.display = 'none';
+  } else if (tab === 'maint') {
+    if (btnMaint) btnMaint.classList.add('active');
+    if (cardTrips) cardTrips.style.display = 'none';
+    if (cardMaint) cardMaint.style.display = 'block';
+  } else {
+    if (btnBoth) btnBoth.classList.add('active');
+    if (cardTrips) cardTrips.style.display = 'block';
+    if (cardMaint) cardMaint.style.display = 'block';
   }
 }
 
