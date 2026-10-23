@@ -2697,7 +2697,7 @@ select.form-input-flat {
 
 .chat-flat-layout {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 350px 1fr;
   flex: 1 1 0;
   min-height: 0;
   height: 100%;
@@ -2709,6 +2709,7 @@ select.form-input-flat {
 }
 
 .chat-flat-sidebar {
+  width: 350px;
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
