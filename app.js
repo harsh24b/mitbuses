@@ -1891,7 +1891,6 @@ function renderRoutesDirectory() {
             <h4 class="route-card-title">${corridorName}</h4>
           </div>
           <span class="badge-clean ${r.status}">
-            <span class="badge-dot"></span>
             ${isMaint ? 'Maintenance' : 'Active'}
           </span>
         </div>
@@ -3151,8 +3150,6 @@ function renderBusDetail(busId) {
     subEl.innerHTML = `
       <span class="meta-item"><i class="ph ph-bus"></i> <span>${bus.model}</span></span>
       <span class="meta-sep">•</span>
-      <span class="meta-item"><i class="ph ph-user"></i> <span>Driver: <strong>${bus.driver.name}</strong></span></span>
-      <span class="meta-sep">•</span>
       <span class="meta-item"><i class="ph ph-navigation-arrow"></i> <span>Corridor: <strong>${bus.assignedCorridor}</strong></span></span>
     `;
   }
@@ -3252,11 +3249,11 @@ function renderBusTripsTable(bus, filterText = '', statusFilter = 'all') {
     let statusPill = '';
     const st = (t.status || '').toLowerCase();
     if (st === 'completed') {
-      statusPill = `<span class="badge-clean operational"><span class="inside-status-dot" style="background:#10B981;"></span> Completed</span>`;
+      statusPill = `<span class="badge-clean operational">Completed</span>`;
     } else if (st === 'scheduled' || st === 'booked') {
-      statusPill = `<span class="badge-clean warning"><span class="inside-status-dot" style="background:#F59E0B;"></span> Scheduled</span>`;
+      statusPill = `<span class="badge-clean warning">Scheduled</span>`;
     } else if (st.includes('progress')) {
-      statusPill = `<span class="badge-clean active"><span class="inside-status-dot" style="background:#3B82F6;"></span> In Progress</span>`;
+      statusPill = `<span class="badge-clean active">In Progress</span>`;
     } else {
       statusPill = `<span class="badge-clean">${t.status}</span>`;
     }
@@ -3337,9 +3334,9 @@ function renderBusMaintTable(bus, filterText = '', levelFilter = 'all') {
     const st = (m.status || '').toLowerCase();
     let statusPill = '';
     if (st === 'completed') {
-      statusPill = `<span class="badge-clean operational"><span class="inside-status-dot" style="background:#10B981;"></span> Completed</span>`;
+      statusPill = `<span class="badge-clean operational">Completed</span>`;
     } else {
-      statusPill = `<span class="badge-clean warning"><span class="inside-status-dot" style="background:#F59E0B;"></span> ${m.status}</span>`;
+      statusPill = `<span class="badge-clean warning">${m.status}</span>`;
     }
 
     return `

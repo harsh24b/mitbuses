@@ -22,7 +22,7 @@
   <!-- Google Maps JavaScript API with user provided key -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-1Dc6aFDvUq8dwzAUfWBNwKexsdgmIkE&libraries=geometry" async defer></script>
 
-  <link rel="stylesheet" href="styles.css?v=trip-box-clean4">
+  <link rel="stylesheet" href="styles.css?v=trip-clean5">
 </head>
 <body>
 
@@ -279,7 +279,7 @@
                       <span class="bus-specs-route-title" id="dashBusRouteSpec">Lohegaon Express Corridor</span>
                     </div>
                     <div class="bus-status-indicator" id="dashBusStatusSpecWrap">
-                      <span class="badge-clean operational" id="dashBusStatusBadge"><span class="status-dot green"></span> Active on Route</span>
+                      <span class="badge-clean operational" id="dashBusStatusBadge">Active on Route</span>
                     </div>
                   </div>
 
@@ -670,7 +670,7 @@
                     <i class="ph ph-bus" style="color: var(--accent);"></i>
                     <span>Assigned Vehicle Fleet Details (2 Buses)</span>
                   </div>
-                  <span class="badge-clean operational" id="rdBusStatusBadge"><span class="badge-dot"></span> 2 Active in Corridor</span>
+                  <span class="badge-clean operational" id="rdBusStatusBadge">2 Active in Corridor</span>
                 </div>
 
                 <div class="assigned-buses-grid" id="rdAssignedBusesContainer">
@@ -683,7 +683,7 @@
                       <div class="route-bus-title-group">
                         <div style="display: flex; align-items: center; gap: 8px;">
                           <span class="route-bus-main-plate" id="rdBus1Plate">MH12-CD-5678</span>
-                          <span class="badge-clean operational" style="font-size: 10.5px; padding: 1px 6px;"><span class="badge-dot"></span> Primary</span>
+                          <span class="badge-clean operational" style="font-size: 10.5px; padding: 1px 6px;">Primary</span>
                         </div>
                         <div class="route-bus-reg-line" id="rdBus1Reg">Coach #09 • REG-1192 • Deluxe High-Deck</div>
                       </div>
@@ -699,7 +699,7 @@
                       <div class="route-bus-title-group">
                         <div style="display: flex; align-items: center; gap: 8px;">
                           <span class="route-bus-main-plate" id="rdBus2Plate">MH12-RN-4421</span>
-                          <span class="badge-clean operational" style="font-size: 10.5px; padding: 1px 6px;"><span class="badge-dot"></span> Supplementary</span>
+                          <span class="badge-clean operational" style="font-size: 10.5px; padding: 1px 6px;">Supplementary</span>
                         </div>
                         <div class="route-bus-reg-line" id="rdBus2Reg">Coach #14 • REG-2044 • Standard 49</div>
                       </div>
@@ -912,8 +912,6 @@
                 <div class="inside-meta-strip" id="bdBusSubtitle">
                   <span class="meta-item"><i class="ph ph-bus"></i> <span>Ashok Leyland 49 Deluxe High-Deck</span></span>
                   <span class="meta-sep">•</span>
-                  <span class="meta-item"><i class="ph ph-user"></i> <span>Driver: <strong>Santosh Jadhav</strong></span></span>
-                  <span class="meta-sep">•</span>
                   <span class="meta-item"><i class="ph ph-navigation-arrow"></i> <span>Corridor: <strong>Bus A - Nigdi</strong></span></span>
                 </div>
               </div>
@@ -922,41 +920,6 @@
                 <button class="btn-clean btn-clean-primary" onclick="openNewTripModalForCurrentBus()">
                   <i class="ph ph-plus-circle"></i> Add New Trip
                 </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bus Detail Quick Metrics Strip -->
-          <div class="bus-detail-summary-strip">
-            <div class="summary-kpi-item">
-              <div class="summary-kpi-icon"><i class="ph ph-calendar-check"></i></div>
-              <div class="summary-kpi-content">
-                <span class="summary-kpi-val" id="bdSummaryTripsCount">3 Trips</span>
-                <span class="summary-kpi-label">Scheduled & Logged</span>
-              </div>
-            </div>
-            <div class="summary-kpi-divider"></div>
-            <div class="summary-kpi-item">
-              <div class="summary-kpi-icon"><i class="ph ph-users"></i></div>
-              <div class="summary-kpi-content">
-                <span class="summary-kpi-val" id="bdSummaryPassengersCount">119 Passengers</span>
-                <span class="summary-kpi-label">Total Transport Users</span>
-              </div>
-            </div>
-            <div class="summary-kpi-divider"></div>
-            <div class="summary-kpi-item">
-              <div class="summary-kpi-icon"><i class="ph ph-wrench"></i></div>
-              <div class="summary-kpi-content">
-                <span class="summary-kpi-val" id="bdSummaryMaintCount">3 Services</span>
-                <span class="summary-kpi-label">Maintenance Records</span>
-              </div>
-            </div>
-            <div class="summary-kpi-divider"></div>
-            <div class="summary-kpi-item">
-              <div class="summary-kpi-icon"><i class="ph ph-gauge"></i></div>
-              <div class="summary-kpi-content">
-                <span class="summary-kpi-val" id="bdSummaryOdometer">38,400 km</span>
-                <span class="summary-kpi-label">Current Odometer</span>
               </div>
             </div>
           </div>
@@ -1981,31 +1944,31 @@
           <div class="form-grid-3col" style="margin-top: 10px;">
             <div class="form-group-flat">
               <label class="form-label-flat">Trip Date</label>
-              <div class="input-icon-wrap">
+              <div class="input-icon-wrap" style="height: 38px;">
                 <i class="ph ph-calendar-blank"></i>
-                <input type="date" id="tripDate" class="form-input-flat" required onclick="this.showPicker && this.showPicker()">
+                <input type="date" id="tripDate" class="form-input-flat" style="height: 38px;" required onclick="this.showPicker && this.showPicker()">
               </div>
             </div>
             <div class="form-group-flat">
               <label class="form-label-flat">Timings</label>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <div class="input-icon-wrap" style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 6px; height: 38px;">
+                <div class="input-icon-wrap" style="flex: 1; height: 38px;">
                   <i class="ph ph-clock"></i>
-                  <input type="time" id="tripTimeStart" class="form-input-flat" style="padding-left: 32px; padding-right: 4px;" required onclick="this.showPicker && this.showPicker()" oninput="syncTripTimings()" title="Departure Time">
+                  <input type="time" id="tripTimeStart" class="form-input-flat" style="padding-left: 32px; padding-right: 4px; height: 38px;" required onclick="this.showPicker && this.showPicker()" oninput="syncTripTimings()" title="Departure Time">
                 </div>
                 <span style="color: var(--text-muted); font-size: 13px; font-weight: 500;">–</span>
-                <div class="input-icon-wrap" style="flex: 1;">
+                <div class="input-icon-wrap" style="flex: 1; height: 38px;">
                   <i class="ph ph-clock"></i>
-                  <input type="time" id="tripTimeEnd" class="form-input-flat" style="padding-left: 32px; padding-right: 4px;" required onclick="this.showPicker && this.showPicker()" oninput="syncTripTimings()" title="Return Time">
+                  <input type="time" id="tripTimeEnd" class="form-input-flat" style="padding-left: 32px; padding-right: 4px; height: 38px;" required onclick="this.showPicker && this.showPicker()" oninput="syncTripTimings()" title="Return Time">
                 </div>
               </div>
               <input type="hidden" id="tripTimings" value="">
             </div>
             <div class="form-group-flat">
-              <label class="form-label-flat">Transport Users Headcount</label>
-              <div class="input-icon-wrap">
+              <label class="form-label-flat">Headcount</label>
+              <div class="input-icon-wrap" style="height: 38px;">
                 <i class="ph ph-users"></i>
-                <input type="number" id="tripPassengers" class="form-input-flat" placeholder="Number of users" min="1" max="60" required>
+                <input type="number" id="tripPassengers" class="form-input-flat" placeholder="Number of users" min="1" max="60" style="height: 38px;" required>
               </div>
             </div>
           </div>
@@ -2456,6 +2419,6 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- SCRIPT -->
-  <script src="app.js?v=trip-box-clean4"></script>
+  <script src="app.js?v=trip-clean5"></script>
 </body>
 </html>

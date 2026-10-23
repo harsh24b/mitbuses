@@ -659,6 +659,12 @@ code {
   display: none !important; /* Remove decorative icons inside status */
 }
 
+.badge-clean .inside-status-dot,
+.badge-clean .status-dot,
+.badge-clean .badge-dot {
+  display: none !important; /* Strictly ensure only 1 dot appears */
+}
+
 /* 5. BUTTONS: 36px height, 6px radius, no shadow */
 .btn-clean,
 .btn-secondary {
@@ -3606,6 +3612,38 @@ select.form-input-flat {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 12px;
+  align-items: start;
+}
+
+.form-grid-3col .form-group-flat {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 0;
+}
+
+.form-grid-3col .form-label-flat {
+  display: block;
+  height: 18px;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 6px;
+}
+
+.form-grid-3col .input-icon-wrap,
+.form-grid-3col .form-input-flat {
+  height: 38px;
+  box-sizing: border-box;
+}
+
+.form-grid-3col input[type="date"].form-input-flat,
+.form-grid-3col input[type="time"].form-input-flat,
+.form-grid-3col input[type="number"].form-input-flat {
+  height: 38px;
+  line-height: 38px;
+  box-sizing: border-box;
 }
 
 .input-icon-wrap {
@@ -5256,17 +5294,9 @@ select.form-input-flat {
    BUS DETAIL VIEW: SUMMARY KPI STRIP & ORGANIZED TABLES
    ========================================================================== */
 
-/* 1. Summary KPI Strip */
+/* 1. Summary KPI Strip - Removed per user request */
 .bus-detail-summary-strip {
-  display: flex;
-  align-items: center;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-control);
-  padding: 14px 20px;
-  margin-bottom: 20px;
-  gap: 16px;
-  overflow-x: auto;
+  display: none !important;
 }
 
 .summary-kpi-item {
