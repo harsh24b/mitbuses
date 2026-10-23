@@ -4829,13 +4829,48 @@ function openChatForDriver(driverName) {
   if (firstDirect) selectChat(firstDirect.id);
 }
 
+function formatTimeToAMPM(timeStr) {
+  if (!timeStr) return '';
+  const parts = timeStr.split(':');
+  if (parts.length < 2) return timeStr;
+  let h = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  const period = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  const minuteStr = m < 10 ? '0' + m : m;
+  return `${h}:${minuteStr} ${period}`;
+}
+
+function syncTripTimings() {
+  const start = document.getElementById('tripTimeStart')?.value;
+  const end = document.getElementById('tripTimeEnd')?.value;
+  const target = document.getElementById('tripTimings');
+  if (target) {
+    if (start && end) {
+      target.value = `${formatTimeToAMPM(start)} – ${formatTimeToAMPM(end)}`;
+    } else if (start) {
+      target.value = formatTimeToAMPM(start);
+    }
+  }
+}
+
 function openNewTripModal() {
   populateTripBusSelect();
-  document.getElementById('newTripModal')?.classList.remove('hidden');
+  // Clear any existing values so inputs are always fresh and empty
+  const modal = document.getElementById('newTripModal');
+  if (modal) {
+    const form = modal.querySelector('form');
+    if (form) form.reset();
+  }
+  if (AppState.currentBusDetailId) {
+    const busSelect = document.getElementById('tripBusSelect');
+    if (busSelect) busSelect.value = AppState.currentBusDetailId;
+  }
+  modal?.classList.remove('hidden');
 }
 
 function closeNewTripModal() {
-  document.getElementById('newTripModal').classList.add('hidden');
+  document.getElementById('newTripModal')?.classList.add('hidden');
 }
 
 function handleSaveTrip(e) {
@@ -4847,15 +4882,42 @@ function handleSaveTrip(e) {
   const col = document.getElementById('tripCollege')?.value || 'School of Engineering';
   const busId = document.getElementById('tripBusSelect')?.value || 'bus-u01';
   const desc = document.getElementById('tripDescription')?.value || 'Special Academic Trip';
-  const date = document.getElementById('tripDate')?.value || '30/03/2026';
-  const timings = document.getElementById('tripTimings')?.value || '8:30 AM – 4:30 PM';
+
+  // Format Date from calendar input (YYYY-MM-DD -> DD Mon, YYYY)
+  const rawDate = document.getElementById('tripDate')?.value || '';
+  let dateFormatted = rawDate;
+  if (rawDate && rawDate.includes('-')) {
+    const parts = rawDate.split('-');
+    if (parts.length === 3) {
+      const d = new Date(parts[0], parseInt(parts[1], 10) - 1, parts[2]);
+      if (!isNaN(d.getTime())) {
+        dateFormatted = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+      }
+    }
+  }
+  if (!dateFormatted) {
+    dateFormatted = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  // Format Timings from clock pickers
+  let timings = document.getElementById('tripTimings')?.value || '';
+  const timeStart = document.getElementById('tripTimeStart')?.value;
+  const timeEnd = document.getElementById('tripTimeEnd')?.value;
+  if (timeStart && timeEnd) {
+    timings = `${formatTimeToAMPM(timeStart)} – ${formatTimeToAMPM(timeEnd)}`;
+  } else if (timeStart) {
+    timings = formatTimeToAMPM(timeStart);
+  } else if (!timings) {
+    timings = '8:30 AM – 4:30 PM';
+  }
+
   const passengers = parseInt(document.getElementById('tripPassengers')?.value) || 40;
 
   const targetBus = UNIVERSITY_BUSES_DATA.find(b => b.id === busId) || UNIVERSITY_BUSES_DATA[0];
   if (targetBus) {
     const newTrip = {
       id: 'trip-' + Date.now(),
-      date: date,
+      date: dateFormatted,
       timings: timings,
       reason: desc,
       status: 'Scheduled',
@@ -4865,7 +4927,7 @@ function handleSaveTrip(e) {
       passengers: passengers
     };
     targetBus.tripSchedule.unshift(newTrip);
-    if (targetBus.status === 'Operational') {
+    if (targetBus.status === 'Operational' || targetBus.status === 'Available') {
       targetBus.status = 'Booked for Special Trip';
     }
   }
@@ -4879,7 +4941,7 @@ function handleSaveTrip(e) {
     renderBusDetail(busId);
   }
 
-  triggerToast(`Formal booking confirmed for ${targetBus.code} (${desc})! Feeds into trip schedule.`, 'success');
+  triggerToast(`Trip booked for ${targetBus.code} (${desc})`, 'success');
   
   // Directly lead user to inspect the newly booked bus schedule
   setTimeout(() => {

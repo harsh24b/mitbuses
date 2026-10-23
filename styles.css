@@ -3627,25 +3627,23 @@ select.form-input-flat {
   width: 100%;
 }
 
-.trip-allocation-callout {
-  background: var(--accent-subtle);
-  border: 1px solid var(--accent-border);
-  border-radius: var(--radius-control);
-  padding: 10px 14px;
-  margin-top: 10px;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 12px;
-  color: #9A3412;
-  line-height: 1.45;
+.form-input-flat[type="date"],
+.form-input-flat[type="time"] {
+  cursor: pointer;
+  color-scheme: light;
+  font-family: inherit;
 }
 
-.trip-allocation-callout i {
-  color: var(--accent);
-  font-size: 18px;
-  flex-shrink: 0;
-  margin-top: 1px;
+.form-input-flat[type="date"]::-webkit-calendar-picker-indicator,
+.form-input-flat[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+.form-input-flat[type="date"]::-webkit-calendar-picker-indicator:hover,
+.form-input-flat[type="time"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
 }
 
 .modal-footer-flat {

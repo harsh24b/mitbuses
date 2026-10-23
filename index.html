@@ -22,7 +22,7 @@
   <!-- Google Maps JavaScript API with user provided key -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-1Dc6aFDvUq8dwzAUfWBNwKexsdgmIkE&libraries=geometry" async defer></script>
 
-  <link rel="stylesheet" href="styles.css?v=clean-tables3">
+  <link rel="stylesheet" href="styles.css?v=trip-box-clean4">
 </head>
 <body>
 
@@ -1931,26 +1931,27 @@
 
           <div class="form-grid-2col">
             <div class="form-group-flat">
-              <label class="form-label-flat">Faculty In-Charge *</label>
+              <label class="form-label-flat">Faculty In-Charge</label>
               <div class="input-icon-wrap">
                 <i class="ph ph-user"></i>
-                <input type="text" id="tripFacultyName" class="form-input-flat" value="Prof. Harsh Bhawsar" required placeholder="Prof. Full Name">
+                <input type="text" id="tripFacultyName" class="form-input-flat" required placeholder="Faculty Name">
               </div>
             </div>
             <div class="form-group-flat">
-              <label class="form-label-flat">Faculty Contact Number *</label>
+              <label class="form-label-flat">Faculty Contact Number</label>
               <div class="input-icon-wrap">
                 <i class="ph ph-phone"></i>
-                <input type="text" id="tripFacultyContact" class="form-input-flat" value="+91 98450 22391" required placeholder="+91 XXXXX XXXXX">
+                <input type="text" id="tripFacultyContact" class="form-input-flat" required placeholder="+91 XXXXX XXXXX">
               </div>
             </div>
           </div>
 
           <div class="form-group-flat" style="margin-top: 10px;">
-            <label class="form-label-flat">Sponsoring College / Institute *</label>
+            <label class="form-label-flat">College</label>
             <div class="input-icon-wrap">
               <i class="ph ph-buildings"></i>
               <select id="tripCollege" class="form-input-flat" required>
+                <option value="" disabled selected>Select College / Institute</option>
                 <option value="Institute of Design">Institute of Design (IOD)</option>
                 <option value="School of Engineering">School of Engineering (SOE)</option>
                 <option value="School of Computing">School of Computing (SOC)</option>
@@ -1970,33 +1971,41 @@
           </div>
 
           <div class="form-group-flat">
-            <label class="form-label-flat">Purpose / Destination Corridor *</label>
+            <label class="form-label-flat">Purpose</label>
             <div class="input-icon-wrap">
               <i class="ph ph-map-pin"></i>
-              <input type="text" id="tripDescription" class="form-input-flat" placeholder="e.g. Industrial Visit - Chakan Automobile Cluster" value="Industrial Visit - Chakan Automobile Cluster" required>
+              <input type="text" id="tripDescription" class="form-input-flat" placeholder="e.g. Industrial Visit - Chakan Automobile Cluster" required>
             </div>
           </div>
 
           <div class="form-grid-3col" style="margin-top: 10px;">
             <div class="form-group-flat">
-              <label class="form-label-flat">Trip Date *</label>
+              <label class="form-label-flat">Trip Date</label>
               <div class="input-icon-wrap">
                 <i class="ph ph-calendar-blank"></i>
-                <input type="text" id="tripDate" class="form-input-flat" value="30/03/2026" required placeholder="DD/MM/YYYY">
+                <input type="date" id="tripDate" class="form-input-flat" required onclick="this.showPicker && this.showPicker()">
               </div>
             </div>
             <div class="form-group-flat">
-              <label class="form-label-flat">Timings *</label>
-              <div class="input-icon-wrap">
-                <i class="ph ph-clock"></i>
-                <input type="text" id="tripTimings" class="form-input-flat" value="8:30 AM – 4:30 PM" required placeholder="8:30 AM – 4:30 PM">
+              <label class="form-label-flat">Timings</label>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <div class="input-icon-wrap" style="flex: 1;">
+                  <i class="ph ph-clock"></i>
+                  <input type="time" id="tripTimeStart" class="form-input-flat" style="padding-left: 32px; padding-right: 4px;" required onclick="this.showPicker && this.showPicker()" oninput="syncTripTimings()" title="Departure Time">
+                </div>
+                <span style="color: var(--text-muted); font-size: 13px; font-weight: 500;">–</span>
+                <div class="input-icon-wrap" style="flex: 1;">
+                  <i class="ph ph-clock"></i>
+                  <input type="time" id="tripTimeEnd" class="form-input-flat" style="padding-left: 32px; padding-right: 4px;" required onclick="this.showPicker && this.showPicker()" oninput="syncTripTimings()" title="Return Time">
+                </div>
               </div>
+              <input type="hidden" id="tripTimings" value="">
             </div>
             <div class="form-group-flat">
-              <label class="form-label-flat">Transport Users Headcount *</label>
+              <label class="form-label-flat">Transport Users Headcount</label>
               <div class="input-icon-wrap">
                 <i class="ph ph-users"></i>
-                <input type="number" id="tripPassengers" class="form-input-flat" value="44" min="1" max="50" required>
+                <input type="number" id="tripPassengers" class="form-input-flat" placeholder="Number of users" min="1" max="60" required>
               </div>
             </div>
           </div>
@@ -2010,20 +2019,12 @@
           </div>
 
           <div class="form-group-flat">
-            <label class="form-label-flat">Select University Bus *</label>
+            <label class="form-label-flat">Select University Bus</label>
             <div class="input-icon-wrap">
               <i class="ph ph-van"></i>
               <select id="tripBusSelect" class="form-input-flat" required>
                 <!-- Dynamically populated with 13 university buses -->
               </select>
-            </div>
-          </div>
-
-          <!-- Notice Banner -->
-          <div class="trip-allocation-callout">
-            <i class="ph ph-shield-check"></i>
-            <div>
-              <strong>Instant Dispatch Allotment:</strong> Bus schedule & designated driver are locked on the university dispatch log.
             </div>
           </div>
         </div>
@@ -2455,6 +2456,6 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- SCRIPT -->
-  <script src="app.js?v=clean-tables3"></script>
+  <script src="app.js?v=trip-box-clean4"></script>
 </body>
 </html>
