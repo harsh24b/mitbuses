@@ -22,7 +22,7 @@
   <!-- Google Maps JavaScript API with user provided key -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-1Dc6aFDvUq8dwzAUfWBNwKexsdgmIkE&libraries=geometry" async defer></script>
 
-  <link rel="stylesheet" href="styles.css?v=trip-clean5">
+  <link rel="stylesheet" href="styles.css?v=chat-fuller2">
 </head>
 <body>
 
@@ -1084,24 +1084,46 @@
         </section>
 
         <!-- ================================================================ -->
-        <!-- VIEW 4: DISPATCH CHAT (CLEAN MINIMALIST ENTERPRISE MESSENGER)    -->
+        <!-- VIEW 4: DISPATCH CHAT (FULL-BLEED ENTERPRISE MESSENGER)          -->
         <!-- ================================================================ -->
         <section class="view-section" id="view-chat">
           <div class="chat-flat-layout">
             
-            <!-- Channels List -->
+            <!-- Channels List Sidebar -->
             <div class="chat-flat-sidebar">
-              <div style="padding: 14px 16px; border-bottom: 1px solid var(--border-color);">
-                <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px;">Dispatch Comms</div>
-                <div class="toolbar-search" style="width: 100%; margin-bottom: 10px;">
-                  <i class="ph ph-magnifying-glass"></i>
-                  <input type="text" id="chatSearchInput" placeholder="Search chats..." onkeyup="filterChatConversations()">
+              <div class="chat-sidebar-header-pane">
+                <div class="chat-sidebar-search-row">
+                  <div class="chat-search-input-wrap">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="text" id="chatSearchInput" placeholder="Search chats..." onkeyup="filterChatConversations()">
+                  </div>
+                  <div class="chat-popover-wrap">
+                    <button type="button" class="chat-sq-icon-btn" id="chatThreeDotsBtn" onclick="toggleChatActionsMenu(event)" title="Options">
+                      <i class="ph ph-dots-three-vertical"></i>
+                    </button>
+                    <!-- Three-dots Dropdown matching reference image -->
+                    <div class="chat-team-dropdown hidden" id="chatActionsDropdown">
+                      <button type="button" class="chat-team-dropdown-item" onclick="handleChatAction('new_group')">
+                        <i class="ph ph-users-three"></i>
+                        <span>New group</span>
+                      </button>
+                      <button type="button" class="chat-team-dropdown-item" onclick="handleChatAction('important')">
+                        <i class="ph ph-star"></i>
+                        <span>Important messages</span>
+                      </button>
+                      <button type="button" class="chat-team-dropdown-item" onclick="handleChatAction('select_chats')">
+                        <i class="ph ph-check-square"></i>
+                        <span>Select chats</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <!-- Selection pills below search: All, Unread, Important -->
+
+                <!-- Selection pills below search: All, Drivers, Coordinators -->
                 <div class="chat-filter-pills-row">
                   <button class="pill-btn active" id="chatPillAll" onclick="setChatFilter('all', this)">All</button>
-                  <button class="pill-btn" id="chatPillUnread" onclick="setChatFilter('unread', this)">Unread (2)</button>
-                  <button class="pill-btn" id="chatPillImportant" onclick="setChatFilter('important', this)">Important (4)</button>
+                  <button class="pill-btn" id="chatPillDrivers" onclick="setChatFilter('drivers', this)">Drivers</button>
+                  <button class="pill-btn" id="chatPillCoordinators" onclick="setChatFilter('coordinators', this)">Coordinators</button>
                 </div>
               </div>
 
@@ -1115,7 +1137,7 @@
               <div class="chat-header-flat">
                 <div>
                   <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="font-size: 14px; font-weight: 600;" id="activeChatName">All Drivers Broadcast</div>
+                    <div style="font-size: 15px; font-weight: 600;" id="activeChatName">All Drivers Broadcast</div>
                   </div>
                   <div style="font-size: 12px; color: var(--status-green);" id="activeChatSub">● 13 Drivers Active • Strict Speed Telemetry</div>
                 </div>
@@ -1134,6 +1156,41 @@
               </div>
 
               <div class="chat-input-row">
+                <div class="chat-popover-wrap chat-attach-wrap">
+                  <button type="button" class="chat-sq-icon-btn" id="chatAttachBtn" onclick="toggleChatAttachMenu(event)" title="Add attachment">
+                    <i class="ph ph-plus"></i>
+                  </button>
+                  <!-- Plus Attachment Dropdown matching reference image -->
+                  <div class="chat-team-dropdown chat-attach-dropdown hidden" id="chatAttachDropdown">
+                    <button type="button" class="chat-team-dropdown-item" onclick="handleAttachAction('photos')">
+                      <i class="ph ph-image"></i>
+                      <span>Photos</span>
+                    </button>
+                    <button type="button" class="chat-team-dropdown-item" onclick="handleAttachAction('camera')">
+                      <i class="ph ph-camera"></i>
+                      <span>Camera</span>
+                    </button>
+                    <button type="button" class="chat-team-dropdown-item" onclick="handleAttachAction('contact')">
+                      <i class="ph ph-phone"></i>
+                      <span>Contact</span>
+                    </button>
+                    <button type="button" class="chat-team-dropdown-item" onclick="handleAttachAction('poll')">
+                      <i class="ph ph-chart-bar-horizontal"></i>
+                      <span>Poll</span>
+                    </button>
+                    <button type="button" class="chat-team-dropdown-item" onclick="handleAttachAction('document')">
+                      <i class="ph ph-file-text"></i>
+                      <span>Document</span>
+                    </button>
+                    <button type="button" class="chat-team-dropdown-item" onclick="handleAttachAction('quick_replies')">
+                      <i class="ph ph-chat-teardrop-dots"></i>
+                      <span>Quick Replies</span>
+                    </button>
+                  </div>
+                  <input type="file" id="chatPhotoUpload" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event)">
+                  <input type="file" id="chatDocUpload" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt" style="display:none;" onchange="handleDocUpload(event)">
+                </div>
+
                 <input type="text" id="chatMessageInput" placeholder="Type a message to driver or channel..." onkeydown="handleChatInputKeyDown(event)">
                 <button class="btn-clean btn-clean-primary" onclick="sendChatMessage()">Send</button>
               </div>
@@ -2419,6 +2476,6 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- SCRIPT -->
-  <script src="app.js?v=trip-clean5"></script>
+  <script src="app.js?v=chat-fuller2"></script>
 </body>
 </html>

@@ -1238,6 +1238,11 @@ function navigateTo(viewId) {
   const target = document.getElementById(`view-${viewId}`);
   if (target) target.classList.add('active');
 
+  const viewport = document.querySelector('.app-main-viewport');
+  if (viewport) {
+    viewport.classList.toggle('chat-full-bleed', viewId === 'chat');
+  }
+
   document.querySelectorAll('.sidebar-nav-item button').forEach(btn => {
     const targetAttr = btn.getAttribute('data-target');
     const isMatched = (targetAttr === viewId) || 
@@ -3519,6 +3524,7 @@ const CHAT_DATA = [
     id: 'grp-all-drivers',
     name: 'All Drivers Broadcast',
     type: 'group',
+    category: 'driver',
     membersCount: 13,
     time: '8:30 AM',
     lastMsg: 'Weather alert - light rain near Loni. Safe spacing.',
@@ -3535,6 +3541,7 @@ const CHAT_DATA = [
     id: 'grp-morning-shift',
     name: 'Morning Shift Operations',
     type: 'group',
+    category: 'driver',
     membersCount: 8,
     time: '7:55 AM',
     lastMsg: 'Vijay (Bus B): Chaphekar bus crossed Baner phata.',
@@ -3549,6 +3556,7 @@ const CHAT_DATA = [
     id: 'grp-special-trips',
     name: 'Special Charter & Visits',
     type: 'group',
+    category: 'coordinator',
     membersCount: 5,
     time: 'Yesterday',
     lastMsg: 'Admin: Bus U-03 booked for Baramati ISRO trip on 31 Mar.',
@@ -3556,15 +3564,69 @@ const CHAT_DATA = [
     important: false,
     messages: [
       { sender: 'admin', text: 'Bus U-03 booked for Baramati ISRO trip on 31 Mar. Driver Dattatray assigned.', time: 'Yesterday' },
-      { sender: 'driver', senderName: 'Dattatray (Bus U-03)', text: 'Received vehicle readiness checklist. Will inspect fuel today.', time: 'Yesterday' }
+      { sender: 'coordinator', senderName: 'Prof. Harsh Bhawsar', text: 'Received vehicle readiness checklist. Faculty roster attached.', time: 'Yesterday' }
     ]
   },
 
-  // 2. DIRECT DRIVER MESSAGES
+  // 2. COORDINATORS
+  {
+    id: 'coord-harsh',
+    name: 'Prof. Harsh Bhawsar',
+    type: 'direct',
+    category: 'coordinator',
+    role: 'Faculty Coordinator • School of Engineering',
+    time: '9:40 AM',
+    lastMsg: 'Requested 2 extra buses for Chakan industrial tour.',
+    unread: true,
+    important: true,
+    phone: '+91 98450 22391',
+    messages: [
+      { sender: 'coordinator', text: 'Good morning CTD Admin, we have 44 mechanical engineering students attending the Tata Motors Chakan visit next Monday.', time: '9:30 AM' },
+      { sender: 'admin', text: 'Noted Prof. Bhawsar. Bus U-01 is scheduled with departure at 8:30 AM from campus gate.', time: '9:35 AM' },
+      { sender: 'coordinator', text: 'Requested 2 extra buses for Chakan industrial tour.', time: '9:40 AM' }
+    ]
+  },
+  {
+    id: 'coord-sarah',
+    name: 'Dr. Sarah Miller',
+    type: 'direct',
+    category: 'coordinator',
+    role: 'Department Coordinator • School of Design',
+    time: 'Yesterday',
+    lastMsg: 'ARAI tech expo student list approved.',
+    unread: false,
+    important: false,
+    phone: '+91 91234 56789',
+    messages: [
+      { sender: 'coordinator', text: 'Hi Admin, sharing the passenger roster for ARAI tech expo.', time: 'Yesterday' },
+      { sender: 'admin', text: 'Roster received. Bus U-04 assigned with 40 seats.', time: 'Yesterday' },
+      { sender: 'coordinator', text: 'ARAI tech expo student list approved.', time: 'Yesterday' }
+    ]
+  },
+  {
+    id: 'coord-patil',
+    name: 'Dr. Rajesh Patil',
+    type: 'direct',
+    category: 'coordinator',
+    role: 'Academic Transit Lead • School of Computing',
+    time: '22 Jan',
+    lastMsg: 'Faculty research conclave timing confirmed.',
+    unread: false,
+    important: false,
+    phone: '+91 98220 11984',
+    messages: [
+      { sender: 'coordinator', text: 'Please ensure return bus is available at 6:00 PM after concluding remarks.', time: '22 Jan' },
+      { sender: 'admin', text: 'Confirmed. Return trip scheduled at 6:00 PM sharp.', time: '22 Jan' },
+      { sender: 'coordinator', text: 'Faculty research conclave timing confirmed.', time: '22 Jan' }
+    ]
+  },
+
+  // 3. DIRECT DRIVER MESSAGES
   {
     id: 'dm-santosh',
     name: 'Santosh Jadhav (Bus U-01)',
     type: 'direct',
+    category: 'driver',
     role: 'Nigdi Corridor • Heavy Transport',
     time: '8:20 AM',
     lastMsg: 'Approaching Dapodi bridge, 42 students on board.',
@@ -3581,6 +3643,7 @@ const CHAT_DATA = [
     id: 'dm-arun',
     name: 'Arun Patil (Bus E)',
     type: 'direct',
+    category: 'driver',
     role: 'Lohegaon Corridor • Regular Transit',
     time: '8:05 AM',
     lastMsg: 'Passed Novotel stop. Next stop Phoenix Mall.',
@@ -3597,6 +3660,7 @@ const CHAT_DATA = [
     id: 'dm-ganesh',
     name: 'Ganesh More (Bus U-02)',
     type: 'direct',
+    category: 'driver',
     role: 'Central Workshop Standby',
     time: 'Yesterday',
     lastMsg: 'Clutch overhaul started in Bay 3.',
@@ -3612,6 +3676,7 @@ const CHAT_DATA = [
     id: 'dm-ramesh',
     name: 'Ramesh Shinde (Bus D)',
     type: 'direct',
+    category: 'driver',
     role: 'Moshi Spine Road Corridor',
     time: '7:42 AM',
     lastMsg: 'Smooth traffic at Sangamwadi bypass.',
@@ -3626,6 +3691,7 @@ const CHAT_DATA = [
     id: 'dm-sunil',
     name: 'Sunil Verma (Bus M)',
     type: 'direct',
+    category: 'driver',
     role: 'Tarawade Logistics Fleet',
     time: '9:15 AM',
     lastMsg: 'Issue noted. Proceeding to depot for checkup.',
@@ -3657,10 +3723,13 @@ function renderChatConversations() {
 
   const filtered = CHAT_DATA.filter(c => {
     let matchFilter = true;
-    if (filter === 'unread') matchFilter = !!c.unread;
-    else if (filter === 'important') matchFilter = !!c.important;
+    if (filter === 'drivers') {
+      matchFilter = c.category === 'driver' || (c.role && c.role.toLowerCase().includes('driver')) || c.id.startsWith('dm-') || c.id === 'grp-all-drivers' || c.id === 'grp-morning-shift';
+    } else if (filter === 'coordinators') {
+      matchFilter = c.category === 'coordinator' || (c.role && c.role.toLowerCase().includes('coordinator')) || c.id.startsWith('coord-') || c.id === 'grp-special-trips';
+    }
 
-    const matchQ = !q || c.name.toLowerCase().includes(q) || c.lastMsg.toLowerCase().includes(q);
+    const matchQ = !q || c.name.toLowerCase().includes(q) || (c.lastMsg && c.lastMsg.toLowerCase().includes(q));
     return matchFilter && matchQ;
   });
 
@@ -3676,9 +3745,15 @@ function renderChatConversations() {
 
   const renderCard = (c) => {
     const isGroup = c.type === 'group';
-    const avatarHtml = isGroup 
-      ? `<div class="chat-item-avatar group" title="Broadcast Group"><i class="ph ph-users"></i></div>`
-      : `<div class="chat-item-avatar direct" title="Direct Driver">${c.name.split(' ')[0][0]}</div>`;
+    const isCoord = c.category === 'coordinator';
+    let avatarHtml = '';
+    if (isGroup) {
+      avatarHtml = `<div class="chat-item-avatar group" title="Broadcast Group"><i class="ph ph-users"></i></div>`;
+    } else if (isCoord) {
+      avatarHtml = `<div class="chat-item-avatar direct" style="background: #EFF6FF; color: #2563EB; border-color: #BFDBFE;" title="Faculty Coordinator"><i class="ph ph-graduation-cap"></i></div>`;
+    } else {
+      avatarHtml = `<div class="chat-item-avatar direct" title="Direct Driver">${c.name.split(' ')[0][0]}</div>`;
+    }
 
     const unreadDot = c.unread ? `<span class="chat-unread-dot" title="Unread Message"></span>` : '';
 
@@ -3701,37 +3776,52 @@ function renderChatConversations() {
     `;
   };
 
-  const groups = filtered.filter(c => c.type === 'group');
-  const direct = filtered.filter(c => c.type !== 'group');
-
   let html = '';
-  if (groups.length > 0) {
-    html += `<div class="chat-section-divider-title">Groups</div>`;
-    html += groups.map(renderCard).join('');
-  }
-  if (direct.length > 0) {
-    html += `<div class="chat-section-divider-title" style="${groups.length > 0 ? 'margin-top: 10px;' : ''}">Direct Messages</div>`;
-    html += direct.map(renderCard).join('');
+  if (filter === 'all') {
+    const groups = filtered.filter(c => c.type === 'group');
+    const coords = filtered.filter(c => c.category === 'coordinator' && c.type !== 'group');
+    const drivers = filtered.filter(c => c.category === 'driver' && c.type !== 'group');
+
+    if (groups.length > 0) {
+      html += `<div class="chat-section-divider-title">Broadcast Channels</div>`;
+      html += groups.map(renderCard).join('');
+    }
+    if (coords.length > 0) {
+      html += `<div class="chat-section-divider-title" style="margin-top: 10px;">Coordinators & Faculty</div>`;
+      html += coords.map(renderCard).join('');
+    }
+    if (drivers.length > 0) {
+      html += `<div class="chat-section-divider-title" style="margin-top: 10px;">Fleet Drivers</div>`;
+      html += drivers.map(renderCard).join('');
+    }
+  } else if (filter === 'drivers') {
+    html += `<div class="chat-section-divider-title">Drivers & Road Operations (${filtered.length})</div>`;
+    html += filtered.map(renderCard).join('');
+  } else if (filter === 'coordinators') {
+    html += `<div class="chat-section-divider-title">Faculty & Institutional Coordinators (${filtered.length})</div>`;
+    html += filtered.map(renderCard).join('');
   }
 
   list.innerHTML = html;
-
-  updateChatPillsCounts();
 }
 
 function selectChat(id) {
   const conv = CHAT_DATA.find(c => c.id === id) || CHAT_DATA[0];
   AppState.activeChatRecipient = conv.name;
-  conv.unread = false; // Mark as read on inspection
+  conv.unread = false;
 
   const nameEl = document.getElementById('activeChatName');
   if (nameEl) nameEl.textContent = conv.name;
 
   const subEl = document.getElementById('activeChatSub');
   if (subEl) {
-    subEl.textContent = conv.type === 'group' 
-      ? `● Broadcast Channel • Monitored by Dispatch Control Room` 
-      : `● Active on Route • ${conv.role || 'Campus Heavy Transport'}`;
+    if (conv.type === 'group') {
+      subEl.textContent = `● Broadcast Channel • Monitored by Dispatch Control Room`;
+    } else if (conv.category === 'coordinator') {
+      subEl.textContent = `● ${conv.role || 'Department Transport Coordinator'}`;
+    } else {
+      subEl.textContent = `● Active on Route • ${conv.role || 'Campus Heavy Transport'}`;
+    }
   }
 
   const callBtn = document.getElementById('activeChatCallBtn');
@@ -3739,12 +3829,12 @@ function selectChat(id) {
     if (conv.phone) {
       callBtn.style.display = 'inline-flex';
       callBtn.setAttribute('onclick', `triggerCall('${conv.phone}')`);
+      callBtn.innerHTML = `<i class="ph ph-phone"></i> Call ${conv.category === 'coordinator' ? 'Coordinator' : 'Driver'}`;
     } else {
       callBtn.style.display = 'none';
     }
   }
 
-  updateChatPillsCounts();
   renderChatConversations();
   renderChatMessages(conv);
 }
@@ -3753,32 +3843,280 @@ function renderChatMessages(conv) {
   const thread = document.getElementById('chatMessagesThread');
   if (!thread) return;
 
-  thread.innerHTML = conv.messages.map(m => {
+  thread.innerHTML = conv.messages.map((m, idx) => {
     const isOut = m.sender === 'admin';
-    const senderTag = (!isOut && conv.type === 'group' && m.senderName)
-      ? `<span class="chat-sender-tag">${m.senderName}</span>`
+    const senderTag = (!isOut && (conv.type === 'group' || m.senderName))
+      ? `<span class="chat-sender-tag">${m.senderName || conv.name.split(' ')[0]}</span>`
       : '';
+
+    let contentHtml = '';
+    if (m.type === 'photo') {
+      contentHtml = `
+        <div class="chat-bubble-photo-wrap">
+          <img src="${m.imgUrl}" alt="Photo" class="chat-bubble-photo-img">
+          ${m.caption ? `<div class="chat-bubble-caption">${m.caption}</div>` : ''}
+        </div>
+      `;
+    } else if (m.type === 'poll') {
+      const totalVotes = m.options.reduce((sum, opt) => sum + opt.votes, 0);
+      contentHtml = `
+        <div class="chat-poll-card">
+          <div class="chat-poll-title"><i class="ph ph-chart-bar-horizontal"></i> ${m.question}</div>
+          <div class="chat-poll-options">
+            ${m.options.map((opt, optIdx) => {
+              const pct = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
+              const isSelected = m.votedIndex === optIdx;
+              return `
+                <div class="chat-poll-opt ${isSelected ? 'selected' : ''}" onclick="voteChatPoll('${conv.id}', ${idx}, ${optIdx})">
+                  <div class="chat-poll-bar" style="width: ${pct}%;"></div>
+                  <div class="chat-poll-opt-content">
+                    <span class="chat-poll-opt-text">${opt.text}</span>
+                    <span class="chat-poll-opt-pct">${pct}% (${opt.votes})</span>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+          <div class="chat-poll-footer">${totalVotes} votes cast • Broadcast Corridor Poll</div>
+        </div>
+      `;
+    } else if (m.type === 'document') {
+      contentHtml = `
+        <div class="chat-bubble-doc-card">
+          <div class="chat-doc-icon"><i class="ph ph-file-text"></i></div>
+          <div class="chat-doc-info">
+            <span class="chat-doc-name">${m.docName}</span>
+            <span class="chat-doc-size">${m.docSize || 'PDF Document'}</span>
+          </div>
+          <button type="button" class="chat-doc-dl-btn" title="Download Document" onclick="showToast('Downloading ${m.docName}...', 'info')">
+            <i class="ph ph-download-simple"></i>
+          </button>
+        </div>
+      `;
+    } else if (m.type === 'contact') {
+      contentHtml = `
+        <div class="chat-bubble-contact-card">
+          <div class="chat-contact-avatar"><i class="ph ph-user"></i></div>
+          <div class="chat-contact-info">
+            <span class="chat-contact-name">${m.contactName}</span>
+            <span class="chat-contact-role">${m.contactRole || 'University Contact'}</span>
+            <span class="chat-contact-phone">${m.phone}</span>
+          </div>
+          <button type="button" class="chat-contact-call-btn" onclick="triggerCall('${m.phone}')" title="Call">
+            <i class="ph ph-phone"></i>
+          </button>
+        </div>
+      `;
+    } else {
+      contentHtml = `<div>${m.text}</div>`;
+    }
 
     return `
       <div class="chat-bubble-flat ${isOut ? 'outgoing' : 'incoming'}">
         ${senderTag}
-        <div>${m.text}</div>
+        ${contentHtml}
         <div class="chat-bubble-time">${m.time}</div>
       </div>
     `;
   }).join('');
+
   thread.scrollTop = thread.scrollHeight;
 }
 
-function updateChatPillsCounts() {
-  const unreadCount = CHAT_DATA.filter(c => c.unread).length;
-  const impCount = CHAT_DATA.filter(c => c.important).length;
+function voteChatPoll(convId, msgIdx, optIdx) {
+  const conv = CHAT_DATA.find(c => c.id === convId);
+  if (!conv || !conv.messages[msgIdx]) return;
+  const poll = conv.messages[msgIdx];
+  if (poll.votedIndex === optIdx) return;
 
-  const pillUnread = document.getElementById('chatPillUnread');
-  if (pillUnread) pillUnread.textContent = `Unread (${unreadCount})`;
+  if (poll.votedIndex !== undefined && poll.votedIndex >= 0) {
+    poll.options[poll.votedIndex].votes = Math.max(0, poll.options[poll.votedIndex].votes - 1);
+  }
+  poll.votedIndex = optIdx;
+  poll.options[optIdx].votes++;
+  renderChatMessages(conv);
+  showToast('Vote recorded: ' + poll.options[optIdx].text, 'info');
+}
 
-  const pillImp = document.getElementById('chatPillImportant');
-  if (pillImp) pillImp.textContent = `Important (${impCount})`;
+// =============================================================================
+// CHAT TEAM LEVEL ACTIONS & ATTACHMENTS (MATCHING USER REFERENCE DESIGN)
+// =============================================================================
+
+function toggleChatActionsMenu(e) {
+  if (e) e.stopPropagation();
+  const dropdown = document.getElementById('chatActionsDropdown');
+  const attachDropdown = document.getElementById('chatAttachDropdown');
+  if (attachDropdown) attachDropdown.classList.add('hidden');
+  if (dropdown) dropdown.classList.toggle('hidden');
+}
+
+function toggleChatAttachMenu(e) {
+  if (e) e.stopPropagation();
+  const dropdown = document.getElementById('chatAttachDropdown');
+  const actionsDropdown = document.getElementById('chatActionsDropdown');
+  if (actionsDropdown) actionsDropdown.classList.add('hidden');
+  if (dropdown) dropdown.classList.toggle('hidden');
+}
+
+function closeAllChatDropdowns() {
+  const actionsDropdown = document.getElementById('chatActionsDropdown');
+  const attachDropdown = document.getElementById('chatAttachDropdown');
+  if (actionsDropdown) actionsDropdown.classList.add('hidden');
+  if (attachDropdown) attachDropdown.classList.add('hidden');
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.chat-popover-wrap')) {
+    closeAllChatDropdowns();
+  }
+});
+
+function handleChatAction(action) {
+  closeAllChatDropdowns();
+  if (action === 'new_group') {
+    const groupName = prompt('Enter new dispatch group title:', 'Evening Return Shift Corridor D');
+    if (groupName && groupName.trim()) {
+      const newGrp = {
+        id: 'grp-' + Date.now(),
+        name: groupName.trim(),
+        type: 'group',
+        category: 'driver',
+        membersCount: 8,
+        time: 'Just now',
+        lastMsg: 'Group created by CTD Dispatch Admin',
+        unread: false,
+        important: false,
+        messages: [
+          { sender: 'admin', text: `Welcome to ${groupName.trim()}. All corridor drivers please report readiness.`, time: 'Just now' }
+        ]
+      };
+      CHAT_DATA.unshift(newGrp);
+      selectChat(newGrp.id);
+      showToast(`Created new group: ${newGrp.name}`, 'info');
+    }
+  } else if (action === 'important') {
+    showToast('Showing starred & important messages', 'info');
+    AppState.chatFilter = 'all';
+    renderChatConversations();
+  } else if (action === 'select_chats') {
+    showToast('Multi-select mode activated for bulk archiving', 'info');
+  }
+}
+
+function handleAttachAction(action) {
+  closeAllChatDropdowns();
+  const conv = CHAT_DATA.find(c => c.name === AppState.activeChatRecipient) || CHAT_DATA[0];
+  const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  if (action === 'photos') {
+    const input = document.getElementById('chatPhotoUpload');
+    if (input) input.click();
+  } else if (action === 'camera') {
+    conv.messages.push({
+      sender: 'admin',
+      type: 'photo',
+      imgUrl: 'buses.png',
+      caption: '📷 Live Dispatch Snapshot • Fleet Inspection Complete',
+      time: time
+    });
+    conv.lastMsg = 'You: 📷 Sent a photo';
+    conv.time = time;
+    renderChatMessages(conv);
+    renderChatConversations();
+    showToast('Camera snapshot uploaded to thread', 'info');
+  } else if (action === 'contact') {
+    conv.messages.push({
+      sender: 'admin',
+      type: 'contact',
+      contactName: conv.category === 'coordinator' ? conv.name : 'Santosh Jadhav (Driver)',
+      contactRole: conv.category === 'coordinator' ? 'Faculty Coordinator' : 'Nigdi Corridor • Bus U-01',
+      phone: conv.phone || '+91 83368 18273',
+      time: time
+    });
+    conv.lastMsg = 'You: 👤 Shared contact card';
+    conv.time = time;
+    renderChatMessages(conv);
+    renderChatConversations();
+    showToast('Contact card shared in conversation', 'info');
+  } else if (action === 'poll') {
+    conv.messages.push({
+      sender: 'admin',
+      type: 'poll',
+      question: 'Corridor Traffic & Roadway Condition Check',
+      options: [
+        { text: 'Route clear & on scheduled time', votes: 7 },
+        { text: 'Moderate congestion near highway bypass', votes: 3 },
+        { text: 'Heavy delay - Request detour authorization', votes: 1 }
+      ],
+      votedIndex: -1,
+      time: time
+    });
+    conv.lastMsg = 'You: 📊 Created a corridor status poll';
+    conv.time = time;
+    renderChatMessages(conv);
+    renderChatConversations();
+    showToast('Poll created in conversation', 'info');
+  } else if (action === 'document') {
+    const docInput = document.getElementById('chatDocUpload');
+    if (docInput) docInput.click();
+  } else if (action === 'quick_replies') {
+    const qrRow = document.querySelector('.chat-quick-replies-row');
+    if (qrRow) {
+      qrRow.scrollIntoView({ behavior: 'smooth' });
+      qrRow.style.background = 'var(--accent-subtle)';
+      setTimeout(() => { qrRow.style.background = 'var(--surface)'; }, 1000);
+    }
+    showToast('Quick replies ready below - click to dispatch instantly', 'info');
+  }
+}
+
+function handlePhotoUpload(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+
+  const conv = CHAT_DATA.find(c => c.name === AppState.activeChatRecipient) || CHAT_DATA[0];
+  const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    conv.messages.push({
+      sender: 'admin',
+      type: 'photo',
+      imgUrl: evt.target.result,
+      caption: `📷 Photo Upload • ${file.name}`,
+      time: time
+    });
+    conv.lastMsg = `You: 📷 Sent ${file.name}`;
+    conv.time = time;
+    renderChatMessages(conv);
+    renderChatConversations();
+    showToast('Photo uploaded successfully', 'info');
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+
+function handleDocUpload(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+
+  const conv = CHAT_DATA.find(c => c.name === AppState.activeChatRecipient) || CHAT_DATA[0];
+  const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const sizeFormatted = file.size > 1024 * 1024 ? (file.size / (1024 * 1024)).toFixed(1) + ' MB' : (file.size / 1024).toFixed(0) + ' KB';
+
+  conv.messages.push({
+    sender: 'admin',
+    type: 'document',
+    docName: file.name,
+    docSize: `${sizeFormatted} • Document`,
+    time: time
+  });
+  conv.lastMsg = `You: 📄 Sent ${file.name}`;
+  conv.time = time;
+  renderChatMessages(conv);
+  renderChatConversations();
+  showToast('Document sent in conversation', 'info');
+  e.target.value = '';
 }
 
 function quickReplyChat(text) {
@@ -3804,13 +4142,17 @@ function sendChatMessage() {
 
   setTimeout(() => {
     const senderName = conv.type === 'group' ? 'Santosh (Bus U-01)' : conv.name.split(' ')[0];
+    const replyText = conv.category === 'coordinator' 
+      ? 'Received update CTD Admin. Coordinating with department students.' 
+      : 'Acknowledged control room. Proceeding with caution.';
+
     conv.messages.push({ 
-      sender: 'driver', 
+      sender: conv.category === 'coordinator' ? 'coordinator' : 'driver', 
       senderName: senderName,
-      text: 'Acknowledged control room. Proceeding with caution.', 
+      text: replyText, 
       time: 'Just now' 
     });
-    conv.lastMsg = `${senderName}: Acknowledged control room.`;
+    conv.lastMsg = `${senderName}: ${replyText}`;
     conv.time = 'Just now';
     renderChatMessages(conv);
     renderChatConversations();
