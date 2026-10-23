@@ -5455,6 +5455,8 @@ select.form-input-flat {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+  margin-left: auto;
+  justify-content: flex-end;
 }
 
 .bus-table-search {
@@ -5473,7 +5475,7 @@ select.form-input-flat {
 
 .bus-table-search input {
   height: 34px;
-  width: 250px;
+  width: 260px;
   padding: 0 12px 0 32px;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -5491,15 +5493,16 @@ select.form-input-flat {
 
 /* 4. Organized Table Cells & Badges */
 .bus-organized-table th {
-  height: 42px;
+  height: 44px;
   padding: 0 16px;
   background: var(--subtle-fill);
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  text-transform: none;
+  letter-spacing: normal;
   border-bottom: 1px solid var(--border);
+  white-space: nowrap;
 }
 
 .bus-organized-table td {

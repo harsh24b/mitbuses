@@ -22,7 +22,7 @@
   <!-- Google Maps JavaScript API with user provided key -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-1Dc6aFDvUq8dwzAUfWBNwKexsdgmIkE&libraries=geometry" async defer></script>
 
-  <link rel="stylesheet" href="styles.css?v=org-tables2">
+  <link rel="stylesheet" href="styles.css?v=clean-tables3">
 </head>
 <body>
 
@@ -907,15 +907,6 @@
               <div class="inside-header-info">
                 <div class="inside-title-strip">
                   <h1 class="inside-title" id="bdBusTitle">Bus U-01 • MH12-CD-5678</h1>
-                  <div class="inside-badges-group">
-                    <span class="inside-status-badge operational" id="bdBusStatusBadge">
-                      <span class="inside-status-dot"></span>
-                      <span class="inside-status-label">Operational</span>
-                    </span>
-                    <span class="inside-tag-badge">
-                      <i class="ph ph-buildings"></i> MIT ADT Owned
-                    </span>
-                  </div>
                 </div>
 
                 <div class="inside-meta-strip" id="bdBusSubtitle">
@@ -930,9 +921,6 @@
               <div class="inside-actions-group">
                 <button class="btn-clean btn-clean-primary" onclick="openNewTripModalForCurrentBus()">
                   <i class="ph ph-plus-circle"></i> Add New Trip
-                </button>
-                <button class="btn-clean" onclick="triggerCall('+918336818273')" id="bdCallDriverBtn">
-                  <i class="ph ph-phone"></i> Call Driver
                 </button>
               </div>
             </div>
@@ -1002,7 +990,6 @@
                     <i class="ph ph-calendar-check"></i>
                     Trip Schedule & Booking History
                   </h3>
-                  <span class="bus-table-count-badge" id="bdTripTableCountBadge">3 Records</span>
                 </div>
                 <p class="bus-table-subtitle">Assigned schedules, passenger counts, faculty coordinators, and departments.</p>
               </div>
@@ -1011,15 +998,6 @@
                   <i class="ph ph-magnifying-glass"></i>
                   <input type="text" id="bdTripSearchInput" placeholder="Search trips, faculty, college..." oninput="filterBusTrips()">
                 </div>
-                <select class="control-select" id="bdTripStatusFilter" onchange="filterBusTrips()" style="height: 34px; font-size: 12.5px; padding: 0 10px;">
-                  <option value="all">All Statuses</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Scheduled">Scheduled</option>
-                  <option value="In Progress">In Progress</option>
-                </select>
-                <button class="btn-clean btn-clean-primary" onclick="openNewTripModalForCurrentBus()" style="height: 34px;">
-                  <i class="ph ph-plus-circle"></i> Add Trip
-                </button>
               </div>
             </div>
 
@@ -1051,25 +1029,17 @@
                     <i class="ph ph-wrench"></i>
                     Maintenance History Log
                   </h3>
-                  <span class="bus-table-count-badge" id="bdMaintTableCountBadge">3 Records</span>
                 </div>
                 <p class="bus-table-subtitle">Service intervals, technical repairs, authorized depots, and expenditure audits.</p>
               </div>
               <div class="bus-table-toolbar">
+                <button class="btn-clean" onclick="logNewMaintenancePrompt()" style="height: 34px;">
+                  <i class="ph ph-plus-circle"></i> Log Service
+                </button>
                 <div class="bus-table-search">
                   <i class="ph ph-magnifying-glass"></i>
                   <input type="text" id="bdMaintSearchInput" placeholder="Search service, workshop, reason..." oninput="filterBusMaint()">
                 </div>
-                <select class="control-select" id="bdMaintLevelFilter" onchange="filterBusMaint()" style="height: 34px; font-size: 12.5px; padding: 0 10px;">
-                  <option value="all">All Levels</option>
-                  <option value="Periodic">Periodic Service</option>
-                  <option value="Preventative">Preventative</option>
-                  <option value="Minor">Minor Service</option>
-                  <option value="Major">Major Overhaul</option>
-                </select>
-                <button class="btn-clean" onclick="logNewMaintenancePrompt()" style="height: 34px;">
-                  <i class="ph ph-plus-circle"></i> Log Service
-                </button>
               </div>
             </div>
 
@@ -2485,6 +2455,6 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- SCRIPT -->
-  <script src="app.js?v=org-tables2"></script>
+  <script src="app.js?v=clean-tables3"></script>
 </body>
 </html>
