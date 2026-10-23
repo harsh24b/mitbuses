@@ -165,11 +165,11 @@
               <span class="kpi-metric-subtext green">12 on duty • 2 off duty</span>
             </div>
 
-            <!-- Card 4 -->
-            <div class="kpi-metric-card" onclick="navigateTo('finances')">
+            <!-- Card 4: Hostel Students (₹150 One-Time Travel) -->
+            <div class="kpi-metric-card" onclick="openHostelOneTimeTravelSection()" style="cursor: pointer;" title="Click to view ₹150 one-time hostel student ledger in Finances">
               <span class="kpi-metric-title">Hostel Students</span>
-              <span class="kpi-metric-number">36</span>
-              <span class="kpi-metric-subtext gray">₹150 per trip • Total : ₹5400</span>
+              <span class="kpi-metric-number" id="dashHostelPassCount">36</span>
+              <span class="kpi-metric-subtext gray" id="dashHostelAmountText">₹150 per trip • Total : ₹5,400</span>
             </div>
 
             <!-- Card 5 -->
@@ -1470,11 +1470,130 @@
               <span class="kpi-metric-number">₹4,85,000</span>
               <span class="kpi-metric-subtext gray">Fuel, Maintenance & Salaries</span>
             </div>
-            <div class="kpi-metric-card">
-              <span class="kpi-metric-title">Contractor Cleared</span>
-              <span class="kpi-metric-number">100%</span>
-              <span class="kpi-metric-subtext green">All Tarawade SLAs verified</span>
+            <div class="kpi-metric-card" onclick="scrollToHostelOneTimeSection()" style="cursor: pointer;" title="Click to inspect ₹150 one-time hostel student ledger">
+              <span class="kpi-metric-title">Hostel Student Amount Collected for This Month</span>
+              <span class="kpi-metric-number" id="finHostelCollectionTotal">₹5,400</span>
+              <span class="kpi-metric-subtext green" id="finHostelTripsSub">36 verified one-time passes • ₹150 / trip</span>
             </div>
+          </div>
+
+          <!-- NEW SECTION: HOSTEL STUDENTS ONE-TIME TRAVEL (₹150 PASSES) LEDGER -->
+          <div class="card-flat hostel-onetime-section" id="hostelOneTimeSection" style="margin-bottom: 24px;">
+            
+            <!-- Section Header & Manager Actions -->
+            <div class="hostel-section-header">
+              <div class="hostel-header-title-col">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div class="hostel-header-icon-box">
+                    <i class="ph ph-receipt"></i>
+                  </div>
+                  <div>
+                    <h3 class="hostel-section-title">Hostel Students One-Time Travel Ledger (₹150 / Trip)</h3>
+                    <p class="hostel-section-subtitle">Real-time audit register of hostel residents issued ₹150 single-journey transit tickets across university corridors.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hostel-header-actions">
+                <button type="button" class="btn-clean" onclick="exportHostelLedgerCSV()" title="Export CSV for audit & accounts">
+                  <i class="ph ph-download-simple"></i> Export Ledger (CSV)
+                </button>
+                <button type="button" class="btn-clean btn-clean-primary" onclick="openRecordHostelPassModal()">
+                  <i class="ph ph-plus-circle"></i> Record ₹150 Pass
+                </button>
+              </div>
+            </div>
+
+            <!-- Quick Metrics Strip for Transport Manager -->
+            <div class="hostel-kpi-summary-strip">
+              <div class="hostel-kpi-item">
+                <span class="hostel-kpi-label">Month Total Collection</span>
+                <span class="hostel-kpi-value text-accent" id="hostelKpiMonthTotal">₹5,400</span>
+                <span class="hostel-kpi-sub" id="hostelKpiMonthTrips">36 Trips Logged</span>
+              </div>
+              <div class="hostel-kpi-divider"></div>
+              <div class="hostel-kpi-item">
+                <span class="hostel-kpi-label">Today's Collection (15 Oct)</span>
+                <span class="hostel-kpi-value text-green" id="hostelKpiTodayTotal">₹1,200</span>
+                <span class="hostel-kpi-sub" id="hostelKpiTodayTrips">8 One-Time Boardings</span>
+              </div>
+              <div class="hostel-kpi-divider"></div>
+              <div class="hostel-kpi-item">
+                <span class="hostel-kpi-label">UPI / Digital Payments</span>
+                <span class="hostel-kpi-value" id="hostelKpiUpiTotal">₹4,500</span>
+                <span class="hostel-kpi-sub" id="hostelKpiUpiTrips">30 Receipts (83%)</span>
+              </div>
+              <div class="hostel-kpi-divider"></div>
+              <div class="hostel-kpi-item">
+                <span class="hostel-kpi-label">Cash at Gate Counter</span>
+                <span class="hostel-kpi-value" id="hostelKpiCashTotal">₹900</span>
+                <span class="hostel-kpi-sub" id="hostelKpiCashTrips">6 Cash Receipts (17%)</span>
+              </div>
+              <div class="hostel-kpi-divider"></div>
+              <div class="hostel-kpi-item">
+                <span class="hostel-kpi-label">Fixed Tariff</span>
+                <span class="hostel-kpi-value">₹150</span>
+                <span class="hostel-kpi-sub">Per Single Journey</span>
+              </div>
+            </div>
+
+            <!-- Filter & Search Toolbar -->
+            <div class="hostel-filter-toolbar">
+              <div class="hostel-search-wrap">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="text" id="hostelSearchInput" placeholder="Search by student name, PRN, hostel, corridor, receipt..." onkeyup="filterHostelOneTimeData()">
+              </div>
+              <div class="hostel-filter-selects">
+                <select id="hostelDateFilter" class="form-input-flat form-select-sm" onchange="filterHostelOneTimeData()">
+                  <option value="all">All Dates (October 2026)</option>
+                  <option value="today">Today (15 Oct, 2026)</option>
+                  <option value="yesterday">Yesterday (14 Oct, 2026)</option>
+                  <option value="earlier">Earlier Dates (11-13 Oct)</option>
+                </select>
+                <select id="hostelLocationFilter" class="form-input-flat form-select-sm" onchange="filterHostelOneTimeData()">
+                  <option value="all">All Hostels</option>
+                  <option value="bageshree">Bageshree Girls</option>
+                  <option value="indrayani">Indrayani Boys</option>
+                  <option value="saraswati">Saraswati Girls</option>
+                  <option value="godavari">Godavari Girls</option>
+                  <option value="vishwa">Vishwa Boys</option>
+                </select>
+                <select id="hostelPayModeFilter" class="form-input-flat form-select-sm" onchange="filterHostelOneTimeData()">
+                  <option value="all">All Payment Modes</option>
+                  <option value="upi">UPI (GPay / PhonePe / Paytm)</option>
+                  <option value="cash">Cash at Counter</option>
+                  <option value="card">Campus Smart Card</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Ledger Table -->
+            <div class="hostel-table-wrap">
+              <table class="table-flat hostel-ledger-table">
+                <thead>
+                  <tr>
+                    <th>Date & Time</th>
+                    <th>Receipt ID</th>
+                    <th>Student Name & PRN</th>
+                    <th>Hostel & Room</th>
+                    <th>Corridor / Route</th>
+                    <th>Payment Mode & Ref</th>
+                    <th style="text-align: right;">Amount</th>
+                    <th>Status</th>
+                    <th style="text-align: center;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="hostelOneTimeTbody">
+                  <!-- Dynamically populated via JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="hostel-ledger-footer">
+              <span id="hostelLedgerCounter" class="hostel-ledger-count-text">Showing 36 of 36 verified ₹150 hostel single-trip records</span>
+              <span class="hostel-ledger-audit-note"><i class="ph ph-shield-check"></i> Verified against Gate Telematics & UPI UTR Ledger</span>
+            </div>
+
           </div>
 
           <div class="card-flat">
@@ -2472,10 +2591,180 @@
     </div>
   </div>
 
+  <!-- ==================================================================== -->
+  <!-- MODAL: RECORD NEW ₹150 ONE-TIME TRAVEL PASS                           -->
+  <!-- ==================================================================== -->
+  <div class="modal-overlay hidden" id="recordHostelPassModal">
+    <div class="modal-dialog-flat" style="max-width: 520px;">
+      <div class="modal-header-flat">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="hostel-header-icon-box" style="width: 34px; height: 34px; font-size: 16px;">
+            <i class="ph ph-ticket"></i>
+          </div>
+          <div>
+            <h3 class="modal-title-flat">Record One-Time Travel Pass (₹150)</h3>
+            <p class="modal-subtitle-flat" style="font-size: 12px; color: var(--text-muted); margin: 0;">Issue single-trip transit boarding ticket to hostel resident.</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closeRecordHostelPassModal()" title="Close dialog"><i class="ph ph-x"></i></button>
+      </div>
+
+      <form onsubmit="handleSaveHostelPass(event)">
+        <div class="form-grid-2col" style="margin-bottom: 12px;">
+          <div class="form-group-flat" style="margin-bottom: 0;">
+            <label class="form-label-flat">Student Full Name</label>
+            <div class="input-icon-wrap">
+              <i class="ph ph-user"></i>
+              <input type="text" id="newHostelStudentName" class="form-input-flat" placeholder="e.g. Siddharth Rao" required>
+            </div>
+          </div>
+          <div class="form-group-flat" style="margin-bottom: 0;">
+            <label class="form-label-flat">PRN / Roll Number</label>
+            <div class="input-icon-wrap">
+              <i class="ph ph-identification-card"></i>
+              <input type="text" id="newHostelRollNo" class="form-input-flat" placeholder="e.g. PRN-2024-ENG-082" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid-2col" style="margin-bottom: 12px;">
+          <div class="form-group-flat" style="margin-bottom: 0;">
+            <label class="form-label-flat">Hostel Residence & Room</label>
+            <select id="newHostelResidence" class="form-input-flat" required>
+              <option value="Bageshree Girls Hostel • Room 304">Bageshree Girls Hostel</option>
+              <option value="Indrayani Boys Hostel • Room 112">Indrayani Boys Hostel</option>
+              <option value="Saraswati Girls Hostel • Room 205">Saraswati Girls Hostel</option>
+              <option value="Godavari Girls Hostel • Room 401">Godavari Girls Hostel</option>
+              <option value="Vishwa Boys Hostel • Room 218">Vishwa Boys Hostel</option>
+            </select>
+          </div>
+          <div class="form-group-flat" style="margin-bottom: 0;">
+            <label class="form-label-flat">Corridor Destination</label>
+            <select id="newHostelCorridor" class="form-input-flat" required>
+              <option value="Bus A – Nigdi Corridor">Bus A – Nigdi Corridor</option>
+              <option value="Bus E – Lohegaon Corridor">Bus E – Lohegaon Corridor</option>
+              <option value="Bus B – Chaphekar Corridor">Bus B – Chaphekar Corridor</option>
+              <option value="Bus C – Swargate Corridor">Bus C – Swargate Corridor</option>
+              <option value="Bus D – Moshi Corridor">Bus D – Moshi Corridor</option>
+              <option value="Bus F – Pashan Corridor">Bus F – Pashan Corridor</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2col" style="margin-bottom: 12px;">
+          <div class="form-group-flat" style="margin-bottom: 0;">
+            <label class="form-label-flat">Payment Method</label>
+            <select id="newHostelPaymentMode" class="form-input-flat" required onchange="handlePaymentModeChange(this.value)">
+              <option value="UPI (GooglePay)">UPI (GooglePay)</option>
+              <option value="UPI (PhonePe)">UPI (PhonePe)</option>
+              <option value="UPI (Paytm)">UPI (Paytm)</option>
+              <option value="Cash at Depot Counter">Cash at Depot Counter</option>
+              <option value="Campus Smart Card">Campus Smart Card</option>
+            </select>
+          </div>
+          <div class="form-group-flat" style="margin-bottom: 0;">
+            <label class="form-label-flat">Transaction Ref / UTR</label>
+            <input type="text" id="newHostelUTR" class="form-input-flat" placeholder="e.g. UPI/42918821034" value="UPI/42918821034">
+          </div>
+        </div>
+
+        <div style="background: var(--subtle-fill); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Fixed Single Journey Tariff</div>
+            <div style="font-size: 11.5px; color: var(--text-muted);">Standard university hostel transit fee</div>
+          </div>
+          <div style="font-size: 20px; font-weight: 800; color: var(--accent);">₹150.00</div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button type="button" class="btn-clean" onclick="closeRecordHostelPassModal()">Cancel</button>
+          <button type="submit" class="btn-clean btn-clean-primary">
+            <i class="ph ph-check"></i> Issue & Credit ₹150 Pass
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- MODAL: VIEW & PRINT HOSTEL STUDENT TRANSIT RECEIPT SLIP              -->
+  <!-- ==================================================================== -->
+  <div class="modal-overlay hidden" id="viewHostelReceiptModal">
+    <div class="modal-dialog-flat" style="max-width: 460px;">
+      <div class="modal-header-flat" style="margin-bottom: 12px; padding-bottom: 10px;">
+        <span class="modal-title-flat" style="display: flex; align-items: center; gap: 8px;">
+          <i class="ph ph-receipt" style="color: var(--accent);"></i> Official Transit Boarding Slip
+        </span>
+        <button class="modal-close-btn" onclick="closeViewHostelReceiptModal()"><i class="ph ph-x"></i></button>
+      </div>
+
+      <div class="receipt-card-container" id="receiptPrintArea">
+        <div class="receipt-header-strip">
+          <div>
+            <div class="receipt-univ-title">MIT ADT UNIVERSITY</div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 1px;">Campus Transportation Division (CTD)</div>
+          </div>
+          <span class="receipt-badge-top"><i class="ph ph-check-circle"></i> VERIFIED</span>
+        </div>
+
+        <div class="receipt-grid-rows">
+          <div class="receipt-data-item">
+            <span class="receipt-data-label">Receipt Number</span>
+            <span class="receipt-data-val" id="rctNumber" style="font-family: var(--font-mono);">#RCP-150-1042</span>
+          </div>
+          <div class="receipt-data-item">
+            <span class="receipt-data-label">Issue Date & Time</span>
+            <span class="receipt-data-val" id="rctDateTime">15 Oct 2026, 07:45 AM</span>
+          </div>
+          <div class="receipt-data-item">
+            <span class="receipt-data-label">Student Name</span>
+            <span class="receipt-data-val" id="rctStudentName">Aarav Kulkarni</span>
+          </div>
+          <div class="receipt-data-item">
+            <span class="receipt-data-label">PRN / Roll No</span>
+            <span class="receipt-data-val" id="rctRollNo" style="font-family: var(--font-mono);">PRN-2024-ENG-082</span>
+          </div>
+          <div class="receipt-data-item">
+            <span class="receipt-data-label">Hostel Residence</span>
+            <span class="receipt-data-val" id="rctHostel">Bageshree Girls • Room 304</span>
+          </div>
+          <div class="receipt-data-item">
+            <span class="receipt-data-label">Authorized Corridor</span>
+            <span class="receipt-data-val" id="rctCorridor">Bus A – Nigdi Corridor</span>
+          </div>
+          <div class="receipt-data-item">
+            <span class="receipt-data-label">Payment Mode</span>
+            <span class="receipt-data-val" id="rctPayMode">UPI (GooglePay)</span>
+          </div>
+          <div class="receipt-data-item">
+            <span class="receipt-data-label">Transaction Ref</span>
+            <span class="receipt-data-val" id="rctUTR" style="font-family: var(--font-mono); font-size: 11.5px;">UPI/42918821034</span>
+          </div>
+        </div>
+
+        <div class="receipt-fare-box">
+          <span class="receipt-fare-label">One-Time Transit Fare Paid</span>
+          <span class="receipt-fare-amount">₹150.00</span>
+        </div>
+
+        <div style="text-align: center; font-size: 10.5px; color: var(--text-muted); font-family: var(--font-mono); letter-spacing: 0.1em; border-top: 1px dashed var(--border); padding-top: 8px;">
+          * * * MIT-ADT-CTD-ONE-TIME-BOARDING-PASS * * *
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+        <button type="button" class="btn-clean" onclick="closeViewHostelReceiptModal()">Close</button>
+        <button type="button" class="btn-clean btn-clean-primary" onclick="printHostelReceipt()">
+          <i class="ph ph-printer"></i> Print Boarding Slip
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- TOASTS -->
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- SCRIPT -->
-  <script src="app.js?v=chat-fuller2"></script>
+  <script src="app.js?v=hostel-ledger1"></script>
 </body>
 </html>
