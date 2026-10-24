@@ -1470,17 +1470,37 @@
               <span class="kpi-metric-number">₹4,85,000</span>
               <span class="kpi-metric-subtext gray">Fuel, Maintenance & Salaries</span>
             </div>
-            <div class="kpi-metric-card" onclick="scrollToHostelOneTimeSection()" style="cursor: pointer;" title="Click to inspect ₹150 one-time hostel student ledger">
-              <span class="kpi-metric-title">Hostel Student Amount Collected for This Month</span>
+            <div class="kpi-metric-card" onclick="scrollToHostelOneTimeSection()" style="cursor: pointer;" title="Click to inspect time traveler ledger">
+              <span class="kpi-metric-title">Hostel Amount Collected</span>
               <span class="kpi-metric-number" id="finHostelCollectionTotal">₹5,400</span>
-              <span class="kpi-metric-subtext green" id="finHostelTripsSub">36 verified one-time passes • ₹150 / trip</span>
+              <span class="kpi-metric-subtext green" id="finHostelTripsSub">₹150 per trip</span>
             </div>
           </div>
 
-          <!-- NEW SECTION: HOSTEL STUDENTS ONE-TIME TRAVEL (₹150 PASSES) LEDGER -->
+          <!-- Segmented Navigation Bar (Matching Reference Image) -->
+          <div class="bus-tables-nav-bar" style="margin-bottom: 20px;">
+            <div class="bus-tables-tab-group">
+              <button type="button" class="bus-tab-btn active" id="tabBtnFinBoth" onclick="switchFinancesTab('both')">
+                <i class="ph ph-squares-four"></i>
+                <span>Both Tables</span>
+              </button>
+              <button type="button" class="bus-tab-btn" id="tabBtnFinStudents" onclick="switchFinancesTab('students')">
+                <i class="ph ph-users"></i>
+                <span>All Students</span>
+                <span class="bus-tab-count" id="finStudentsTabCount">36</span>
+              </button>
+              <button type="button" class="bus-tab-btn" id="tabBtnFinInvoices" onclick="switchFinancesTab('invoices')">
+                <i class="ph ph-receipt"></i>
+                <span>Tarawade Monthly Invoices</span>
+                <span class="bus-tab-count" id="finInvoicesTabCount">4</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- SECTION: TIME TRAVELER LEDGER -->
           <div class="card-flat hostel-onetime-section" id="hostelOneTimeSection" style="margin-bottom: 24px;">
             
-            <!-- Section Header & Manager Actions -->
+            <!-- Section Header -->
             <div class="hostel-section-header">
               <div class="hostel-header-title-col">
                 <div style="display: flex; align-items: center; gap: 10px;">
@@ -1488,8 +1508,8 @@
                     <i class="ph ph-receipt"></i>
                   </div>
                   <div>
-                    <h3 class="hostel-section-title">Hostel Students One-Time Travel Ledger (₹150 / Trip)</h3>
-                    <p class="hostel-section-subtitle">Real-time audit register of hostel residents issued ₹150 single-journey transit tickets across university corridors.</p>
+                    <h3 class="hostel-section-title">Time Traveler Ledger</h3>
+                    <p class="hostel-section-subtitle">Real-time transit record of daily single-journey passenger boardings across corridors.</p>
                   </div>
                 </div>
               </div>
@@ -1498,89 +1518,27 @@
                 <button type="button" class="btn-clean" onclick="exportHostelLedgerCSV()" title="Export CSV for audit & accounts">
                   <i class="ph ph-download-simple"></i> Export Ledger (CSV)
                 </button>
-                <button type="button" class="btn-clean btn-clean-primary" onclick="openRecordHostelPassModal()">
-                  <i class="ph ph-plus-circle"></i> Record ₹150 Pass
-                </button>
               </div>
             </div>
 
-            <!-- Quick Metrics Strip for Transport Manager -->
-            <div class="hostel-kpi-summary-strip">
-              <div class="hostel-kpi-item">
-                <span class="hostel-kpi-label">Month Total Collection</span>
-                <span class="hostel-kpi-value text-accent" id="hostelKpiMonthTotal">₹5,400</span>
-                <span class="hostel-kpi-sub" id="hostelKpiMonthTrips">36 Trips Logged</span>
-              </div>
-              <div class="hostel-kpi-divider"></div>
-              <div class="hostel-kpi-item">
-                <span class="hostel-kpi-label">Today's Collection (15 Oct)</span>
+            <!-- Single Focus Stat: Today's Collection -->
+            <div class="hostel-kpi-summary-strip" style="display: inline-flex; width: auto; min-width: 240px; padding: 12px 18px; margin-bottom: 16px;">
+              <div class="hostel-kpi-item" style="min-width: 180px;">
+                <span class="hostel-kpi-label">Today's Collection</span>
                 <span class="hostel-kpi-value text-green" id="hostelKpiTodayTotal">₹1,200</span>
                 <span class="hostel-kpi-sub" id="hostelKpiTodayTrips">8 One-Time Boardings</span>
               </div>
-              <div class="hostel-kpi-divider"></div>
-              <div class="hostel-kpi-item">
-                <span class="hostel-kpi-label">UPI / Digital Payments</span>
-                <span class="hostel-kpi-value" id="hostelKpiUpiTotal">₹4,500</span>
-                <span class="hostel-kpi-sub" id="hostelKpiUpiTrips">30 Receipts (83%)</span>
-              </div>
-              <div class="hostel-kpi-divider"></div>
-              <div class="hostel-kpi-item">
-                <span class="hostel-kpi-label">Cash at Gate Counter</span>
-                <span class="hostel-kpi-value" id="hostelKpiCashTotal">₹900</span>
-                <span class="hostel-kpi-sub" id="hostelKpiCashTrips">6 Cash Receipts (17%)</span>
-              </div>
-              <div class="hostel-kpi-divider"></div>
-              <div class="hostel-kpi-item">
-                <span class="hostel-kpi-label">Fixed Tariff</span>
-                <span class="hostel-kpi-value">₹150</span>
-                <span class="hostel-kpi-sub">Per Single Journey</span>
-              </div>
             </div>
 
-            <!-- Filter & Search Toolbar -->
-            <div class="hostel-filter-toolbar">
-              <div class="hostel-search-wrap">
-                <i class="ph ph-magnifying-glass"></i>
-                <input type="text" id="hostelSearchInput" placeholder="Search by student name, PRN, hostel, corridor, receipt..." onkeyup="filterHostelOneTimeData()">
-              </div>
-              <div class="hostel-filter-selects">
-                <select id="hostelDateFilter" class="form-input-flat form-select-sm" onchange="filterHostelOneTimeData()">
-                  <option value="all">All Dates (October 2026)</option>
-                  <option value="today">Today (15 Oct, 2026)</option>
-                  <option value="yesterday">Yesterday (14 Oct, 2026)</option>
-                  <option value="earlier">Earlier Dates (11-13 Oct)</option>
-                </select>
-                <select id="hostelLocationFilter" class="form-input-flat form-select-sm" onchange="filterHostelOneTimeData()">
-                  <option value="all">All Hostels</option>
-                  <option value="bageshree">Bageshree Girls</option>
-                  <option value="indrayani">Indrayani Boys</option>
-                  <option value="saraswati">Saraswati Girls</option>
-                  <option value="godavari">Godavari Girls</option>
-                  <option value="vishwa">Vishwa Boys</option>
-                </select>
-                <select id="hostelPayModeFilter" class="form-input-flat form-select-sm" onchange="filterHostelOneTimeData()">
-                  <option value="all">All Payment Modes</option>
-                  <option value="upi">UPI (GPay / PhonePe / Paytm)</option>
-                  <option value="cash">Cash at Counter</option>
-                  <option value="card">Campus Smart Card</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Ledger Table -->
+            <!-- Ledger Table (Streamlined) -->
             <div class="hostel-table-wrap">
               <table class="table-flat hostel-ledger-table">
                 <thead>
                   <tr>
-                    <th>Date & Time</th>
-                    <th>Receipt ID</th>
-                    <th>Student Name & PRN</th>
-                    <th>Hostel & Room</th>
+                    <th style="width: 150px;">Date</th>
+                    <th>Student Name & Roll Number</th>
                     <th>Corridor / Route</th>
-                    <th>Payment Mode & Ref</th>
-                    <th style="text-align: right;">Amount</th>
-                    <th>Status</th>
-                    <th style="text-align: center;">Action</th>
+                    <th style="text-align: center; width: 110px;">Action</th>
                   </tr>
                 </thead>
                 <tbody id="hostelOneTimeTbody">
@@ -1590,14 +1548,21 @@
             </div>
 
             <div class="hostel-ledger-footer">
-              <span id="hostelLedgerCounter" class="hostel-ledger-count-text">Showing 36 of 36 verified ₹150 hostel single-trip records</span>
+              <span id="hostelLedgerCounter" class="hostel-ledger-count-text">Showing 36 verified one-time travel records</span>
               <span class="hostel-ledger-audit-note"><i class="ph ph-shield-check"></i> Verified against Gate Telematics & UPI UTR Ledger</span>
             </div>
 
           </div>
 
-          <div class="card-flat">
-            <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Tarawade Monthly Invoices</div>
+          <!-- SECTION: TARAWADE MONTHLY INVOICES -->
+          <div class="card-flat" id="cardTarawadeInvoices">
+            <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="ph ph-receipt" style="color: var(--accent); font-size: 18px;"></i>
+                <span>Tarawade Monthly Invoices</span>
+              </div>
+              <span class="badge-clean active" style="font-size: 11px;">4 Statements</span>
+            </div>
             <table class="table-flat">
               <thead>
                 <tr>
@@ -2765,6 +2730,6 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- SCRIPT -->
-  <script src="app.js?v=hostel-ledger1"></script>
+  <script src="app.js?v=time-traveler2"></script>
 </body>
 </html>
