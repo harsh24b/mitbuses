@@ -6205,7 +6205,7 @@ function getTransitBoardingDetails(item) {
   const destRaw = parts[1] || 'Nigdi';
 
   const codeLookup = {
-    'Campus': { code: 'CAMP', name: 'MIT ADT Campus' },
+    'Campus': { code: 'MIT', name: 'MIT ADT Campus' },
     'Nigdi': { code: 'NGD', name: 'Nigdi Pradhikaran' },
     'Kothrud': { code: 'KTD', name: 'Kothrud Stand' },
     'Hadapsar': { code: 'HDP', name: 'Hadapsar Depot' },
@@ -6356,9 +6356,9 @@ function printHostelReceipt() {
             width: 360px;
             background: #FFFFFF;
             color: #111827;
-            border-radius: 24px;
+            border-radius: 20px;
             padding: 24px 22px 20px 22px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            box-shadow: none;
             border: 1px solid #E5E7EB;
           }
           .bpass-header-line { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
@@ -6378,11 +6378,11 @@ function printHostelReceipt() {
           .bpass-mid-duration { display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 2px; }
           .bpass-duration-txt { font-size: 10px; color: #4B5563; font-weight: 600; white-space: nowrap; }
           .bpass-direct-pill { background: #111827; color: #FFFFFF; font-size: 9.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-top: 5px; }
-          .bpass-blue-strip { background: #9DB7D9; border-radius: 8px; padding: 9px 12px; margin: 12px 0 14px 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+          .bpass-blue-strip { background: #FFF7ED; border: 1px solid #FED7AA; border-radius: 8px; padding: 9px 12px; margin: 12px 0 14px 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
           .bpass-strip-col { display: flex; flex-direction: column; gap: 2px; }
-          .bpass-strip-label { font-size: 9px; color: #2F4766; font-weight: 600; line-height: 1.1; white-space: nowrap; }
-          .bpass-strip-val { font-size: 12px; font-weight: 800; color: #0E1B2E; white-space: nowrap; }
-          .bpass-passid { font-family: monospace; font-size: 11px; }
+          .bpass-strip-label { font-size: 9px; color: #C2410C; font-weight: 600; line-height: 1.1; white-space: nowrap; }
+          .bpass-strip-val { font-size: 12px; font-weight: 800; color: #111827; white-space: nowrap; }
+          .bpass-passid { font-family: monospace; font-size: 11px; color: #F26B1D; }
           .bpass-passenger-row { display: grid; grid-template-columns: 1.35fr 1.25fr 0.9fr; gap: 8px; margin-bottom: 14px; }
           .bpass-pass-col { display: flex; flex-direction: column; gap: 2px; }
           .bpass-meta-label { font-size: 9.5px; color: #9CA3AF; font-weight: 600; }
