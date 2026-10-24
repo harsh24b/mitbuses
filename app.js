@@ -5989,42 +5989,42 @@ function triggerToast(msg, type = 'info') {
 // =============================================================================
 
 const HOSTEL_ONE_TIME_DATA = [
-  { id: 'HST-150-01', receiptNo: '#RCP-150-1042', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Aarav Kulkarni', rollNo: 'EDT23IODB1042', corridor: 'Bus A – Nigdi Corridor', hostel: 'Bageshree Girls Hostel • Room 304', payMode: 'UPI (GooglePay)', utr: 'UPI/42918821034', amount: 150 },
-  { id: 'HST-150-02', receiptNo: '#RCP-150-1041', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Tanvi Deshmukh', rollNo: 'EDT23IODB2184', corridor: 'Bus E – Lohegaon Corridor', hostel: 'Saraswati Girls Hostel • Room 205', payMode: 'UPI (PhonePe)', utr: 'UPI/88392019482', amount: 150 },
-  { id: 'HST-150-03', receiptNo: '#RCP-150-1040', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Rohan Joshi', rollNo: 'EDT23IODB3095', corridor: 'Bus B – Chaphekar Corridor', hostel: 'Indrayani Boys Hostel • Room 112', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-088', amount: 150 },
-  { id: 'HST-150-04', receiptNo: '#RCP-150-1039', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Sneha Patil', rollNo: 'EDT23IODB4112', corridor: 'Bus C – Swargate Corridor', hostel: 'Godavari Girls Hostel • Room 401', payMode: 'UPI (Paytm)', utr: 'UPI/99102834571', amount: 150 },
-  { id: 'HST-150-05', receiptNo: '#RCP-150-1038', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Aditya Shinde', rollNo: 'EDT23IODB5820', corridor: 'Bus D – Moshi Corridor', hostel: 'Vishwa Boys Hostel • Room 218', payMode: 'UPI (GooglePay)', utr: 'UPI/66183920194', amount: 150 },
-  { id: 'HST-150-06', receiptNo: '#RCP-150-1037', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Priya Mahajan', rollNo: 'EDT23IODB6239', corridor: 'Bus F – Pashan Corridor', hostel: 'Bageshree Girls Hostel • Room 118', payMode: 'UPI (PhonePe)', utr: 'UPI/12093849502', amount: 150 },
-  { id: 'HST-150-07', receiptNo: '#RCP-150-1036', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Kunal Gaikwad', rollNo: 'EDT23IODB7415', corridor: 'Bus A – Nigdi Corridor', hostel: 'Indrayani Boys Hostel • Room 305', payMode: 'UPI (GooglePay)', utr: 'UPI/55829103482', amount: 150 },
-  { id: 'HST-150-08', receiptNo: '#RCP-150-1035', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Isha Nair', rollNo: 'EDT23IODB8902', corridor: 'Bus E – Lohegaon Corridor', hostel: 'Saraswati Girls Hostel • Room 102', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-089', amount: 150 },
-  { id: 'HST-150-09', receiptNo: '#RCP-150-1034', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Siddharth Rao', rollNo: 'EDT23IODB1156', corridor: 'Bus B – Chaphekar Corridor', hostel: 'Vishwa Boys Hostel • Room 104', payMode: 'UPI (GooglePay)', utr: 'UPI/33019482910', amount: 150 },
-  { id: 'HST-150-10', receiptNo: '#RCP-150-1033', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Ananya Sharma', rollNo: 'EDT23IODB2341', corridor: 'Bus A – Nigdi Corridor', hostel: 'Bageshree Girls Hostel • Room 212', payMode: 'UPI (PhonePe)', utr: 'UPI/77182930491', amount: 150 },
-  { id: 'HST-150-11', receiptNo: '#RCP-150-1032', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Harsh Vardhan', rollNo: 'EDT23IODB3478', corridor: 'Bus C – Swargate Corridor', hostel: 'Indrayani Boys Hostel • Room 220', payMode: 'UPI (Paytm)', utr: 'UPI/44910293847', amount: 150 },
-  { id: 'HST-150-12', receiptNo: '#RCP-150-1031', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Meera Chougule', rollNo: 'EDT23IODB4590', corridor: 'Bus D – Moshi Corridor', hostel: 'Godavari Girls Hostel • Room 309', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-082', amount: 150 },
-  { id: 'HST-150-13', receiptNo: '#RCP-150-1030', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Vikram Jadhav', rollNo: 'EDT23IODB5612', corridor: 'Bus E – Lohegaon Corridor', hostel: 'Vishwa Boys Hostel • Room 311', payMode: 'UPI (GooglePay)', utr: 'UPI/99201948572', amount: 150 },
-  { id: 'HST-150-14', receiptNo: '#RCP-150-1029', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Riya Kadam', rollNo: 'EDT23IODB6783', corridor: 'Bus F – Pashan Corridor', hostel: 'Saraswati Girls Hostel • Room 314', payMode: 'UPI (GooglePay)', utr: 'UPI/66102938401', amount: 150 },
-  { id: 'HST-150-15', receiptNo: '#RCP-150-1028', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Nikhil Rane', rollNo: 'EDT23IODB7894', corridor: 'Bus A – Nigdi Corridor', hostel: 'Indrayani Boys Hostel • Room 402', payMode: 'UPI (PhonePe)', utr: 'UPI/88301928491', amount: 150 },
-  { id: 'HST-150-16', receiptNo: '#RCP-150-1027', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Pooja Agarwal', rollNo: 'EDT23IODB8921', corridor: 'Bus B – Chaphekar Corridor', hostel: 'Bageshree Girls Hostel • Room 408', payMode: 'UPI (Paytm)', utr: 'UPI/22019485729', amount: 150 },
-  { id: 'HST-150-17', receiptNo: '#RCP-150-1026', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Saurabh Salunkhe', rollNo: 'EDT23IODB9034', corridor: 'Bus C – Swargate Corridor', hostel: 'Vishwa Boys Hostel • Room 207', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-083', amount: 150 },
-  { id: 'HST-150-18', receiptNo: '#RCP-150-1025', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Shreya Tiwari', rollNo: 'EDT23IODB1245', corridor: 'Bus E – Lohegaon Corridor', hostel: 'Godavari Girls Hostel • Room 115', payMode: 'UPI (GooglePay)', utr: 'UPI/44019284758', amount: 150 },
-  { id: 'HST-150-19', receiptNo: '#RCP-150-1024', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Amitabh Sen', rollNo: 'EDT23IODB2356', corridor: 'Bus A – Nigdi Corridor', hostel: 'Indrayani Boys Hostel • Room 118', payMode: 'UPI (GooglePay)', utr: 'UPI/11928475820', amount: 150 },
-  { id: 'HST-150-20', receiptNo: '#RCP-150-1023', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Kavita Menon', rollNo: 'EDT23IODB3467', corridor: 'Bus E – Lohegaon Corridor', hostel: 'Saraswati Girls Hostel • Room 222', payMode: 'UPI (PhonePe)', utr: 'UPI/99018274619', amount: 150 },
-  { id: 'HST-150-21', receiptNo: '#RCP-150-1022', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Yash Bhosale', rollNo: 'EDT23IODB4578', corridor: 'Bus D – Moshi Corridor', hostel: 'Vishwa Boys Hostel • Room 119', payMode: 'UPI (GooglePay)', utr: 'UPI/55019284710', amount: 150 },
-  { id: 'HST-150-22', receiptNo: '#RCP-150-1021', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Diya Chakraborty', rollNo: 'EDT23IODB5689', corridor: 'Bus B – Chaphekar Corridor', hostel: 'Bageshree Girls Hostel • Room 316', payMode: 'UPI (Paytm)', utr: 'UPI/88201948571', amount: 150 },
-  { id: 'HST-150-23', receiptNo: '#RCP-150-1020', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Gaurav Kulkarni', rollNo: 'EDT23IODB6790', corridor: 'Bus F – Pashan Corridor', hostel: 'Indrayani Boys Hostel • Room 309', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-079', amount: 150 },
-  { id: 'HST-150-24', receiptNo: '#RCP-150-1019', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Simran Kaur', rollNo: 'EDT23IODB7801', corridor: 'Bus C – Swargate Corridor', hostel: 'Godavari Girls Hostel • Room 208', payMode: 'UPI (GooglePay)', utr: 'UPI/33910284751', amount: 150 },
-  { id: 'HST-150-25', receiptNo: '#RCP-150-1018', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Varun Pillai', rollNo: 'EDT23IODB8912', corridor: 'Bus A – Nigdi Corridor', hostel: 'Vishwa Boys Hostel • Room 325', payMode: 'UPI (PhonePe)', utr: 'UPI/66192847590', amount: 150 },
-  { id: 'HST-150-26', receiptNo: '#RCP-150-1017', date: '2026-10-12', dateOnly: '12 Oct 2026', studentName: 'Manish Pandey', rollNo: 'EDT23IODB9023', corridor: 'Bus E – Lohegaon Corridor', hostel: 'Indrayani Boys Hostel • Room 215', payMode: 'UPI (GooglePay)', utr: 'UPI/77102938475', amount: 150 },
-  { id: 'HST-150-27', receiptNo: '#RCP-150-1016', date: '2026-10-12', dateOnly: '12 Oct 2026', studentName: 'Aishwarya Shetty', rollNo: 'EDT23IODB1357', corridor: 'Bus A – Nigdi Corridor', hostel: 'Bageshree Girls Hostel • Room 107', payMode: 'UPI (PhonePe)', utr: 'UPI/22194857201', amount: 150 },
-  { id: 'HST-150-28', receiptNo: '#RCP-150-1015', date: '2026-10-12', dateOnly: '12 Oct 2026', studentName: 'Omkar Sawant', rollNo: 'EDT23IODB2468', corridor: 'Bus B – Chaphekar Corridor', hostel: 'Vishwa Boys Hostel • Room 214', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-074', amount: 150 },
-  { id: 'HST-150-29', receiptNo: '#RCP-150-1014', date: '2026-10-12', dateOnly: '12 Oct 2026', studentName: 'Ritika Gupta', rollNo: 'EDT23IODB3579', corridor: 'Bus D – Moshi Corridor', hostel: 'Saraswati Girls Hostel • Room 308', payMode: 'UPI (Paytm)', utr: 'UPI/55102938472', amount: 150 },
-  { id: 'HST-150-30', receiptNo: '#RCP-150-1013', date: '2026-10-12', dateOnly: '12 Oct 2026', studentName: 'Tejas More', rollNo: 'EDT23IODB4680', corridor: 'Bus C – Swargate Corridor', hostel: 'Indrayani Boys Hostel • Room 107', payMode: 'UPI (GooglePay)', utr: 'UPI/99102837461', amount: 150 },
-  { id: 'HST-150-31', receiptNo: '#RCP-150-1012', date: '2026-10-12', dateOnly: '12 Oct 2026', studentName: 'Natasha Dsouza', rollNo: 'EDT23IODB5791', corridor: 'Bus F – Pashan Corridor', hostel: 'Godavari Girls Hostel • Room 311', payMode: 'UPI (GooglePay)', utr: 'UPI/44019283745', amount: 150 },
-  { id: 'HST-150-32', receiptNo: '#RCP-150-1011', date: '2026-10-11', dateOnly: '11 Oct 2026', studentName: 'Pranav Date', rollNo: 'EDT23IODB6802', corridor: 'Bus A – Nigdi Corridor', hostel: 'Vishwa Boys Hostel • Room 110', payMode: 'UPI (GooglePay)', utr: 'UPI/88192039485', amount: 150 },
-  { id: 'HST-150-33', receiptNo: '#RCP-150-1010', date: '2026-10-11', dateOnly: '11 Oct 2026', studentName: 'Bhavna Rathod', rollNo: 'EDT23IODB7913', corridor: 'Bus E – Lohegaon Corridor', hostel: 'Bageshree Girls Hostel • Room 204', payMode: 'UPI (PhonePe)', utr: 'UPI/33019284719', amount: 150 },
-  { id: 'HST-150-34', receiptNo: '#RCP-150-1009', date: '2026-10-11', dateOnly: '11 Oct 2026', studentName: 'Chirag Sethi', rollNo: 'EDT23IODB8024', corridor: 'Bus B – Chaphekar Corridor', hostel: 'Indrayani Boys Hostel • Room 314', payMode: 'UPI (GooglePay)', utr: 'UPI/66102938471', amount: 150 },
-  { id: 'HST-150-35', receiptNo: '#RCP-150-1008', date: '2026-10-11', dateOnly: '11 Oct 2026', studentName: 'Sayali Jagtap', rollNo: 'EDT23IODB9135', corridor: 'Bus C – Swargate Corridor', hostel: 'Saraswati Girls Hostel • Room 110', payMode: 'UPI (Paytm)', utr: 'UPI/11029384756', amount: 150 },
-  { id: 'HST-150-36', receiptNo: '#RCP-150-1007', date: '2026-10-11', dateOnly: '11 Oct 2026', studentName: 'Abhishek Mishra', rollNo: 'EDT23IODB1470', corridor: 'Bus D – Moshi Corridor', hostel: 'Vishwa Boys Hostel • Room 202', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-071', amount: 150 },
+  { id: 'HST-150-01', receiptNo: '#RCP-150-1042', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Aarav Kulkarni', rollNo: 'ADT23IODB1042', busName: 'Bus A', routeDirection: 'Campus → Nigdi', hostel: 'Bageshree Girls Hostel • Room 304', payMode: 'UPI (GooglePay)', utr: 'UPI/42918821034', amount: 150 },
+  { id: 'HST-150-02', receiptNo: '#RCP-150-1041', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Tanvi Deshmukh', rollNo: 'ADT23IODB2184', busName: 'Bus E', routeDirection: 'Lohegaon → Campus', hostel: 'Saraswati Girls Hostel • Room 205', payMode: 'UPI (PhonePe)', utr: 'UPI/88392019482', amount: 150 },
+  { id: 'HST-150-03', receiptNo: '#RCP-150-1040', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Rohan Joshi', rollNo: 'ADT23IODB3095', busName: 'Bus B', routeDirection: 'Campus → Chaphekar', hostel: 'Indrayani Boys Hostel • Room 112', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-088', amount: 150 },
+  { id: 'HST-150-04', receiptNo: '#RCP-150-1039', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Sneha Patil', rollNo: 'ADT23IODB4112', busName: 'Bus C', routeDirection: 'Swargate → Campus', hostel: 'Godavari Girls Hostel • Room 401', payMode: 'UPI (Paytm)', utr: 'UPI/99102834571', amount: 150 },
+  { id: 'HST-150-05', receiptNo: '#RCP-150-1038', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Aditya Shinde', rollNo: 'ADT23IODB5820', busName: 'Bus D', routeDirection: 'Campus → Moshi', hostel: 'Vishwa Boys Hostel • Room 218', payMode: 'UPI (GooglePay)', utr: 'UPI/66183920194', amount: 150 },
+  { id: 'HST-150-06', receiptNo: '#RCP-150-1037', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Priya Mahajan', rollNo: 'ADT23IODB6239', busName: 'Bus F', routeDirection: 'Pashan → Campus', hostel: 'Bageshree Girls Hostel • Room 118', payMode: 'UPI (PhonePe)', utr: 'UPI/12093849502', amount: 150 },
+  { id: 'HST-150-07', receiptNo: '#RCP-150-1036', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Kunal Gaikwad', rollNo: 'ADT23IODB7415', busName: 'Bus A', routeDirection: 'Nigdi → Campus', hostel: 'Indrayani Boys Hostel • Room 305', payMode: 'UPI (GooglePay)', utr: 'UPI/55829103482', amount: 150 },
+  { id: 'HST-150-08', receiptNo: '#RCP-150-1035', date: '2026-10-15', dateOnly: '15 Oct 2026', studentName: 'Isha Nair', rollNo: 'ADT23IODB8902', busName: 'Bus E', routeDirection: 'Campus → Lohegaon', hostel: 'Saraswati Girls Hostel • Room 102', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-089', amount: 150 },
+  { id: 'HST-150-09', receiptNo: '#RCP-150-1034', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Siddharth Rao', rollNo: 'ADT23IODB1156', busName: 'Bus B', routeDirection: 'Chaphekar → Campus', hostel: 'Vishwa Boys Hostel • Room 104', payMode: 'UPI (GooglePay)', utr: 'UPI/33019482910', amount: 150 },
+  { id: 'HST-150-10', receiptNo: '#RCP-150-1033', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Ananya Sharma', rollNo: 'ADT23IODB2341', busName: 'Bus A', routeDirection: 'Campus → Nigdi', hostel: 'Bageshree Girls Hostel • Room 212', payMode: 'UPI (PhonePe)', utr: 'UPI/77182930491', amount: 150 },
+  { id: 'HST-150-11', receiptNo: '#RCP-150-1032', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Harsh Vardhan', rollNo: 'ADT23IODB3478', busName: 'Bus C', routeDirection: 'Campus → Swargate', hostel: 'Indrayani Boys Hostel • Room 220', payMode: 'UPI (Paytm)', utr: 'UPI/44910293847', amount: 150 },
+  { id: 'HST-150-12', receiptNo: '#RCP-150-1031', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Meera Chougule', rollNo: 'ADT23IODB4590', busName: 'Bus D', routeDirection: 'Moshi → Campus', hostel: 'Godavari Girls Hostel • Room 309', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-082', amount: 150 },
+  { id: 'HST-150-13', receiptNo: '#RCP-150-1030', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Vikram Jadhav', rollNo: 'ADT23IODB5612', busName: 'Bus E', routeDirection: 'Lohegaon → Campus', hostel: 'Vishwa Boys Hostel • Room 311', payMode: 'UPI (GooglePay)', utr: 'UPI/99201948572', amount: 150 },
+  { id: 'HST-150-14', receiptNo: '#RCP-150-1029', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Riya Kadam', rollNo: 'ADT23IODB6783', busName: 'Bus F', routeDirection: 'Campus → Pashan', hostel: 'Saraswati Girls Hostel • Room 314', payMode: 'UPI (GooglePay)', utr: 'UPI/66102938401', amount: 150 },
+  { id: 'HST-150-15', receiptNo: '#RCP-150-1028', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Nikhil Rane', rollNo: 'ADT23IODB7894', busName: 'Bus A', routeDirection: 'Nigdi → Campus', hostel: 'Indrayani Boys Hostel • Room 402', payMode: 'UPI (PhonePe)', utr: 'UPI/88301928491', amount: 150 },
+  { id: 'HST-150-16', receiptNo: '#RCP-150-1027', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Pooja Agarwal', rollNo: 'ADT23IODB8921', busName: 'Bus B', routeDirection: 'Campus → Chaphekar', hostel: 'Bageshree Girls Hostel • Room 408', payMode: 'UPI (Paytm)', utr: 'UPI/22019485729', amount: 150 },
+  { id: 'HST-150-17', receiptNo: '#RCP-150-1026', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Saurabh Salunkhe', rollNo: 'ADT23IODB9034', busName: 'Bus C', routeDirection: 'Swargate → Campus', hostel: 'Vishwa Boys Hostel • Room 207', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-083', amount: 150 },
+  { id: 'HST-150-18', receiptNo: '#RCP-150-1025', date: '2026-10-14', dateOnly: '14 Oct 2026', studentName: 'Shreya Tiwari', rollNo: 'ADT23IODB1245', busName: 'Bus E', routeDirection: 'Campus → Lohegaon', hostel: 'Godavari Girls Hostel • Room 115', payMode: 'UPI (GooglePay)', utr: 'UPI/44019284758', amount: 150 },
+  { id: 'HST-150-19', receiptNo: '#RCP-150-1024', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Amitabh Sen', rollNo: 'ADT23IODB2356', busName: 'Bus A', routeDirection: 'Campus → Nigdi', hostel: 'Indrayani Boys Hostel • Room 118', payMode: 'UPI (GooglePay)', utr: 'UPI/11928475820', amount: 150 },
+  { id: 'HST-150-20', receiptNo: '#RCP-150-1023', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Kavita Menon', rollNo: 'ADT23IODB3467', busName: 'Bus E', routeDirection: 'Lohegaon → Campus', hostel: 'Saraswati Girls Hostel • Room 222', payMode: 'UPI (PhonePe)', utr: 'UPI/99018274619', amount: 150 },
+  { id: 'HST-150-21', receiptNo: '#RCP-150-1022', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Yash Bhosale', rollNo: 'ADT23IODB4578', busName: 'Bus D', routeDirection: 'Campus → Moshi', hostel: 'Vishwa Boys Hostel • Room 119', payMode: 'UPI (GooglePay)', utr: 'UPI/55019284710', amount: 150 },
+  { id: 'HST-150-22', receiptNo: '#RCP-150-1021', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Diya Chakraborty', rollNo: 'ADT23IODB5689', busName: 'Bus B', routeDirection: 'Chaphekar → Campus', hostel: 'Bageshree Girls Hostel • Room 316', payMode: 'UPI (Paytm)', utr: 'UPI/88201948571', amount: 150 },
+  { id: 'HST-150-23', receiptNo: '#RCP-150-1020', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Gaurav Kulkarni', rollNo: 'ADT23IODB6790', busName: 'Bus F', routeDirection: 'Campus → Pashan', hostel: 'Indrayani Boys Hostel • Room 309', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-079', amount: 150 },
+  { id: 'HST-150-24', receiptNo: '#RCP-150-1019', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Simran Kaur', rollNo: 'ADT23IODB7801', busName: 'Bus C', routeDirection: 'Swargate → Campus', hostel: 'Godavari Girls Hostel • Room 208', payMode: 'UPI (GooglePay)', utr: 'UPI/33910284751', amount: 150 },
+  { id: 'HST-150-25', receiptNo: '#RCP-150-1018', date: '2026-10-13', dateOnly: '13 Oct 2026', studentName: 'Varun Pillai', rollNo: 'ADT23IODB8912', busName: 'Bus A', routeDirection: 'Nigdi → Campus', hostel: 'Vishwa Boys Hostel • Room 325', payMode: 'UPI (PhonePe)', utr: 'UPI/66192847590', amount: 150 },
+  { id: 'HST-150-26', receiptNo: '#RCP-150-1017', date: '2026-10-12', dateOnly: '12 Oct 2026', studentName: 'Manish Pandey', rollNo: 'ADT23IODB9023', busName: 'Bus E', routeDirection: 'Campus → Lohegaon', hostel: 'Indrayani Boys Hostel • Room 215', payMode: 'UPI (GooglePay)', utr: 'UPI/77102938475', amount: 150 },
+  { id: 'HST-150-27', receiptNo: '#RCP-150-1016', date: '2026-10-12', dateOnly: '12 Oct 2026', studentName: 'Aishwarya Shetty', rollNo: 'ADT23IODB1357', busName: 'Bus A', routeDirection: 'Campus → Nigdi', hostel: 'Bageshree Girls Hostel • Room 107', payMode: 'UPI (PhonePe)', utr: 'UPI/22194857201', amount: 150 },
+  { id: 'HST-150-28', receiptNo: '#RCP-150-1015', date: '2026-10-12', dateOnly: '12 Oct 2026', studentName: 'Omkar Sawant', rollNo: 'ADT23IODB2468', busName: 'Bus B', routeDirection: 'Chaphekar → Campus', hostel: 'Vishwa Boys Hostel • Room 214', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-074', amount: 150 },
+  { id: 'HST-150-29', receiptNo: '#RCP-150-1014', date: '2026-10-12', dateOnly: '12 Oct 2026', studentName: 'Ritika Gupta', rollNo: 'ADT23IODB3579', busName: 'Bus D', routeDirection: 'Campus → Moshi', hostel: 'Saraswati Girls Hostel • Room 308', payMode: 'UPI (Paytm)', utr: 'UPI/55102938472', amount: 150 },
+  { id: 'HST-150-30', receiptNo: '#RCP-150-1013', date: '2026-10-12', dateOnly: '12 Oct 2026', studentName: 'Tejas More', rollNo: 'ADT23IODB4680', busName: 'Bus C', routeDirection: 'Campus → Swargate', hostel: 'Indrayani Boys Hostel • Room 107', payMode: 'UPI (GooglePay)', utr: 'UPI/99102837461', amount: 150 },
+  { id: 'HST-150-31', receiptNo: '#RCP-150-1012', date: '2026-10-12', dateOnly: '12 Oct 2026', studentName: 'Natasha Dsouza', rollNo: 'ADT23IODB5791', busName: 'Bus F', routeDirection: 'Pashan → Campus', hostel: 'Godavari Girls Hostel • Room 311', payMode: 'UPI (GooglePay)', utr: 'UPI/44019283745', amount: 150 },
+  { id: 'HST-150-32', receiptNo: '#RCP-150-1011', date: '2026-10-11', dateOnly: '11 Oct 2026', studentName: 'Pranav Date', rollNo: 'ADT23IODB6802', busName: 'Bus A', routeDirection: 'Nigdi → Campus', hostel: 'Vishwa Boys Hostel • Room 110', payMode: 'UPI (GooglePay)', utr: 'UPI/88192039485', amount: 150 },
+  { id: 'HST-150-33', receiptNo: '#RCP-150-1010', date: '2026-10-11', dateOnly: '11 Oct 2026', studentName: 'Bhavna Rathod', rollNo: 'ADT23IODB7913', busName: 'Bus E', routeDirection: 'Lohegaon → Campus', hostel: 'Bageshree Girls Hostel • Room 204', payMode: 'UPI (PhonePe)', utr: 'UPI/33019284719', amount: 150 },
+  { id: 'HST-150-34', receiptNo: '#RCP-150-1009', date: '2026-10-11', dateOnly: '11 Oct 2026', studentName: 'Chirag Sethi', rollNo: 'ADT23IODB8024', busName: 'Bus B', routeDirection: 'Campus → Chaphekar', hostel: 'Indrayani Boys Hostel • Room 314', payMode: 'UPI (GooglePay)', utr: 'UPI/66102938471', amount: 150 },
+  { id: 'HST-150-35', receiptNo: '#RCP-150-1008', date: '2026-10-11', dateOnly: '11 Oct 2026', studentName: 'Sayali Jagtap', rollNo: 'ADT23IODB9135', busName: 'Bus C', routeDirection: 'Swargate → Campus', hostel: 'Saraswati Girls Hostel • Room 110', payMode: 'UPI (Paytm)', utr: 'UPI/11029384756', amount: 150 },
+  { id: 'HST-150-36', receiptNo: '#RCP-150-1007', date: '2026-10-11', dateOnly: '11 Oct 2026', studentName: 'Abhishek Mishra', rollNo: 'ADT23IODB1470', busName: 'Bus D', routeDirection: 'Moshi → Campus', hostel: 'Vishwa Boys Hostel • Room 202', payMode: 'Cash at Depot Counter', utr: 'CASH-GATE-071', amount: 150 },
 ];
 
 
@@ -6125,7 +6125,7 @@ function renderHostelOneTimeTable(dataToRender = null) {
   if (list.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="4" style="text-align: center; padding: 36px 16px; color: var(--text-muted);">
+        <td colspan="5" style="text-align: center; padding: 36px 16px; color: var(--text-muted);">
           <i class="ph ph-receipt-x" style="font-size: 32px; display: block; margin: 0 auto 8px auto; opacity: 0.6;"></i>
           No records in Time Traveler Ledger.
         </td>
@@ -6146,8 +6146,11 @@ function renderHostelOneTimeTable(dataToRender = null) {
         <div class="hostel-student-prn" style="font-family: var(--font-mono); font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">${item.rollNo}</div>
       </td>
       <td>
-        <span class="hostel-corridor-badge">
-          <i class="ph ph-van"></i> ${item.corridor}
+        <span style="font-weight: 600; font-size: 12.5px; color: var(--text-primary);">${item.busName}</span>
+      </td>
+      <td>
+        <span style="font-size: 12.5px; color: var(--text-secondary); font-weight: 500;">
+          ${item.routeDirection}
         </span>
       </td>
       <td style="text-align: center;">
@@ -6166,12 +6169,13 @@ function renderHostelOneTimeTable(dataToRender = null) {
 
 function exportHostelLedgerCSV() {
   const data = HOSTEL_ONE_TIME_DATA;
-  const headers = ['Date', 'Student Name', 'Roll Number', 'Corridor / Route'];
+  const headers = ['Date', 'Student Name', 'Roll Number', 'Bus', 'Route'];
   const rows = data.map(item => [
     `"${item.dateOnly}"`,
     `"${item.studentName.replace(/"/g, '""')}"`,
     `"${item.rollNo}"`,
-    `"${item.corridor.replace(/"/g, '""')}"`
+    `"${item.busName}"`,
+    `"${item.routeDirection}"`
   ]);
 
   const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
@@ -6208,7 +6212,7 @@ function viewHostelReceipt(id) {
   if (rctHostel) rctHostel.textContent = item.hostel || 'Hostel Resident';
 
   const rctCorridor = document.getElementById('rctCorridor');
-  if (rctCorridor) rctCorridor.textContent = item.corridor;
+  if (rctCorridor) rctCorridor.textContent = `${item.busName} • ${item.routeDirection}`;
 
   const rctPayMode = document.getElementById('rctPayMode');
   if (rctPayMode) rctPayMode.textContent = item.payMode || 'UPI (Digital)';
@@ -6279,7 +6283,7 @@ function printHostelReceipt() {
           <div class="row"><span class="label">Issue Date</span><span class="val">${document.getElementById('rctDateTime')?.textContent || ''}</span></div>
           <div class="row"><span class="label">Student Name</span><span class="val">${document.getElementById('rctStudentName')?.textContent || ''}</span></div>
           <div class="row"><span class="label">Roll Number</span><span class="val" style="font-family: monospace;">${document.getElementById('rctRollNo')?.textContent || ''}</span></div>
-          <div class="row"><span class="label">Corridor Route</span><span class="val">${document.getElementById('rctCorridor')?.textContent || ''}</span></div>
+          <div class="row"><span class="label">Bus & Route</span><span class="val">${document.getElementById('rctCorridor')?.textContent || ''}</span></div>
           <div class="fare-box">
             <span style="font-size: 12px; font-weight: 600;">One-Time Transit Fare</span>
             <span class="fare-amount">₹150.00</span>
