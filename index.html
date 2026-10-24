@@ -1461,17 +1461,17 @@
               <span class="kpi-metric-subtext red">142 pending installments</span>
             </div>
             <div class="kpi-metric-card">
-              <span class="kpi-metric-title">Bus Pass Registrations</span>
-              <span class="kpi-metric-number">842 Passes</span>
-              <span class="kpi-metric-subtext green">+58 new this month</span>
-            </div>
-            <div class="kpi-metric-card">
               <span class="kpi-metric-title">Internal Operating Expenses</span>
               <span class="kpi-metric-number">₹4,85,000</span>
               <span class="kpi-metric-subtext gray">Fuel, Maintenance & Salaries</span>
             </div>
-            <div class="kpi-metric-card" onclick="scrollToHostelOneTimeSection()" style="cursor: pointer;" title="Click to inspect time traveler ledger">
-              <span class="kpi-metric-title">Hostel Amount Collected</span>
+            <div class="kpi-metric-card" onclick="scrollToHostelOneTimeSection()" style="cursor: pointer;" title="Click to view today's one-time collection">
+              <span class="kpi-metric-title">Today's Collection</span>
+              <span class="kpi-metric-number" id="finTodayCollectionTotal">₹1,200</span>
+              <span class="kpi-metric-subtext green" id="finTodayTripsSub">8 passes • Today</span>
+            </div>
+            <div class="kpi-metric-card" onclick="scrollToHostelOneTimeSection()" style="cursor: pointer;" title="Click to inspect one time traveler ledger">
+              <span class="kpi-metric-title">One-Time Travel Revenue</span>
               <span class="kpi-metric-number" id="finHostelCollectionTotal">₹5,400</span>
               <span class="kpi-metric-subtext green" id="finHostelTripsSub">₹150 per trip</span>
             </div>
@@ -1486,7 +1486,7 @@
               </button>
               <button type="button" class="bus-tab-btn" id="tabBtnFinStudents" onclick="switchFinancesTab('students')">
                 <i class="ph ph-users"></i>
-                <span>All Students</span>
+                <span>One Time Traveler</span>
                 <span class="bus-tab-count" id="finStudentsTabCount">36</span>
               </button>
               <button type="button" class="bus-tab-btn" id="tabBtnFinInvoices" onclick="switchFinancesTab('invoices')">
@@ -1497,7 +1497,7 @@
             </div>
           </div>
 
-          <!-- SECTION: TIME TRAVELER LEDGER -->
+          <!-- SECTION: ONE TIME TRAVELER LEDGER -->
           <div class="card-flat hostel-onetime-section" id="hostelOneTimeSection" style="margin-bottom: 24px;">
             
             <!-- Section Header -->
@@ -1508,7 +1508,7 @@
                     <i class="ph ph-receipt"></i>
                   </div>
                   <div>
-                    <h3 class="hostel-section-title">Time Traveler Ledger</h3>
+                    <h3 class="hostel-section-title">One Time Traveler Ledger</h3>
                     <p class="hostel-section-subtitle">Real-time transit record of daily single-journey passenger boardings across corridors.</p>
                   </div>
                 </div>
@@ -1533,13 +1533,20 @@
             <!-- Ledger Table (Streamlined) -->
             <div class="hostel-table-wrap">
               <table class="table-flat hostel-ledger-table">
+                <colgroup>
+                  <col style="width: 18%;">
+                  <col style="width: 26%;">
+                  <col style="width: 16%;">
+                  <col style="width: 26%;">
+                  <col style="width: 14%;">
+                </colgroup>
                 <thead>
                   <tr>
-                    <th style="width: 140px;">Date</th>
+                    <th>Date</th>
                     <th>Student Name & Roll Number</th>
-                    <th style="width: 120px;">Bus</th>
+                    <th>Bus</th>
                     <th>Route</th>
-                    <th style="text-align: center; width: 100px;">Action</th>
+                    <th style="text-align: center;">Action</th>
                   </tr>
                 </thead>
                 <tbody id="hostelOneTimeTbody">
@@ -2656,72 +2663,155 @@
   <!-- MODAL: VIEW & PRINT HOSTEL STUDENT TRANSIT RECEIPT SLIP              -->
   <!-- ==================================================================== -->
   <div class="modal-overlay hidden" id="viewHostelReceiptModal">
-    <div class="modal-dialog-flat" style="max-width: 460px;">
-      <div class="modal-header-flat" style="margin-bottom: 12px; padding-bottom: 10px;">
-        <span class="modal-title-flat" style="display: flex; align-items: center; gap: 8px;">
-          <i class="ph ph-receipt" style="color: var(--accent);"></i> Official Transit Boarding Slip
+    <div class="modal-dialog-flat" style="max-width: 420px; padding: 18px 20px 20px 20px;">
+      <div class="modal-header-flat" style="margin-bottom: 12px; padding-bottom: 8px;">
+        <span class="modal-title-flat" style="display: flex; align-items: center; gap: 8px; font-size: 14px;">
+          <i class="ph ph-ticket" style="color: var(--accent); font-size: 18px;"></i> Transit Boarding Pass
         </span>
-        <button class="modal-close-btn" onclick="closeViewHostelReceiptModal()"><i class="ph ph-x"></i></button>
+        <button class="modal-close-btn" onclick="closeViewHostelReceiptModal()" title="Close dialog"><i class="ph ph-x"></i></button>
       </div>
 
-      <div class="receipt-card-container" id="receiptPrintArea">
-        <div class="receipt-header-strip">
-          <div>
-            <div class="receipt-univ-title">MIT ADT UNIVERSITY</div>
-            <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 1px;">Campus Transportation Division (CTD)</div>
+      <!-- BOARDING PASS TICKET (Styled strictly as per Reference Image) -->
+      <div class="boarding-pass-wrapper" id="receiptPrintArea">
+        <div class="boarding-pass-ticket">
+          
+          <!-- TOP ROUTE CONNECT LINE -->
+          <div class="bpass-header-line">
+            <span class="bpass-point-label">FROM <span class="bpass-dot">●</span></span>
+            <div class="bpass-route-dash">
+              <span class="bpass-dash-line"></span>
+              <span class="bpass-bus-icon"><i class="ph ph-bus"></i></span>
+              <span class="bpass-dash-line"></span>
+            </div>
+            <span class="bpass-point-label"><span class="bpass-dot">●</span> TO</span>
           </div>
-          <span class="receipt-badge-top"><i class="ph ph-check-circle"></i> VERIFIED</span>
-        </div>
 
-        <div class="receipt-grid-rows">
-          <div class="receipt-data-item">
-            <span class="receipt-data-label">Receipt Number</span>
-            <span class="receipt-data-val" id="rctNumber" style="font-family: var(--font-mono);">#RCP-150-1042</span>
-          </div>
-          <div class="receipt-data-item">
-            <span class="receipt-data-label">Issue Date & Time</span>
-            <span class="receipt-data-val" id="rctDateTime">15 Oct 2026, 07:45 AM</span>
-          </div>
-          <div class="receipt-data-item">
-            <span class="receipt-data-label">Student Name</span>
-            <span class="receipt-data-val" id="rctStudentName">Aarav Kulkarni</span>
-          </div>
-          <div class="receipt-data-item">
-            <span class="receipt-data-label">PRN / Roll No</span>
-            <span class="receipt-data-val" id="rctRollNo" style="font-family: var(--font-mono);">PRN-2024-ENG-082</span>
-          </div>
-          <div class="receipt-data-item">
-            <span class="receipt-data-label">Hostel Residence</span>
-            <span class="receipt-data-val" id="rctHostel">Bageshree Girls • Room 304</span>
-          </div>
-          <div class="receipt-data-item">
-            <span class="receipt-data-label">Authorized Corridor</span>
-            <span class="receipt-data-val" id="rctCorridor">Bus A – Nigdi Corridor</span>
-          </div>
-          <div class="receipt-data-item">
-            <span class="receipt-data-label">Payment Mode</span>
-            <span class="receipt-data-val" id="rctPayMode">UPI (GooglePay)</span>
-          </div>
-          <div class="receipt-data-item">
-            <span class="receipt-data-label">Transaction Ref</span>
-            <span class="receipt-data-val" id="rctUTR" style="font-family: var(--font-mono); font-size: 11.5px;">UPI/42918821034</span>
-          </div>
-        </div>
+          <!-- ORIGIN, DURATION, DESTINATION -->
+          <div class="bpass-cities-row">
+            <div class="bpass-city-col bpass-origin">
+              <div class="bpass-city-code" id="bpassOriginCode">CAMP</div>
+              <div class="bpass-city-name" id="bpassOriginName">MIT ADT Campus</div>
+              <div class="bpass-city-time" id="bpassDepTime">08:00 AM</div>
+              <div class="bpass-city-date" id="bpassOriginDate">Oct 15, Thu</div>
+            </div>
 
-        <div class="receipt-fare-box">
-          <span class="receipt-fare-label">One-Time Transit Fare Paid</span>
-          <span class="receipt-fare-amount">₹150.00</span>
-        </div>
+            <div class="bpass-mid-duration">
+              <span class="bpass-duration-txt" id="bpassDuration">45 minutes</span>
+              <span class="bpass-direct-pill">Direct</span>
+            </div>
 
-        <div style="text-align: center; font-size: 10.5px; color: var(--text-muted); font-family: var(--font-mono); letter-spacing: 0.1em; border-top: 1px dashed var(--border); padding-top: 8px;">
-          * * * MIT-ADT-CTD-ONE-TIME-BOARDING-PASS * * *
+            <div class="bpass-city-col bpass-dest">
+              <div class="bpass-city-code" id="bpassDestCode">NGD</div>
+              <div class="bpass-city-name" id="bpassDestName">Nigdi Pradhikaran</div>
+              <div class="bpass-city-time" id="bpassArrTime">08:45 AM</div>
+              <div class="bpass-city-date" id="bpassDestDate">Oct 15, Thu</div>
+            </div>
+          </div>
+
+          <!-- SOFT BLUE STRIP: BOARDING TIME, TERMINAL/BUS, GATE, FLIGHT/PASS ID -->
+          <div class="bpass-blue-strip">
+            <div class="bpass-strip-col">
+              <span class="bpass-strip-label">Boarding time</span>
+              <span class="bpass-strip-val" id="bpassBoardingTime">07:45 AM</span>
+            </div>
+            <div class="bpass-strip-col">
+              <span class="bpass-strip-label">Bus</span>
+              <span class="bpass-strip-val" id="bpassBusName">Bus A</span>
+            </div>
+            <div class="bpass-strip-col">
+              <span class="bpass-strip-label">Gate / Bay</span>
+              <span class="bpass-strip-val" id="bpassGate">Bay 2</span>
+            </div>
+            <div class="bpass-strip-col">
+              <span class="bpass-strip-label">Pass ID</span>
+              <span class="bpass-strip-val bpass-passid" id="bpassPassId">RCP-1042</span>
+            </div>
+          </div>
+
+          <!-- PASSENGER DETAILS ROW -->
+          <div class="bpass-passenger-row">
+            <div class="bpass-pass-col">
+              <span class="bpass-meta-label">Passenger</span>
+              <span class="bpass-meta-val" id="bpassPassengerName">Aarav Kulkarni</span>
+            </div>
+            <div class="bpass-pass-col">
+              <span class="bpass-meta-label">Roll Number</span>
+              <span class="bpass-meta-val bpass-mono" id="bpassRollNo">ADT23IODB1042</span>
+            </div>
+            <div class="bpass-pass-col">
+              <span class="bpass-meta-label">Class</span>
+              <span class="bpass-meta-val bpass-fare" id="bpassFareClass">₹150 • Paid</span>
+            </div>
+          </div>
+
+          <!-- PERFORATION WITH SIDE NOTCHES -->
+          <div class="bpass-perforation-wrap">
+            <span class="bpass-notch bpass-notch-left"></span>
+            <div class="bpass-perf-line"></div>
+            <span class="bpass-notch bpass-notch-right"></span>
+          </div>
+
+          <!-- BARCODE SECTION -->
+          <div class="bpass-barcode-section">
+            <div class="bpass-barcode-graphic">
+              <svg class="bpass-barcode-svg" viewBox="0 0 280 48" preserveAspectRatio="none">
+                <rect x="0" y="0" width="3" height="48" fill="#111827" />
+                <rect x="5" y="0" width="2" height="48" fill="#111827" />
+                <rect x="9" y="0" width="5" height="48" fill="#111827" />
+                <rect x="17" y="0" width="2" height="48" fill="#111827" />
+                <rect x="22" y="0" width="4" height="48" fill="#111827" />
+                <rect x="29" y="0" width="1" height="48" fill="#111827" />
+                <rect x="33" y="0" width="6" height="48" fill="#111827" />
+                <rect x="42" y="0" width="2" height="48" fill="#111827" />
+                <rect x="47" y="0" width="3" height="48" fill="#111827" />
+                <rect x="53" y="0" width="5" height="48" fill="#111827" />
+                <rect x="61" y="0" width="2" height="48" fill="#111827" />
+                <rect x="66" y="0" width="4" height="48" fill="#111827" />
+                <rect x="73" y="0" width="2" height="48" fill="#111827" />
+                <rect x="78" y="0" width="6" height="48" fill="#111827" />
+                <rect x="87" y="0" width="3" height="48" fill="#111827" />
+                <rect x="93" y="0" width="2" height="48" fill="#111827" />
+                <rect x="98" y="0" width="4" height="48" fill="#111827" />
+                <rect x="105" y="0" width="2" height="48" fill="#111827" />
+                <rect x="110" y="0" width="5" height="48" fill="#111827" />
+                <rect x="118" y="0" width="2" height="48" fill="#111827" />
+                <rect x="123" y="0" width="3" height="48" fill="#111827" />
+                <rect x="129" y="0" width="6" height="48" fill="#111827" />
+                <rect x="138" y="0" width="2" height="48" fill="#111827" />
+                <rect x="143" y="0" width="4" height="48" fill="#111827" />
+                <rect x="150" y="0" width="2" height="48" fill="#111827" />
+                <rect x="155" y="0" width="5" height="48" fill="#111827" />
+                <rect x="163" y="0" width="3" height="48" fill="#111827" />
+                <rect x="169" y="0" width="2" height="48" fill="#111827" />
+                <rect x="174" y="0" width="6" height="48" fill="#111827" />
+                <rect x="183" y="0" width="2" height="48" fill="#111827" />
+                <rect x="188" y="0" width="4" height="48" fill="#111827" />
+                <rect x="195" y="0" width="3" height="48" fill="#111827" />
+                <rect x="201" y="0" width="5" height="48" fill="#111827" />
+                <rect x="209" y="0" width="2" height="48" fill="#111827" />
+                <rect x="214" y="0" width="4" height="48" fill="#111827" />
+                <rect x="221" y="0" width="2" height="48" fill="#111827" />
+                <rect x="226" y="0" width="6" height="48" fill="#111827" />
+                <rect x="235" y="0" width="3" height="48" fill="#111827" />
+                <rect x="241" y="0" width="2" height="48" fill="#111827" />
+                <rect x="246" y="0" width="4" height="48" fill="#111827" />
+                <rect x="253" y="0" width="2" height="48" fill="#111827" />
+                <rect x="258" y="0" width="5" height="48" fill="#111827" />
+                <rect x="266" y="0" width="3" height="48" fill="#111827" />
+                <rect x="272" y="0" width="2" height="48" fill="#111827" />
+                <rect x="277" y="0" width="3" height="48" fill="#111827" />
+              </svg>
+            </div>
+            <div class="bpass-barcode-num" id="bpassBarcodeText">MIT-ADT • RCP-150-1042 • VERIFIED</div>
+          </div>
+
         </div>
       </div>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
-        <button type="button" class="btn-clean" onclick="closeViewHostelReceiptModal()">Close</button>
-        <button type="button" class="btn-clean btn-clean-primary" onclick="printHostelReceipt()">
-          <i class="ph ph-printer"></i> Print Boarding Slip
+      <!-- FOOTER: ONLY PRINT BOARDING SLIP BUTTON (NO CLOSE BUTTON) -->
+      <div style="margin-top: 16px;">
+        <button type="button" class="btn-clean btn-clean-primary" style="width: 100%; justify-content: center; height: 42px; font-weight: 600; font-size: 13.5px;" onclick="printHostelReceipt()">
+          <i class="ph ph-printer" style="font-size: 17px;"></i> Print Boarding Slip
         </button>
       </div>
     </div>
@@ -2731,6 +2821,6 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- SCRIPT -->
-  <script src="app.js?v=bus-route3"></script>
+  <script src="app.js?v=boarding-pass4"></script>
 </body>
 </html>

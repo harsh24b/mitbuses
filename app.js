@@ -6089,7 +6089,7 @@ function updateHostelMetrics(dataset) {
   const todayTrips = todayData.length;
   const todayTotal = todayTrips * 150;
 
-  // Today's Collection single metric
+  // Today's Collection single metric in section strip
   const todayTotalEl = document.getElementById('hostelKpiTodayTotal');
   if (todayTotalEl) todayTotalEl.textContent = `₹${todayTotal.toLocaleString('en-IN')}`;
 
@@ -6107,7 +6107,14 @@ function updateHostelMetrics(dataset) {
   const dashAmount = document.getElementById('dashHostelAmountText');
   if (dashAmount) dashAmount.textContent = `₹150 per trip • Total : ₹${monthTotal.toLocaleString('en-IN')}`;
 
-  // Sync Finances Card 5
+  // Sync Finances Card 4: Today's Collection
+  const finTodayTotal = document.getElementById('finTodayCollectionTotal');
+  if (finTodayTotal) finTodayTotal.textContent = `₹${todayTotal.toLocaleString('en-IN')}`;
+
+  const finTodaySub = document.getElementById('finTodayTripsSub');
+  if (finTodaySub) finTodaySub.textContent = `${todayTrips} passes • Today`;
+
+  // Sync Finances Card 5: One-Time Travel Revenue
   const finCollection = document.getElementById('finHostelCollectionTotal');
   if (finCollection) finCollection.textContent = `₹${monthTotal.toLocaleString('en-IN')}`;
 
@@ -6127,7 +6134,7 @@ function renderHostelOneTimeTable(dataToRender = null) {
       <tr>
         <td colspan="5" style="text-align: center; padding: 36px 16px; color: var(--text-muted);">
           <i class="ph ph-receipt-x" style="font-size: 32px; display: block; margin: 0 auto 8px auto; opacity: 0.6;"></i>
-          No records in Time Traveler Ledger.
+          No records in One Time Traveler Ledger.
         </td>
       </tr>
     `;
@@ -6154,7 +6161,7 @@ function renderHostelOneTimeTable(dataToRender = null) {
         </span>
       </td>
       <td style="text-align: center;">
-        <button type="button" class="hostel-btn-slip" onclick="viewHostelReceipt('${item.id}')" title="View & print official transit receipt slip">
+        <button type="button" class="hostel-btn-slip" onclick="viewHostelReceipt('${item.id}')" title="View & print official transit boarding pass">
           <i class="ph ph-receipt"></i> Slip
         </button>
       </td>
@@ -6183,7 +6190,7 @@ function exportHostelLedgerCSV() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `Time_Traveler_Ledger_${new Date().toISOString().slice(0, 10)}.csv`;
+  a.download = `One_Time_Traveler_Ledger_${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -6192,33 +6199,122 @@ function exportHostelLedgerCSV() {
   showToast(`Exported ${data.length} records to CSV`);
 }
 
+function getTransitBoardingDetails(item) {
+  const parts = (item.routeDirection || '').split('→').map(s => s.trim());
+  const origRaw = parts[0] || 'Campus';
+  const destRaw = parts[1] || 'Nigdi';
+
+  const codeLookup = {
+    'Campus': { code: 'CAMP', name: 'MIT ADT Campus' },
+    'Nigdi': { code: 'NGD', name: 'Nigdi Pradhikaran' },
+    'Kothrud': { code: 'KTD', name: 'Kothrud Stand' },
+    'Hadapsar': { code: 'HDP', name: 'Hadapsar Depot' },
+    'Viman Nagar': { code: 'VMN', name: 'Viman Nagar Chowk' },
+    'Swargate': { code: 'SWG', name: 'Swargate Terminal' },
+    'Hinjawadi': { code: 'HJW', name: 'Hinjawadi Phase 1' },
+    'Chinchwad': { code: 'CHP', name: 'Chinchwad Station' },
+    'Bhosari': { code: 'BHS', name: 'Bhosari Central' },
+    'Pimpri': { code: 'PMP', name: 'Pimpri Colony' },
+    'Katraj': { code: 'KTJ', name: 'Katraj Junction' },
+    'Wagholi': { code: 'WGH', name: 'Wagholi Bypass' },
+    'Kharadi': { code: 'KRD', name: 'Kharadi IT Park' }
+  };
+
+  const origInfo = codeLookup[origRaw] || { code: origRaw.slice(0, 4).toUpperCase(), name: origRaw };
+  const destInfo = codeLookup[destRaw] || { code: destRaw.slice(0, 4).toUpperCase(), name: destRaw };
+
+  const isFromCampus = origRaw.toLowerCase().includes('campus');
+  const depTime = isFromCampus ? '08:00 AM' : '07:15 AM';
+  const arrTime = isFromCampus ? '08:45 AM' : '08:00 AM';
+  const boardingTime = isFromCampus ? '07:45 AM' : '07:00 AM';
+
+  let gate = 'Bay 2';
+  if (item.busName) {
+    if (item.busName.includes('A')) gate = 'Bay 1';
+    else if (item.busName.includes('B')) gate = 'Bay 2';
+    else if (item.busName.includes('C')) gate = 'Bay 3';
+    else if (item.busName.includes('D')) gate = 'Bay 4';
+    else if (item.busName.includes('E')) gate = 'Bay 5';
+  }
+
+  let dateFormatted = item.dateOnly || '15 Oct 2026';
+  try {
+    const d = new Date(item.date);
+    if (!isNaN(d.getTime())) {
+      dateFormatted = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' });
+    }
+  } catch (e) {}
+
+  return {
+    origCode: origInfo.code,
+    origName: origInfo.name,
+    destCode: destInfo.code,
+    destName: destInfo.name,
+    depTime,
+    arrTime,
+    boardingTime,
+    gate,
+    duration: '45 minutes',
+    dateFormatted
+  };
+}
+
 function viewHostelReceipt(id) {
   const item = HOSTEL_ONE_TIME_DATA.find(d => d.id === id);
   if (!item) return;
 
-  const rctNumber = document.getElementById('rctNumber');
-  if (rctNumber) rctNumber.textContent = item.receiptNo;
+  const info = getTransitBoardingDetails(item);
 
-  const rctDateTime = document.getElementById('rctDateTime');
-  if (rctDateTime) rctDateTime.textContent = `${item.dateOnly}, 08:00 AM`;
+  const bpassOriginCode = document.getElementById('bpassOriginCode');
+  if (bpassOriginCode) bpassOriginCode.textContent = info.origCode;
 
-  const rctStudentName = document.getElementById('rctStudentName');
-  if (rctStudentName) rctStudentName.textContent = item.studentName;
+  const bpassOriginName = document.getElementById('bpassOriginName');
+  if (bpassOriginName) bpassOriginName.textContent = info.origName;
 
-  const rctRollNo = document.getElementById('rctRollNo');
-  if (rctRollNo) rctRollNo.textContent = item.rollNo;
+  const bpassDepTime = document.getElementById('bpassDepTime');
+  if (bpassDepTime) bpassDepTime.textContent = info.depTime;
 
-  const rctHostel = document.getElementById('rctHostel');
-  if (rctHostel) rctHostel.textContent = item.hostel || 'Hostel Resident';
+  const bpassOriginDate = document.getElementById('bpassOriginDate');
+  if (bpassOriginDate) bpassOriginDate.textContent = info.dateFormatted;
 
-  const rctCorridor = document.getElementById('rctCorridor');
-  if (rctCorridor) rctCorridor.textContent = `${item.busName} • ${item.routeDirection}`;
+  const bpassDuration = document.getElementById('bpassDuration');
+  if (bpassDuration) bpassDuration.textContent = info.duration;
 
-  const rctPayMode = document.getElementById('rctPayMode');
-  if (rctPayMode) rctPayMode.textContent = item.payMode || 'UPI (Digital)';
+  const bpassDestCode = document.getElementById('bpassDestCode');
+  if (bpassDestCode) bpassDestCode.textContent = info.destCode;
 
-  const rctUTR = document.getElementById('rctUTR');
-  if (rctUTR) rctUTR.textContent = item.utr || 'UTR-VERIFIED';
+  const bpassDestName = document.getElementById('bpassDestName');
+  if (bpassDestName) bpassDestName.textContent = info.destName;
+
+  const bpassArrTime = document.getElementById('bpassArrTime');
+  if (bpassArrTime) bpassArrTime.textContent = info.arrTime;
+
+  const bpassDestDate = document.getElementById('bpassDestDate');
+  if (bpassDestDate) bpassDestDate.textContent = info.dateFormatted;
+
+  const bpassBoardingTime = document.getElementById('bpassBoardingTime');
+  if (bpassBoardingTime) bpassBoardingTime.textContent = info.boardingTime;
+
+  const bpassBusName = document.getElementById('bpassBusName');
+  if (bpassBusName) bpassBusName.textContent = item.busName;
+
+  const bpassGate = document.getElementById('bpassGate');
+  if (bpassGate) bpassGate.textContent = info.gate;
+
+  const bpassPassId = document.getElementById('bpassPassId');
+  if (bpassPassId) bpassPassId.textContent = item.receiptNo ? item.receiptNo.replace('#', '') : 'RCP-1042';
+
+  const bpassPassengerName = document.getElementById('bpassPassengerName');
+  if (bpassPassengerName) bpassPassengerName.textContent = item.studentName;
+
+  const bpassRollNo = document.getElementById('bpassRollNo');
+  if (bpassRollNo) bpassRollNo.textContent = item.rollNo;
+
+  const bpassFareClass = document.getElementById('bpassFareClass');
+  if (bpassFareClass) bpassFareClass.textContent = '₹150 • Paid';
+
+  const bpassBarcodeText = document.getElementById('bpassBarcodeText');
+  if (bpassBarcodeText) bpassBarcodeText.textContent = `MIT-ADT • ${item.receiptNo || 'RCP-1042'} • VERIFIED`;
 
   const modal = document.getElementById('viewHostelReceiptModal');
   if (modal) modal.classList.remove('hidden');
@@ -6236,7 +6332,8 @@ function printHostelReceipt() {
     return;
   }
 
-  const win = window.open('', '_blank', 'width=500,height=600');
+  const ticketHtml = printArea.querySelector('.boarding-pass-ticket')?.outerHTML || printArea.innerHTML;
+  const win = window.open('', '_blank', 'width=460,height=700');
   if (win) {
     win.document.write(`
       <!DOCTYPE html>
@@ -6244,52 +6341,67 @@ function printHostelReceipt() {
       <head>
         <title>MIT ADT University - One-Time Transit Boarding Slip</title>
         <style>
+          * { box-sizing: border-box; margin: 0; padding: 0; }
           body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 20px;
-            color: #111827;
-            background: #fff;
-          }
-          .receipt-print {
-            border: 1px solid #E5E7EB;
+            background: #F3F4F6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             padding: 24px;
-            border-radius: 8px;
-            max-width: 440px;
-            margin: 0 auto;
           }
-          .title { font-size: 16px; font-weight: 800; letter-spacing: 0.05em; margin: 0; }
-          .subtitle { font-size: 12px; color: #6B7280; margin: 3px 0 12px 0; }
-          .badge { display: inline-block; font-size: 11px; font-weight: 700; color: #10B981; border: 1px solid #A7F3D0; background: #ECFDF5; padding: 2px 8px; border-radius: 4px; }
-          .divider { border-bottom: 2px dashed #E5E7EB; margin: 12px 0 16px 0; }
-          .row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px; }
-          .label { color: #6B7280; font-size: 11px; text-transform: uppercase; font-weight: 600; }
-          .val { font-weight: 600; color: #111827; text-align: right; }
-          .fare-box { background: #FFF7ED; border: 1px solid #FFEDD5; border-radius: 6px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; margin: 16px 0; }
-          .fare-amount { font-size: 20px; font-weight: 800; color: #EA580C; }
-          .footer-note { text-align: center; font-size: 11px; color: #9CA3AF; font-family: monospace; border-top: 1px dashed #E5E7EB; padding-top: 12px; }
+          .boarding-pass-ticket {
+            position: relative;
+            width: 360px;
+            background: #FFFFFF;
+            color: #111827;
+            border-radius: 24px;
+            padding: 24px 22px 20px 22px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E7EB;
+          }
+          .bpass-header-line { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+          .bpass-point-label { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: #9CA3AF; display: flex; align-items: center; gap: 4px; }
+          .bpass-dot { font-size: 8px; color: #111827; }
+          .bpass-route-dash { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 10px; }
+          .bpass-dash-line { flex: 1; height: 0; border-top: 1.5px dotted #D1D5DB; }
+          .bpass-bus-icon { color: #111827; font-size: 15px; }
+          .bpass-cities-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+          .bpass-city-col { display: flex; flex-direction: column; }
+          .bpass-origin { text-align: left; }
+          .bpass-dest { text-align: right; align-items: flex-end; }
+          .bpass-city-code { font-size: 28px; font-weight: 800; line-height: 1; color: #111827; }
+          .bpass-city-name { font-size: 11px; font-weight: 500; color: #6B7280; margin-top: 4px; max-width: 120px; line-height: 1.25; }
+          .bpass-city-time { font-size: 13px; font-weight: 700; color: #111827; margin-top: 7px; }
+          .bpass-city-date { font-size: 10px; color: #9CA3AF; margin-top: 2px; font-weight: 500; }
+          .bpass-mid-duration { display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 2px; }
+          .bpass-duration-txt { font-size: 10px; color: #4B5563; font-weight: 600; white-space: nowrap; }
+          .bpass-direct-pill { background: #111827; color: #FFFFFF; font-size: 9.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-top: 5px; }
+          .bpass-blue-strip { background: #9DB7D9; border-radius: 8px; padding: 9px 12px; margin: 12px 0 14px 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+          .bpass-strip-col { display: flex; flex-direction: column; gap: 2px; }
+          .bpass-strip-label { font-size: 9px; color: #2F4766; font-weight: 600; line-height: 1.1; white-space: nowrap; }
+          .bpass-strip-val { font-size: 12px; font-weight: 800; color: #0E1B2E; white-space: nowrap; }
+          .bpass-passid { font-family: monospace; font-size: 11px; }
+          .bpass-passenger-row { display: grid; grid-template-columns: 1.35fr 1.25fr 0.9fr; gap: 8px; margin-bottom: 14px; }
+          .bpass-pass-col { display: flex; flex-direction: column; gap: 2px; }
+          .bpass-meta-label { font-size: 9.5px; color: #9CA3AF; font-weight: 600; }
+          .bpass-meta-val { font-size: 12.5px; font-weight: 800; color: #111827; }
+          .bpass-mono { font-family: monospace; font-size: 11px; font-weight: 700; }
+          .bpass-fare { color: #10B981; font-weight: 800; }
+          .bpass-perforation-wrap { position: relative; display: flex; align-items: center; margin: 12px -22px 14px -22px; height: 22px; }
+          .bpass-notch { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #F3F4F6; top: 50%; transform: translateY(-50%); z-index: 2; }
+          .bpass-notch-left { left: -11px; }
+          .bpass-notch-right { right: -11px; }
+          .bpass-perf-line { width: 100%; border-top: 2px dotted #9CA3AF; margin: 0 16px; }
+          .bpass-barcode-section { display: flex; flex-direction: column; align-items: center; padding-top: 4px; }
+          .bpass-barcode-graphic { width: 100%; max-width: 270px; display: flex; justify-content: center; }
+          .bpass-barcode-svg { width: 100%; height: 46px; }
+          .bpass-barcode-num { font-family: monospace; font-size: 9.5px; font-weight: 700; color: #6B7280; letter-spacing: 0.12em; margin-top: 6px; text-align: center; }
         </style>
       </head>
       <body>
-        <div class="receipt-print">
-          <div style="display:flex; justify-content: space-between; align-items: flex-start;">
-            <div>
-              <div class="title">MIT ADT UNIVERSITY</div>
-              <div class="subtitle">Campus Transportation Division (CTD)</div>
-            </div>
-            <span class="badge">VERIFIED & BOARDED</span>
-          </div>
-          <div class="divider"></div>
-          <div class="row"><span class="label">Receipt Number</span><span class="val" style="font-family: monospace;">${document.getElementById('rctNumber')?.textContent || ''}</span></div>
-          <div class="row"><span class="label">Issue Date</span><span class="val">${document.getElementById('rctDateTime')?.textContent || ''}</span></div>
-          <div class="row"><span class="label">Student Name</span><span class="val">${document.getElementById('rctStudentName')?.textContent || ''}</span></div>
-          <div class="row"><span class="label">Roll Number</span><span class="val" style="font-family: monospace;">${document.getElementById('rctRollNo')?.textContent || ''}</span></div>
-          <div class="row"><span class="label">Bus & Route</span><span class="val">${document.getElementById('rctCorridor')?.textContent || ''}</span></div>
-          <div class="fare-box">
-            <span style="font-size: 12px; font-weight: 600;">One-Time Transit Fare</span>
-            <span class="fare-amount">₹150.00</span>
-          </div>
-          <div class="footer-note">* * * OFFICIAL BOARDING SLIP • MIT CTD * * *</div>
-        </div>
+        ${ticketHtml}
         <script>
           window.onload = function() {
             window.print();

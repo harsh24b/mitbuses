@@ -6312,6 +6312,7 @@ select.form-input-flat {
 
 .hostel-ledger-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: 13px;
   text-align: left;
@@ -6322,17 +6323,20 @@ select.form-input-flat {
   color: var(--text-secondary);
   font-weight: 600;
   font-size: 11.5px;
-  padding: 10px 14px;
+  padding: 12px 18px;
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
   letter-spacing: 0.02em;
 }
 
 .hostel-ledger-table td {
-  padding: 11px 14px;
+  padding: 12px 18px;
   border-bottom: 1px solid var(--border);
   color: var(--text-primary);
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .hostel-ledger-table tbody tr:last-child td {
@@ -6487,95 +6491,292 @@ select.form-input-flat {
 }
 
 /* ========================================================================== */
-/* RECEIPT / BOARDING PASS SLIP MODAL                                         */
+/* AIRLINE-STYLE BOARDING SLIP CARD (Reference Design)                        */
 /* ========================================================================== */
 
-.receipt-card-container {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 18px 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.receipt-header-strip {
+.boarding-pass-wrapper {
   display: flex;
+  justify-content: center;
+  padding: 4px 0 6px 0;
+}
+
+.boarding-pass-ticket {
+  position: relative;
+  width: 100%;
+  max-width: 370px;
+  background: #FFFFFF;
+  color: #111827;
+  border-radius: 24px;
+  padding: 22px 20px 18px 20px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+/* Header Route Line */
+.bpass-header-line {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-start;
-  border-bottom: 2px dashed var(--border);
-  padding-bottom: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
-.receipt-univ-title {
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 0.03em;
-  color: var(--text-primary);
-}
-
-.receipt-badge-top {
-  display: inline-flex;
+.bpass-point-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #9CA3AF;
+  display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
-  font-weight: 700;
-  background: rgba(16, 185, 129, 0.12);
-  color: #10B981;
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  padding: 2px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.05em;
 }
 
-.receipt-grid-rows {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px 14px;
+.bpass-dot {
+  font-size: 8px;
+  color: #111827;
+}
+
+.bpass-route-dash {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 10px;
+}
+
+.bpass-dash-line {
+  flex: 1;
+  height: 0;
+  border-top: 1.5px dotted #D1D5DB;
+}
+
+.bpass-bus-icon {
+  color: #111827;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+/* City & Times Row */
+.bpass-cities-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
   margin-bottom: 14px;
 }
 
-.receipt-data-item {
+.bpass-city-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.bpass-origin {
+  text-align: left;
+}
+
+.bpass-dest {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.bpass-city-code {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.5px;
+  color: #111827;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.bpass-city-name {
+  font-size: 11px;
+  font-weight: 500;
+  color: #6B7280;
+  margin-top: 4px;
+  max-width: 120px;
+  line-height: 1.25;
+}
+
+.bpass-city-time {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 7px;
+}
+
+.bpass-city-date {
+  font-size: 10.5px;
+  color: #9CA3AF;
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+.bpass-mid-duration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2px;
+}
+
+.bpass-duration-txt {
+  font-size: 10px;
+  color: #4B5563;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.bpass-direct-pill {
+  background: #111827;
+  color: #FFFFFF;
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-top: 5px;
+  letter-spacing: 0.04em;
+}
+
+/* Middle Tinted Blue Ribbon */
+.bpass-blue-strip {
+  background: #9DB7D9;
+  border-radius: 8px;
+  padding: 9px 12px;
+  margin: 12px 0 14px 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.bpass-strip-col {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.receipt-data-label {
-  font-size: 10.5px;
-  text-transform: uppercase;
-  color: var(--text-muted);
+.bpass-strip-label {
+  font-size: 9px;
+  color: #2F4766;
   font-weight: 600;
-  letter-spacing: 0.03em;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
-.receipt-data-val {
+.bpass-strip-val {
   font-size: 12.5px;
-  font-weight: 600;
-  color: var(--text-primary);
-  line-height: 1.3;
-}
-
-.receipt-fare-box {
-  background: rgba(249, 115, 22, 0.08);
-  border: 1px solid rgba(249, 115, 22, 0.25);
-  border-radius: 6px;
-  padding: 10px 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.receipt-fare-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.receipt-fare-amount {
-  font-size: 20px;
   font-weight: 800;
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
+  color: #0E1B2E;
+  white-space: nowrap;
+}
+
+.bpass-passid {
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+}
+
+/* Passenger Metadata Row */
+.bpass-passenger-row {
+  display: grid;
+  grid-template-columns: 1.35fr 1.25fr 0.9fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.bpass-pass-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bpass-meta-label {
+  font-size: 9.5px;
+  color: #9CA3AF;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.bpass-meta-val {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.25;
+}
+
+.bpass-mono {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.bpass-fare {
+  color: #10B981;
+  font-weight: 800;
+}
+
+/* Perforation with side notches */
+.bpass-perforation-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 12px -20px 14px -20px;
+  height: 22px;
+}
+
+.bpass-notch {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface, #1E1F25);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.bpass-notch-left {
+  left: -11px;
+}
+
+.bpass-notch-right {
+  right: -11px;
+}
+
+.bpass-perf-line {
+  width: 100%;
+  height: 0;
+  border-top: 2px dotted #9CA3AF;
+  margin: 0 16px;
+}
+
+/* Barcode section */
+.bpass-barcode-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 4px;
+}
+
+.bpass-barcode-graphic {
+  width: 100%;
+  max-width: 270px;
+  display: flex;
+  justify-content: center;
+}
+
+.bpass-barcode-svg {
+  width: 100%;
+  height: 48px;
+  display: block;
+}
+
+.bpass-barcode-num {
+  font-family: var(--font-mono, monospace);
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #6B7280;
+  letter-spacing: 0.12em;
+  margin-top: 6px;
+  text-align: center;
 }
